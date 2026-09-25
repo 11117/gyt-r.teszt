@@ -1,0 +1,86 @@
+name: Weboldal ellenőrzése
+
+# Ez a szkript minden feltöltésnél (push) és minden Pull Requestnél lefut,
+# és automatikusan leellenőrzi, hogy nem romlott-e el valami alapvető dolog
+# a weboldalon, MIELŐTT az élesben landolna. Ha hibát talál, a GitHub piros
+# pipát mutat a commit mellett, és a Actions fülön részletesen kiírja, mi a baj.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:   # ezzel kézzel is elindítható az Actions fülről
+
+jobs:
+  ellenorzes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repó letöltése
+        uses: actions/checkout@v4
+
+      - name: manifest.json érvényes-e (nem romlott-e el a JSON)
+        run: |
+          python3 -c "
+          import json, sys
+          try:
+              with open('manifest.json', encoding='utf-8') as f:
+                  data = json.load(f)
+              print('OK - manifest.json érvényes JSON')
+              for key in ['name', 'short_name', 'icons', 'start_url', 'display']:
+                  if key not in data:
+                      print(f'FIGYELEM: hiányzik a \"{key}\" mező a manifest.json-ból')
+              if not data.get('icons'):
+                  print('FIGYELEM: nincs egyetlen ikon sem a manifest.json-ban')
+                  sys.exit(1)
+              sizes = [i.get('sizes') for i in data['icons']]
+              if '512x512' not in sizes:
+                  print('HIBA: nincs 512x512-es ikon a manifestben - emiatt Androidon nem jelenik meg a telepítési felugró ablak!')
+                  sys.exit(1)
+          except json.JSONDecodeError as e:
+              print(f'HIBA: manifest.json nem érvényes JSON: {e}')
+              sys.exit(1)
+          "
+
+      - name: sw.js szintaktikai ellenőrzése (Node.js)
+        run: node -c sw.js
+
+      - name: Minden .html fájl szintaktikai/szerkezeti ellenőrzése
+        run: |
+          pip install --quiet beautifulsoup4
+          python3 - << 'EOF'
+          import glob, sys
+          from bs4 import BeautifulSoup
+
+          hiba_volt = False
+          for fn in sorted(glob.glob('*.html')):
+              with open(fn, encoding='utf-8') as f:
+                  content = f.read()
+
+              # Alap struktúra-ellenőrzés: van-e <html>, <head>, <body>
+              soup = BeautifulSoup(content, 'html.parser')
+              if not soup.find('html'):
+                  print(f'HIBA [{fn}]: hiányzik a <html> elem')
+                  hiba_volt = True
+              if not soup.find('head'):
+                  print(f'HIBA [{fn}]: hiányzik a <head> elem')
+                  hiba_volt = True
+              if not soup.find('body'):
+                  print(f'HIBA [{fn}]: hiányzik a <body> elem')
+                  hiba_volt = True
+              if not soup.find('title'):
+                  print(f'FIGYELEM [{fn}]: nincs <title> tag')
+
+              # Manifest/ikon linkek megléte (ha egy oldalról lemaradna telepítéskor)
+              if 'rel="manifest"' not in content:
+                  print(f'FIGYELEM [{fn}]: nincs <link rel="manifest"> hivatkozás')
+
+              print(f'OK  [{fn}] ({len(content)//1024} KB)')
+
+          if hiba_volt:
+              sys.exit(1)
+          EOF
+
+      - name: Összegzés
+        if: success()
+        run: echo "✅ Minden ellenőrzés sikeres - a weboldal biztonságosan deployolható."
