@@ -301,6 +301,42 @@
   .rules-fab .q { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:#ffb300; color:#1a1a1a; font-weight:900; font-size:0.75rem; }
   .rules-fab:hover { background:#333; }
   @media (max-width:480px){ .rules-fab { top:66px; padding:8px 12px; font-size:0.78rem; } }
+  #fullscreen-btn { top:118px; }
+  @media (max-width:480px){ #fullscreen-btn { top:112px; } }
+
+  /* ===================== Teljes képernyős játékmód ===================== */
+  /* Teljes képernyőben a game-layout tölti ki a képernyőt: a pálya, a
+     vezérlőpanel (dpad) és a kórokozó-napló együtt marad látható, rögzített
+     elrendezésben, hogy játék közben semmi ne ugráljon vagy lapozódjon el. */
+  .game-layout:fullscreen,
+  .game-layout:-webkit-full-screen {
+    display: flex; flex-direction: row; flex-wrap: nowrap;
+    width: 100vw; height: 100vh; max-width: none; margin: 0;
+    background: #0d1117; padding: 18px; box-sizing: border-box;
+    align-items: center; justify-content: center; gap: 24px;
+    overflow: hidden;
+  }
+  .game-layout:fullscreen .game-column,
+  .game-layout:-webkit-full-screen .game-column {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%; overflow: hidden;
+  }
+  .game-layout:fullscreen .stage-wrap,
+  .game-layout:-webkit-full-screen .stage-wrap {
+    max-width: min(560px, 70vh); width: 100%;
+  }
+  .game-layout:fullscreen .pathogen-chat,
+  .game-layout:-webkit-full-screen .pathogen-chat {
+    max-height: 90vh; height: 90vh; margin: 0; flex: 0 0 320px;
+  }
+  .game-layout:fullscreen .dpad,
+  .game-layout:-webkit-full-screen .dpad {
+    flex-shrink: 0;
+  }
+  html:has(.game-layout:fullscreen) body,
+  html:has(.game-layout:-webkit-full-screen) body {
+    overflow: hidden;
+  }
 
   .hud-row { max-width:1100px; margin:0 auto 10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
   .hud-row .pill { background:#fff; border:1px solid #e5eaee; border-radius:30px; padding:6px 12px; font-size:0.82rem; font-weight:700; color:var(--navy); box-shadow:0 3px 8px rgba(32,48,64,0.06); display:flex; align-items:center; gap:6px; white-space:nowrap; }
@@ -391,6 +427,7 @@
   <p class="subtitle">Vezesd a gyógyszerészt a patika alaprajzú labirintusban, gyűjtsd a pirulákat, és kerüld a kórokozókat!</p>
 </header>
 <button type="button" class="rules-fab" id="open-rules"><span class="q">?</span> Szabály</button>
+<button type="button" class="rules-fab" id="fullscreen-btn"><i class="fa-solid fa-expand" id="fullscreen-icon"></i> Teljes képernyő</button>
 
 <main class="wrap">
   <div class="back-btn-row" style="max-width:1100px; margin:44px auto 4px; padding:0 20px;"><a class="back-btn" href="index.html#jatekok"><i class="fa-solid fa-arrow-left"></i> Vissza az Ismeretterjesztő játékokhoz</a></div>
@@ -1250,6 +1287,48 @@ document.getElementById('open-rules').addEventListener('click', function () {
   showRules();
 });
 document.getElementById('rules-close').addEventListener('click', closeRules);
+
+/* ===================== Teljes képernyős mód ===================== */
+(function () {
+  var fsBtn = document.getElementById('fullscreen-btn');
+  var fsIcon = document.getElementById('fullscreen-icon');
+  var layoutEl = document.querySelector('.game-layout');
+  if (!fsBtn || !layoutEl) return;
+
+  function isFs() {
+    return !!(document.fullscreenElement || document.webkitFullscreenElement);
+  }
+
+  function updateBtn() {
+    if (isFs()) {
+      fsIcon.className = 'fa-solid fa-compress';
+      fsBtn.lastChild.textContent = ' Kilépés a teljes képernyőből';
+    } else {
+      fsIcon.className = 'fa-solid fa-expand';
+      fsBtn.lastChild.textContent = ' Teljes képernyő';
+    }
+    // Az elrendezés mérete változott (fullscreen ki/be) - igazítsuk a canvast.
+    setTimeout(resizeCanvas, 60);
+  }
+
+  fsBtn.addEventListener('click', function () {
+    if (!isFs()) {
+      var req = layoutEl.requestFullscreen || layoutEl.webkitRequestFullscreen;
+      if (req) {
+        req.call(layoutEl).catch(function () {
+          // Ha a Fullscreen API nem engedélyezett (pl. iOS Safari), nincs
+          // hiba a felhasználó felé - a játék a normál nézetben is működik.
+        });
+      }
+    } else {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document);
+    }
+  });
+
+  document.addEventListener('fullscreenchange', updateBtn);
+  document.addEventListener('webkitfullscreenchange', updateBtn);
+})();
 
 /* ===================== Indítás ===================== */
 function init() {
