@@ -295,10 +295,20 @@
         .close-x { position: absolute; right: 20px; top: 15px; font-size: 25px; cursor: pointer; }
 
   /* ===== Gyógyszer-labirintus - jatek stilusok ===== */
-  .rules-fab { position:fixed; top:70px; right:16px; z-index:99000; background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,0.25); border-radius:30px; padding:9px 16px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 6px 16px rgba(0,0,0,0.25); }
+  .rules-fab {
+    position:fixed; top:70px; right:16px; z-index:99000;
+    background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,0.25);
+    border-radius:50%; width:44px; height:44px; padding:0;
+    font-weight:700; font-size:0.85rem; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+  }
   .rules-fab .q { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; background:#ffb300; color:#1a1a1a; font-weight:900; font-size:0.75rem; }
+  .rules-fab .ico { font-size:1.15rem; }
+  .rules-fab span#fullscreen-label, .rules-fab .rules-fab-label { display:none; }
   .rules-fab:hover { background:#333; }
-  @media (max-width:480px){ .rules-fab { top:66px; padding:8px 12px; font-size:0.78rem; } }
+  #fullscreen-btn { top:70px; right:68px; }
+  @media (max-width:480px){ .rules-fab { top:66px; width:40px; height:40px; } #fullscreen-btn { top:66px; right:62px; } }
   #fullscreen-btn { top:118px; }
   @media (max-width:480px){ #fullscreen-btn { top:112px; } }
 
@@ -442,8 +452,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
   <h1><svg class="ico ico-pills"><use href="#ico-pills"></use></svg> Gyógyszer-labirintus</h1>
   <p class="subtitle">Vezesd a gyógyszerészt a patika alaprajzú labirintusban, gyűjtsd a pirulákat, és kerüld a kórokozókat!</p>
 </header>
-<button type="button" class="rules-fab" id="open-rules"><span class="q">?</span> Szabály</button>
-<button type="button" class="rules-fab" id="fullscreen-btn"><svg class="ico ico-expand" id="fullscreen-icon"><use href="#ico-expand"></use></svg><span id="fullscreen-label">Teljes képernyő</span></button>
+<button type="button" class="rules-fab" id="open-rules" aria-label="Szabály"><span class="q">?</span><span class="rules-fab-label"> Szabály</span></button>
+<button type="button" class="rules-fab" id="fullscreen-btn" aria-label="Teljes képernyő"><svg class="ico ico-expand" id="fullscreen-icon"><use href="#ico-expand"></use></svg><span id="fullscreen-label">Teljes képernyő</span></button>
 
 <main class="wrap">
   <div class="back-btn-row" style="max-width:1100px; margin:44px auto 4px; padding:0 20px;"><a class="back-btn" href="index.html#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza az Ismeretterjesztő játékokhoz</a></div>
@@ -1219,7 +1229,6 @@ function showPushNotifIfUnread() {
   pushNotifEl.classList.add('pop');
 }
 function goToPathogenChat() {
-  hideOverlay();
   if (pushNotifEl) pushNotifEl.classList.add('hidden');
   if (typeof window.clearPathogenUnread === 'function') window.clearPathogenUnread();
   var chatEl = document.querySelector('.pathogen-chat');
@@ -1356,6 +1365,7 @@ document.getElementById('rules-close').addEventListener('click', closeRules);
     document.documentElement.classList.toggle('pseudo-fs-lock', on);
     if (fsUse) fsUse.setAttribute('href', on ? '#ico-compress' : '#ico-expand');
     if (fsLabel) fsLabel.textContent = on ? 'Kilépés a teljes képernyőből' : 'Teljes képernyő';
+    fsBtn.setAttribute('aria-label', on ? 'Kilépés a teljes képernyőből' : 'Teljes képernyő');
     // Az elrendezés mérete változott - igazítsuk a canvast.
     setTimeout(resizeCanvas, 60);
   }
