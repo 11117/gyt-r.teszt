@@ -559,7 +559,21 @@
             }
             .pwa-pill-item.active { color: #fff; }
             .quick-phone { bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important; }
+
+            /* A kezdőkép pontosan kitölti a látható területet (fejléc + alsó csúszka nélkül) */
+            .hero {
+                min-height: calc(100svh - 60px - env(safe-area-inset-top, 0px));
+                transform-origin: 50% 0; will-change: transform;
+                overflow: hidden;
+            }
+            /* A "Görgessen a részletekért" jelzés az alsó csúszka FÖLÉ kerül */
+            .scroll-down { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+
+            /* Hírek ablak: az alsó csúszka az ablak fölött marad látható és kattintható */
+            .pwa-pill-nav { z-index: 98500; }
+            .news-modal::after { content: ""; display: block; height: calc(92px + env(safe-area-inset-bottom, 0px)); }
         }
+        html.ios-pwa-glass .hero { min-height: calc(100svh - 64px - env(safe-area-inset-top, 0px)); }
         html.ios-pwa-glass .pwa-pill-nav {
             background-color: rgba(28,28,30,0.55) !important;
             -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -1692,8 +1706,18 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     if (!isStandalone) return;
     var newsPill = document.getElementById('pwa-pill-news');
     var newsBtn = document.getElementById('news-menu-btn');
+    var newsModalEl = document.getElementById('news-modal');
+    function newsIsOpen(){ return newsModalEl && newsModalEl.style.display === 'block'; }
+    function closeNewsNow(){
+        if (!newsIsOpen()) return;
+        newsModalEl.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
     if (newsPill && newsBtn) {
-        newsPill.addEventListener('click', function(){ newsBtn.click(); });
+        // Második koppintás a Hírek gombra bezárja az ablakot (váltókapcsoló)
+        newsPill.addEventListener('click', function(){
+            if (newsIsOpen()) closeNewsNow(); else newsBtn.click();
+        });
     }
     var nav = document.getElementById('pwa-pill-nav');
     var lens = document.getElementById('pwa-pill-lens');
@@ -1733,9 +1757,45 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         centerItem(item);
     }
 
+    var prevActive = null;
     items.forEach(function(item){
-        item.addEventListener('click', function(){ setActive(item); });
+        item.addEventListener('click', function(){
+            var cur = document.querySelector('.pwa-pill-item.active');
+            if (item === newsPill && cur && cur !== newsPill) prevActive = cur;
+            setActive(item);
+        });
     });
+
+    // Ha a Hírek ablakot az X-szel / a háttérre koppintva zárják be, a csúszka visszaáll az előző elemre
+    if (newsModalEl && newsPill && window.MutationObserver) {
+        new MutationObserver(function(){
+            if (!newsIsOpen() && newsPill.classList.contains('active') && prevActive) {
+                setActive(prevActive);
+            }
+        }).observe(newsModalEl, { attributes: true, attributeFilter: ['style'] });
+    }
+
+    // Kezdőkép zsugorítása görgetéskor (Safari-szerű): kicsinyedés + lekerekedő sarkok
+    var hero = document.querySelector('.hero');
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (hero && !reduce) {
+        var ticking = false;
+        var updateHero = function(){
+            ticking = false;
+            var h = hero.offsetHeight;
+            if (!h) { hero.style.transform = ''; hero.style.borderRadius = ''; return; }
+            var y = Math.max(window.scrollY || window.pageYOffset || 0, 0);
+            var p = Math.min(y / (h * 0.7), 1);
+            if (p <= 0) { hero.style.transform = ''; hero.style.borderRadius = ''; return; }
+            hero.style.transform = 'scale(' + (1 - 0.1 * p).toFixed(4) + ')';
+            hero.style.borderRadius = (30 * p).toFixed(1) + 'px';
+        };
+        window.addEventListener('scroll', function(){
+            if (!ticking) { ticking = true; requestAnimationFrame(updateHero); }
+        }, { passive: true });
+        window.addEventListener('resize', updateHero);
+        updateHero();
+    }
 
     var initialActive = document.querySelector('.pwa-pill-item.active');
     requestAnimationFrame(function(){
