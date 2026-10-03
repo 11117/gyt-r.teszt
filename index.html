@@ -179,7 +179,7 @@
         .szimp-stage .szimpatika-frame-wrap { margin: 0; }
         .szimp-nav-btn { display: none; }
         @media screen and (max-width: 768px) {
-            .szimp-stage { padding: 0 54px; }
+            .szimp-stage { padding: 0 54px 0 6px; }
             .szimp-nav-btn {
                 display: flex; align-items: center; justify-content: center;
                 position: absolute; right: 6px; width: 42px; height: 42px; padding: 0;
@@ -463,6 +463,9 @@
         #view-kihivas .spin { border:0; border-radius:28px; background:var(--g); color:#fff; font:800 1rem Montserrat; padding:15px 25px; cursor:pointer; box-shadow:0 8px 18px #2e7d323b }
         #view-kihivas .spin:hover { background:#216326 }
         #view-kihivas .spin:disabled { opacity:.65; cursor:wait }
+        #view-kihivas .wheelbox { cursor:pointer; -webkit-tap-highlight-color:transparent }
+        #view-kihivas .result { scroll-margin-bottom:24px }
+        @media (display-mode: standalone) { #view-kihivas .result { scroll-margin-bottom:calc(110px + env(safe-area-inset-bottom, 0px)) } }
         #view-kihivas .result { margin:28px auto 0; background:#fff; border-radius:17px; padding:23px; box-shadow:0 10px 25px #20304012; max-width:550px; min-height:98px }
         #view-kihivas .result h2 { font:800 1rem Montserrat; color:var(--g); margin:0 0 9px }
         #view-kihivas .result p { font:700 1.15rem Montserrat; margin:0; line-height:1.45 }
@@ -905,7 +908,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     <div class="icon"><svg class="ico ico-arrows-spin"><use href="#ico-arrows-spin"></use></svg></div>
                     <h2>Napi kihívás</h2>
                     <p>Pörgesd meg a tárcsát egy egyszerű, egészséges napi szokásért. Melyik kihívást vállalod ma?</p>
-                    <span class="arrow">Tárcsa megpörgetése <svg class="ico ico-arrow-right"><use href="#ico-arrow-right"></use></svg></span>
+                    <span class="arrow"><span id="spin-card-label">Tárcsa megpörgetése</span> <svg class="ico ico-arrow-right"><use href="#ico-arrow-right"></use></svg></span>
                 </a>
                 <a class="card" href="gyogyszer-labirintus.html" data-cat="gyerek video">
                     <div class="icon">
@@ -1035,7 +1038,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     <div class="pointer"></div>
                     <div class="wheel" id="wheel"></div>
                 </div>
-                <button class="spin" id="spin"><svg class="ico ico-rotate-right"><use href="#ico-rotate-right"></use></svg> Tárcsa pörgetése</button>
+                <button class="spin" id="spin"><svg class="ico ico-rotate-right"><use href="#ico-rotate-right"></use></svg> <span id="spin-btn-label">Tárcsa pörgetése</span></button>
                 <section class="result" aria-live="polite">
                     <h2>A mai kihívásod</h2>
                     <p id="result-kihivas">Pörgesd meg a tárcsát!</p>
@@ -1642,20 +1645,39 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     const C=['Sétálj 15 percet a friss levegőn!','Igyál meg most egy pohár vizet!','Tarts 5 perc nyújtózkodó szünetet!','Egy étkezés mellé egyél egy zöldséget vagy gyümölcsöt!','Szellőztesd ki a szobát 5 percre!','Tarts képernyőmentes szünetet 10 percig!','Mosd meg alaposan a kezed a következő étkezés előtt!','Hívd fel vagy írj rá egy számodra fontos emberre!','Tervezz be ma egy korábbi lefekvést!','Sétálj egy megállónyit, ha teheted!','Ülj egyenesen és lazítsd el a vállad 1 percre!','Készíts egy koffeinmentes, meleg italt, lehetőleg gyógyteát!','Egyél lassabban a következő étkezésnél!','Tegyél rendet 5 percig a környezetedben!','Állj fel és mozgasd át magad 2 percig!','Figyelj meg három dolgot, amiért ma hálás vagy!','Közlekedj biciklivel vagy menj gyalog egy szakaszon, ha biztonságos!','Tegyél ma egy rövid sétát ebéd után!','Készíts magadnak egy kis adag egészséges uzsonnát! Pl.: saláta, pár gyümöpcs, stb.','Tölts 10 percet kedvenc, nyugtató tevékenységeddel!','Tedd el szem elől a telefont egy étkezés idejére!','Mosolyogj rá valakire vagy mondj egy kedves szót!','Vegyél 5 lassú, mély lélegzetet!','Nézd át, hogy van-e elegendő ivóvized holnapra!','Írj fel egy egészséges célt a holnapi napra!','Hallgass meg egy kedvenc zenét, és lazíts!','Nyújtsd meg óvatosan a nyakad és a hátad!','Menj ki a természetes fényre néhány percre!', 'Sétálj legalább 30 percet a friss levegőn!', 'Mellőzd a cukros üdítőket a mai napon!'];
     let angle=0,busy=false;
     const w=$('wheel'),b_spin=$('spin'),r_spin=$('result-kihivas');
+    const SPIN_KEY='gondviseles_napi_kihivas_utolso_porgetes_v1', DAY_MS=24*60*60*1000;
+    function hasRecentSpin(){
+        try{const t=parseInt(localStorage.getItem(SPIN_KEY)||'0',10);return t>0&&Date.now()-t<DAY_MS&&Date.now()-t>=0}catch(e){return false}
+    }
+    function updateSpinLabels(){
+        const again=hasRecentSpin();
+        const cardL=$('spin-card-label'),btnL=$('spin-btn-label');
+        if(cardL)cardL.textContent=again?'Újat pörgetek':'Tárcsa megpörgetése';
+        if(btnL)btnL.textContent=again?'Újat pörgetek':'Tárcsa pörgetése';
+    }
+    updateSpinLabels();
+    function doSpin(){
+        if(busy)return;
+        busy=true;
+        b_spin.disabled=true;
+        let pick=Math.floor(Math.random()*C.length);
+        angle+=1440+Math.floor(Math.random()*360);
+        w.style.transform=`rotate(${angle}deg)`;
+        setTimeout(()=>{
+            r_spin.textContent=C[pick];
+            b_spin.disabled=false;
+            busy=false;
+            try{localStorage.setItem(SPIN_KEY,String(Date.now()))}catch(e){}
+            updateSpinLabels();
+            // a kihívás szövegének aljára ugrunk, hogy a felhasználó el tudja olvasni
+            const box=r_spin.closest('.result')||r_spin;
+            box.scrollIntoView({behavior:'smooth',block:'end'});
+        },4600)
+    }
     if(b_spin){
-        b_spin.onclick=()=>{
-            if(busy)return;
-            busy=true;
-            b_spin.disabled=true;
-            let pick=Math.floor(Math.random()*C.length);
-            angle+=1440+Math.floor(Math.random()*360);
-            w.style.transform=`rotate(${angle}deg)`;
-            setTimeout(()=>{
-                r_spin.textContent=C[pick];
-                b_spin.disabled=false;
-                busy=false
-            },4600)
-        }
+        b_spin.onclick=doSpin;
+        const wb=w&&w.parentElement;
+        if(wb)wb.addEventListener('click',doSpin);
     }
 
     /* --- GYÓGYNÖVÉNY TESZT SCRIPT --- */
