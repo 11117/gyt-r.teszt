@@ -1210,8 +1210,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             Weboldalunk a működéshez szükséges technikai sütiket (cookie-kat) és egyéb technikai elemeket használ, emellett bizonyos külső tartalmakat (pl. Google Térkép, Szimpatika akciók) is megjeleníthet. Az opcionális külső tartalmak csak az Ön hozzájárulása után töltődnek be.
         </p>
         <div class="gyszt-notice-btns">
-            <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
             <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
+            <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -1427,7 +1427,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             };
             if (settingsBtn) settingsBtn.onclick = function () { window.openCookieSettings(); };
 
-            if (settingsCloseX && settingsModal) settingsCloseX.onclick = function () { settingsModal.style.display = 'none'; restoreFocus(); };
+            if (settingsCloseX && settingsModal) settingsCloseX.onclick = function () { settingsModal.style.display = 'none'; restoreFocus(); if (location.hash === '#gyszt-sutibeallitasok') { try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {} } };
             if (settingsCloseX) {
                 settingsCloseX.addEventListener('keydown', function (e) {
                     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); settingsCloseX.click(); }
