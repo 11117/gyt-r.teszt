@@ -301,7 +301,7 @@
 
   /* ===== Gyógyszer-labirintus - jatek stilusok ===== */
   .rules-fab {
-    position:fixed; top:70px; right:16px; z-index:99000;
+    position:absolute; top:34px; right:12px; z-index:60000;
     background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,0.25);
     border-radius:50%; width:44px; height:44px; padding:0;
     font-weight:700; font-size:0.85rem; cursor:pointer;
@@ -312,7 +312,11 @@
   .rules-fab .ico { font-size:1.15rem; }
   .rules-fab .rules-fab-label { display:none; }
   .rules-fab:hover { background:#333; }
-  @media (max-width:480px){ .rules-fab { top:66px; width:40px; height:40px; } }
+  @media (max-width:480px){ .rules-fab { top:36px; width:40px; height:40px; } }
+  /* A gomb a fejléc (hero) ALATT indul, görgetéskor a menüsáv alatt lebeg tovább */
+  .rules-fab-holder { position:sticky; top:calc(38px + env(safe-area-inset-top, 0px)); height:0; z-index:60000; }
+  .rules-fab-holder + .back-btn-row { padding-right:64px !important; }
+  html.chat-open .rules-fab-holder, html.pseudo-fs-lock .rules-fab-holder { display:none; }
 
   /* ===================== Teljes képernyős játékmód ===================== */
   /* Mivel az iOS Safari (böngészőben és telepített PWA-ban is) nem támogatja
@@ -483,9 +487,9 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
   <h1><svg class="ico ico-pills"><use href="#ico-pills"></use></svg> Gyógyszer-labirintus</h1>
   <p class="subtitle">Vezesd a gyógyszerészt a patika alaprajzú labirintusban, gyűjtsd a pirulákat, és kerüld a kórokozókat!</p>
 </header>
-<button type="button" class="rules-fab" id="open-rules" aria-label="Szabály"><span class="q">?</span><span class="rules-fab-label"> Szabály</span></button>
 
 <main class="wrap">
+  <div class="rules-fab-holder"><button type="button" class="rules-fab" id="open-rules" aria-label="Szabály"><span class="q">?</span><span class="rules-fab-label"> Szabály</span></button></div>
   <div class="back-btn-row" style="max-width:1100px; margin:44px auto 4px; padding:0 20px;"><a class="back-btn" href="index.html#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza az Ismeretterjesztő játékokhoz</a></div>
 
   <div class="promo-card" style="margin-bottom:18px;">
@@ -1530,8 +1534,7 @@ init();
         </p>
         <div class="gyszt-notice-btns">
             <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
-            <button id="gyszt-reject-btn" class="btn-reject">Csak a szükségesek elfogadása</button>
-            <button id="gyszt-settings-btn" class="btn-info">Beállítások</button>
+            <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -1555,13 +1558,13 @@ init();
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
                     <strong>Külső tartalmak</strong>
-                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle"><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" checked><span class="slider"></span></label>
                 </div>
                 <p>Google Térkép, Szimpatika akciók és egyéb harmadik féltől származó beágyazott tartalmak megjelenítése. Betöltésükkor adatok (pl. IP-cím) juthatnak el az adott külső szolgáltatóhoz.</p>
             </div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Beállítások mentése</button>
+                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Kiválasztottak elfogadása</button>
                 <button id="gyszt-settings-acceptall" class="btn-accept" style="flex:1;">Összes elfogadása</button>
             </div>
             <p style="margin-top:16px; font-size:0.8rem; text-align:center;">
@@ -1650,7 +1653,7 @@ init();
             };
             window.openCookieSettings = function () {
                 const c = loadConsent();
-                if (externalToggle) externalToggle.checked = !!(c && c.external);
+                if (externalToggle) externalToggle.checked = c ? !!c.external : true;
                 if (settingsModal) settingsModal.style.display = 'block';
             };
 

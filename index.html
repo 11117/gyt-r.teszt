@@ -282,6 +282,31 @@
             font-family: 'Segoe UI', system-ui, sans-serif;
         }
         #pwa-install-banner.is-visible { display: block; }
+        @keyframes pibPop {
+            0%   { transform: translateX(-50%) translateY(36px) scale(0.9); opacity: 0; }
+            45%  { transform: translateX(-50%) translateY(-8px) scale(1.06); opacity: 1; }
+            70%  { transform: translateX(-50%) translateY(0) scale(0.98); }
+            100% { transform: translateX(-50%) translateY(0) scale(1); }
+        }
+        #pwa-install-banner.pulse { animation: pibPop 0.7s ease-out 1; }
+        /* Szembetűnő "Alkalmazás letöltése" gomb – csak mobil webes nézetben (nem telepített appban) */
+        .pwa-dl-btn { display: none; }
+        html.pwa-dl-available .pwa-dl-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            position: fixed; left: 14px; right: 84px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 14000;
+            height: 52px; border: 0; border-radius: 999px; cursor: pointer;
+            background: linear-gradient(135deg, #2E7D32, #43a047); color: #fff;
+            font: 800 1rem 'Segoe UI', system-ui, sans-serif; letter-spacing: .2px;
+            box-shadow: 0 8px 22px rgba(46,125,50,0.45), 0 0 0 3px rgba(255,255,255,0.9);
+            -webkit-tap-highlight-color: transparent;
+        }
+        html.pwa-dl-available .pwa-dl-btn:active { transform: scale(0.97); }
+        html.pwa-dl-available .pwa-dl-btn .ico { font-size: 1.15rem; }
+        html.pwa-dl-available body { padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px)); }
+        html.pwa-banner-open .pwa-dl-btn { display: none !important; }
+        html.gyszt-lock .pwa-dl-btn { display: none !important; }
+        @media screen and (min-width: 769px) { .pwa-dl-btn { display: none !important; } }
+        @media (display-mode: standalone) { .pwa-dl-btn { display: none !important; } }
         #pwa-install-banner .pib-row { display: flex; align-items: flex-start; gap: 10px; }
         #pwa-install-banner .pib-icon-wrap { flex-shrink: 0; text-align: center; width: 46px; }
         #pwa-install-banner .pib-icon-wrap img { width: 40px; height: 40px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.18); display: block; }
@@ -1160,6 +1185,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         </div>
     </div>
 
+    <button type="button" class="pwa-dl-btn" id="pwa-dl-btn" aria-label="Alkalmazás letöltése"><svg class="ico ico-download"><use href="#ico-download"></use></svg> Alkalmazás letöltése</button>
+
     <div id="pwa-install-banner" role="dialog" aria-label="Alkalmazás telepítése">
         <div class="pib-row">
             <div class="pib-icon-wrap">
@@ -1184,8 +1211,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         </p>
         <div class="gyszt-notice-btns">
             <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
-            <button id="gyszt-reject-btn" class="btn-reject">Csak a szükségesek elfogadása</button>
-            <button id="gyszt-settings-btn" class="btn-info">Beállítások</button>
+            <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -1209,13 +1235,13 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
                     <strong>Külső tartalmak</strong>
-                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle"><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" checked><span class="slider"></span></label>
                 </div>
                 <p>Google Térkép, Szimpatika akciók és egyéb harmadik féltől származó beágyazott tartalmak megjelenítése. Betöltésükkor adatok (pl. IP-cím) juthatnak el az adott külső szolgáltatóhoz.</p>
             </div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Beállítások mentése</button>
+                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Kiválasztottak elfogadása</button>
                 <button id="gyszt-settings-acceptall" class="btn-accept" style="flex:1;">Összes elfogadása</button>
             </div>
             <p style="margin-top:16px; font-size:0.8rem; text-align:center;">
@@ -1377,7 +1403,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             };
             window.openCookieSettings = function () {
                 const c = loadConsent();
-                if (externalToggle) externalToggle.checked = !!(c && c.external);
+                if (externalToggle) externalToggle.checked = c ? !!c.external : true;
                 if (settingsModal) settingsModal.style.display = 'block';
             };
 
@@ -1928,12 +1954,16 @@ if ('serviceWorker' in navigator) {
     var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
     if (isStandalone) return;
 
+    // Mobil webes nézetben megjelenik az "Alkalmazás letöltése" gomb
+    document.documentElement.classList.add('pwa-dl-available');
+
     var DISMISS_KEY = 'pwaBannerDismissedAt';
     var DISMISS_DAYS = 14;
+    var suppressAuto = false; // a panel magától nem ugrik fel, de a gombbal bármikor megnyitható
     try {
         var dismissedAt = localStorage.getItem(DISMISS_KEY);
         if (dismissedAt && (Date.now() - parseInt(dismissedAt, 10)) < DISMISS_DAYS * 24 * 60 * 60 * 1000) {
-            return;
+            suppressAuto = true;
         }
     } catch (e) {}
 
@@ -1964,8 +1994,8 @@ if ('serviceWorker' in navigator) {
     }
 
     var iosShown = false;
-    function showIosBanner() {
-        if (iosShown) return;
+    function showIosBanner(force) {
+        if (iosShown && !force) return;
         iosShown = true;
         var shareIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin:0 1px;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>';
         var dotsIcon = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="display:inline-block; vertical-align:middle; margin:0 1px;"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="7.5" cy="12" r="1.2" fill="currentColor"/><circle cx="16.5" cy="12" r="1.2" fill="currentColor"/></svg>';
@@ -1997,6 +2027,7 @@ if ('serviceWorker' in navigator) {
     }
 
     function revealIfConsented() {
+        if (suppressAuto) return;
         if (!hasCookieConsent()) return;
         if (isiOS) setTimeout(showIosBanner, 1500);
         showAndroidBanner();
@@ -2009,6 +2040,34 @@ if ('serviceWorker' in navigator) {
         androidDeferredPrompt = e;
         revealIfConsented();
     });
+
+    // --- "Alkalmazás letöltése" gomb: a panel felugrik és egyet pulzál (Android és iOS) ---
+    function pulseBanner() {
+        banner.classList.remove('pulse');
+        void banner.offsetWidth;
+        banner.classList.add('pulse');
+    }
+    function openInstallPanel() {
+        if (androidDeferredPrompt) {
+            showAndroidBanner();
+        } else if (isiOS) {
+            showIosBanner(true);
+            installBtn.style.display = 'none';
+        } else {
+            descSpan.textContent = 'Nyissa meg a böngésző menüjét (⋮), majd válassza az „Alkalmazás telepítése” vagy a „Hozzáadás a kezdőképernyőhöz” lehetőséget.';
+            installBtn.style.display = 'none';
+            banner.classList.add('is-visible');
+        }
+        pulseBanner();
+    }
+    var dlBtn = document.getElementById('pwa-dl-btn');
+    if (dlBtn) dlBtn.addEventListener('click', openInstallPanel);
+    // amíg a panel látszik, a gomb elrejtőzik (ne takarják egymást)
+    if (window.MutationObserver) {
+        new MutationObserver(function () {
+            document.documentElement.classList.toggle('pwa-banner-open', banner.classList.contains('is-visible'));
+        }).observe(banner, { attributes: true, attributeFilter: ['class'] });
+    }
 
     window.addEventListener('appinstalled', function () {
         banner.classList.remove('is-visible');

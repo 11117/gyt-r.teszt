@@ -488,8 +488,7 @@ renderRecipes();
         </p>
         <div class="gyszt-notice-btns">
             <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
-            <button id="gyszt-reject-btn" class="btn-reject">Csak a szükségesek elfogadása</button>
-            <button id="gyszt-settings-btn" class="btn-info">Beállítások</button>
+            <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -513,13 +512,13 @@ renderRecipes();
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
                     <strong>Külső tartalmak</strong>
-                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle"><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" checked><span class="slider"></span></label>
                 </div>
                 <p>Google Térkép, Szimpatika akciók és egyéb harmadik féltől származó beágyazott tartalmak megjelenítése. Betöltésükkor adatok (pl. IP-cím) juthatnak el az adott külső szolgáltatóhoz.</p>
             </div>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Beállítások mentése</button>
+                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Kiválasztottak elfogadása</button>
                 <button id="gyszt-settings-acceptall" class="btn-accept" style="flex:1;">Összes elfogadása</button>
             </div>
             <p style="margin-top:16px; font-size:0.8rem; text-align:center;">
@@ -608,7 +607,7 @@ renderRecipes();
             };
             window.openCookieSettings = function () {
                 const c = loadConsent();
-                if (externalToggle) externalToggle.checked = !!(c && c.external);
+                if (externalToggle) externalToggle.checked = c ? !!c.external : true;
                 if (settingsModal) settingsModal.style.display = 'block';
             };
 
