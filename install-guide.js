@@ -1,98 +1,99 @@
 (function(){
-var ua=navigator.userAgent,iOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),AND=/Android/i.test(ua);
-if(!(iOS||AND))return;
-if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)return;
-var D=document,LS=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
-var br=/GSA\//.test(ua)?'g':/CriOS|EdgiOS|FxiOS/.test(ua)?'c':/OPT\/|OPiOS|OPR\//.test(ua)?'o':AND?(navigator.brave?'b':'c'):'s';
-var old=D.getElementById('pwa-install-banner'),ICON=(old&&old.querySelector('img')||{}).src||'icon-192.png';
+var ua=navigator.userAgent,D=document,iOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),AND=/Android/i.test(ua);
+var mb=D.getElementById('pwa-menu-dl');
+if(!(iOS||AND)||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true){if(mb&&mb.parentNode)mb.parentNode.style.setProperty('display','none','important');return}
+var LS=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
+var br=/GSA\//.test(ua)?'g':/CriOS|EdgiOS|FxiOS/.test(ua)?'c':/OPT\/|OPiOS|OPR\//.test(ua)?'o':navigator.brave?'b':AND?'c':'s';
+var bar=LS('igBar')||(iOS?(br==='c'?'t':'b'):(br==='o'?'b':'t'));
+var old=D.getElementById('pwa-install-banner'),ICON=(old&&old.querySelector('img')||{}).src||'icon-192.png',NAME='Gyógyszertáram';
 if(old)old.remove();
-var css='.ig-pop,.ig-card{position:fixed;z-index:99000;background:#fff;color:#1a1a1a;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.3);font:14px/1.4 -apple-system,"Segoe UI",system-ui,sans-serif}'+
-'.ig-pop{left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom,0px));max-width:400px;margin:auto;padding:10px 12px;display:none;align-items:center;gap:10px}.ig-pop.on{display:flex}'+
-'.ig-pop img{width:44px;height:44px;border-radius:10px}.ig-pop b{display:block;font-size:.9rem}.ig-pop span{font-size:.76rem;color:#555}.ig-pop div{flex:1}'+
-'.ig-btn{border:0;border-radius:999px;background:'+(iOS?'#007AFF':'#1a73e8')+';color:#fff;font-weight:700;padding:9px 16px;font-size:.85rem}'+
-'.ig-x{position:absolute;top:2px;right:6px;background:none;border:0;font-size:22px;color:#888;padding:4px 8px}.ig-pop .ig-x{position:static}'+
-'.ig-card{left:8px;right:8px;max-width:440px;margin:auto;padding:12px 10px 8px;display:none;transition:top .6s,bottom .6s}.ig-card.on{display:block}'+
-'.ig-card.bot{bottom:calc(8px + env(safe-area-inset-bottom,0px))}.ig-card.top{top:var(--ig-top,64px)}'+
-'.ig-row{display:flex;align-items:center;gap:4px}.ig-sl{flex:1;min-width:0;text-align:center}.ig-nav{border:0;background:#eef1f4;border-radius:50%;width:34px;height:34px;font-size:20px;color:#333;flex:none}'+
-'.ig-svg{width:100%;max-height:150px;border-radius:10px;background:#eef1f4}.ig-sl h4{margin:6px 0 2px;font-size:.95rem}.ig-sl p{margin:0;font-size:.8rem;color:#444}.ig-sl p svg{vertical-align:middle}'+
-'.ig-dots{display:flex;justify-content:center;gap:6px;margin-top:8px}.ig-dots i{font-style:normal;width:22px;height:22px;border-radius:50%;background:#dde2e7;color:#555;font-size:.7rem;line-height:22px;text-align:center}.ig-dots i.on{background:'+(iOS?'#007AFF':'#1a73e8')+';color:#fff}'+
-'.ig-alt{display:block;text-align:center;font-size:.7rem;color:#777;margin-top:6px;text-decoration:underline}'+
-'.ig-arr{position:fixed;z-index:99001;font-size:34px;color:#e53935;display:none;animation:igb 1s infinite;text-shadow:0 0 4px #fff;pointer-events:none}.ig-arr.on{display:block}'+
-'@keyframes igb{50%{transform:translateY(8px)}}.ig-ring{animation:igp 1.2s infinite}@keyframes igp{50%{opacity:.25}}@media(prefers-reduced-motion:reduce){.ig-arr,.ig-ring{animation:none}}';
-var st=D.createElement('style');st.textContent=css;D.head.appendChild(st);
-// --- SVG kellékek ---
-var BL=iOS?'#007AFF':'#1a73e8';
+var BL=iOS?'#007AFF':'#1a73e8',SAFE='env(safe-area-inset-bottom,0px)';
+var st=D.createElement('style');st.textContent='.ig-pop,.ig-card{position:fixed;z-index:99000;background:#fff;color:#1a1a1a;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.3);font:13px/1.3 -apple-system,"Segoe UI",system-ui,sans-serif;left:8px;right:8px;max-width:440px;margin:auto}'+
+'.ig-pop{display:none;align-items:center;gap:8px;padding:6px 8px}.ig-pop.on{display:flex}.ig-pop img{width:34px;height:34px;border-radius:8px}.ig-pop div{flex:1;min-width:0}.ig-pop b{display:block;font-size:.8rem}.ig-pop span{font-size:.68rem;color:#555}'+
+'.ig-btn{border:0;border-radius:999px;background:'+BL+';color:#fff;font-weight:700;padding:6px 13px;font-size:.78rem}.ig-pop .ig-x{font-size:20px;padding:0 2px}'+
+'.ig-top{top:var(--ig-top,0)}.ig-bot{bottom:calc(8px + '+SAFE+')}.ig-bot.ar{bottom:calc(40px + '+SAFE+')}'+
+'.ig-card{display:none;padding:5px 3px 3px}.ig-card.on{display:block}.ig-row{display:flex;align-items:center;gap:2px}.ig-nav{flex:none;width:24px;height:40px;border:0;border-radius:12px;background:#eef1f4;font-size:20px;color:#333;padding:0}'+
+'.ig-body{flex:1;min-width:0;display:flex;gap:7px;align-items:center}.ig-ill{flex:0 0 52%}.ig-svg{display:block;width:100%;height:auto;border-radius:8px}.ig-tx{flex:1;min-width:0}.ig-tx b{display:block;font-size:.8rem}.ig-tx p{margin:2px 0 0;font-size:.7rem;line-height:1.28;color:#444}'+
+'.ig-foot{display:flex;align-items:center;justify-content:space-between;padding:3px 8px 0}.ig-alt{min-width:78px;font-size:.62rem;color:#777}.ig-dots{display:flex;gap:4px}.ig-dots i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#dde2e7;color:#555;font-size:.62rem;line-height:18px;text-align:center}.ig-dots i.on{background:'+BL+';color:#fff}'+
+'.ig-x{min-width:78px;text-align:right;background:none;border:0;color:#666;font-size:.68rem;padding:0}.ig-pop .ig-x{min-width:0}'+
+'.ig-arr{position:fixed;z-index:99001;font-size:30px;line-height:1;color:#e53935;display:none;animation:igb 1s infinite;text-shadow:0 0 4px #fff;pointer-events:none}.ig-arr.on{display:block}@keyframes igb{50%{transform:translateY(7px)}}.ig-ring{animation:igp 1.2s infinite}@keyframes igp{50%{opacity:.25}}@media(prefers-reduced-motion:reduce){.ig-arr,.ig-ring{animation:none}}';
+D.head.appendChild(st);
+// ---- SVG kellékek ----
 function R(x,y,w,h,r,f,s){return'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+r+'" fill="'+(f||'none')+'"'+(s?' stroke="'+s+'" stroke-width="1.2"':'')+'/>'}
-function T(x,y,t,z,f,a){return'<text x="'+x+'" y="'+y+'" font-size="'+(z||8)+'" fill="'+(f||'#333')+'" text-anchor="'+(a||'start')+'">'+t+'</text>'}
+function T(x,y,t,z,f,a,w){z=z||10;return'<text x="'+x+'" y="'+y+'" font-size="'+z+'" fill="'+(f||'#222')+'" text-anchor="'+(a||'start')+'"'+(w?' font-weight="700"':'')+'>'+t.split('|').map(function(s,i){return'<tspan x="'+x+'" dy="'+(i?z*1.15:0)+'">'+s+'</tspan>'}).join('')+'</text>'}
 function C(x,y,r,f){return'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+f+'"/>'}
-function ring(x,y){return'<circle class="ig-ring" cx="'+x+'" cy="'+y+'" r="13" fill="none" stroke="#e53935" stroke-width="2.5"/>'}
-function box(x,y,w,h){return'<rect class="ig-ring" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="6" fill="none" stroke="#e53935" stroke-width="2.5"/>'}
-function g(x,y,p,c){return'<g transform="translate('+x+','+y+')" fill="none" stroke="'+(c||BL)+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+p+'</g>'}
-var SH='<path d="M-5 0v7a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V0M0 5V-8M-3-5l3-3 3 3"/>',DOTS='<circle cx="0" cy="-4" r="1.3"/><circle cx="0" cy="0" r="1.3"/><circle cx="0" cy="4" r="1.3"/>',
-PLUS='<rect x="-6" y="-6" width="12" height="12" rx="3"/><path d="M0-3v6M-3 0h6"/>',CHV='<path d="M-6-2l6 5 6-5"/>';
-function S(i){return'<svg class="ig-svg" viewBox="0 0 240 130">'+R(0,0,240,130,0,'#eef1f4')+i+'</svg>'}
-var HOME=S(R(0,0,240,130,0,'#cfe0f0')+[0,1,2,3].map(function(n){return R(20+n*55,16,38,38,9,'#fff')}).join('')+R(20,70,38,38,9,'#fff')+R(75,70,38,38,9,'#fff')+'<image href="'+ICON+'" x="130" y="70" width="38" height="38"/>'+box(126,66,46,46)+T(149,120,'Gondviselés',7,'#333','middle'));
-var hu=!/^en/i.test(navigator.language||'hu'),L={add:hu?'Főképernyőhöz adás':'Add to Home Screen',more:hu?'Továbbiak megtekintése':'View More',share:hu?'Megosztás':'Share',inst:hu?'Alkalmazás telepítése':'Install app',web:hu?'Megnyitás webalkalmazásként':'Open as Web App',addb:hu?'Hozzáadás':'Add'};
-var bar=LS('igBar')||((iOS&&(br==='c'))?'t':'b'); // címsor helye: t=fent, b=lent
+function ring(x,y,r){return'<circle class="ig-ring" cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="#e53935" stroke-width="3"/>'}
+function box(x,y,w,h){return'<rect class="ig-ring" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="7" fill="none" stroke="#e53935" stroke-width="3"/>'}
+function g(x,y,p,c,s){s=s||1.2;return'<g transform="translate('+x+','+y+') scale('+s+')" fill="none" stroke="'+(c||'#333')+'" stroke-width="'+(1.8/s)+'" stroke-linecap="round" stroke-linejoin="round">'+p+'</g>'}
+function ic(p,c){return'<svg width="15" height="15" viewBox="-10 -10 20 20" style="vertical-align:-3px" fill="none" stroke="'+(c||'#333')+'" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'}
+function S(i,bg){return'<svg class="ig-svg" viewBox="0 0 240 80">'+R(0,0,240,80,0,bg||'#e9ecef')+i+'</svg>'}
+var SH='<path d="M-3.5-3H-5a2.2 2.2 0 0 0-2.2 2.2V6.5A2.5 2.5 0 0 0-4.7 9H4.7a2.5 2.5 0 0 0 2.5-2.5V-.8A2.2 2.2 0 0 0 5-3H3.5M0 4.5V-9M-3.5-5.5L0-9l3.5 3.5"/>',
+PL='<rect x="-7" y="-7" width="14" height="14" rx="3.5"/><path d="M0-3.5v7M-3.5 0h7"/>',CV='<path d="M-7-2.5L0 4l7-6.5"/>',
+CP='<rect x="-6" y="-3" width="9" height="11" rx="2"/><path d="M-3-6h6.5a2 2 0 0 1 2 2V5"/>',BM='<path d="M-4.5-7h9v14l-4.5-3.5-4.5 3.5z"/>',
+GL='<circle cx="-4.5" cy="1" r="3.5"/><circle cx="4.5" cy="1" r="3.5"/><path d="M-1 .5h2"/>',ST='<path d="M0-8l2.4 5 5.4.7-4 3.8 1 5.4L0 4l-4.8 2.9 1-5.4-4-3.8 5.4-.7z"/>',
+LP='<circle cx="-4" cy="-5" r="3"/><path d="M-4-6.5v3M-5.5-5h3M1-5h7M-7 0h15M-7 5h15"/>',DC='<rect x="-5" y="-6" width="10" height="13" rx="2"/><path d="M-2 0l2 2 3-4"/>',
+RM='<rect x="-6" y="-7" width="12" height="14" rx="2.5"/><path d="M-3-3h6M-3 0h6M-3 3h3"/>',SR='<circle cx="-1.5" cy="-1.5" r="5"/><path d="M2 2l5 5"/>',
+DH='<circle cx="-5" r="1.6" fill="#fff"/><circle r="1.6" fill="#fff"/><circle cx="5" r="1.6" fill="#fff"/>',DV='<circle cy="-5" r="1.6" fill="#333"/><circle r="1.6" fill="#333"/><circle cy="5" r="1.6" fill="#333"/>',
+BK='<path d="M2-6l-6 6 6 6"/>';
+function HOME(){return S([20,78,136].map(function(x){return R(x,10,36,36,9,'#fff')}).join('')+'<image href="'+ICON+'" x="188" y="10" width="36" height="36"/>'+ring(206,28,27)+T(206,62,NAME,9,'#222','middle'),'#cfe0f0')}
 function steps(){
- if(br==='g')return[{t:'Nyisd meg böngészőben',d:iOS?'A Google alkalmazás beépített nézetéből nem lehet telepíteni. Koppints a '+g(0,0,'<circle cx="0" cy="0" r="6"/><path d="M-2-2l5-2-2 5-5 2z"/>','#333').replace('<g','<svg width="16" height="16" viewBox="-8 -8 16 16"><g').replace('</g>','</g></svg>')+' <b>Megnyitás Safariban</b> lehetőségre, majd ott kövesd a lépéseket.':'Koppints a <b>⋮</b> menüre, majd a <b>Megnyitás Chrome-ban</b> lehetőségre, és ott kövesd a lépéseket.',s:S(R(20,30,200,70,10,'#fff')+T(120,70,'Megnyitás böngészőben',10,'#333','middle')+box(30,52,180,34))}];
- if(AND){var topB=br!=='o',my=topB?16:114;
-  return[{t:'Nyisd meg a menüt',d:'Koppints a <b>⋮</b> (három pont) gombra a böngésző '+(topB?'jobb felső':'jobb alsó')+' sarkában.',s:S(R(8,6,224,20,10,'#e2e5e9')+T(120,20,'11117.github.io',8,'#555','middle')+g(222,my>20?my:16,DOTS,'#333')+(topB?ring(222,16):R(8,100,224,24,12,'#e2e5e9')+g(222,112,DOTS,'#333')+ring(222,112)))},
-  {t:'Válaszd a telepítést',d:'Koppints az <b>'+L.inst+'</b> vagy a <b>Hozzáadás a kezdőképernyőhöz</b> menüpontra.',s:S(R(100,topB?24:8,132,topB?96:92,8,'#fff','#ccc')+T(108,topB?42:26,'Új lap',8)+T(108,topB?58:42,'Könyvjelzők',8)+T(108,topB?74:58,L.inst,8,'#111')+T(108,topB?90:74,'Beállítások',8)+box(102,topB?62:46,128,18))},
-  {t:'Erősítsd meg',d:'A felugró ablakban koppints a <b>Telepítés</b> (vagy <b>Hozzáadás</b>) gombra.',s:S(R(20,30,200,76,12,'#fff','#ccc')+'<image href="'+ICON+'" x="30" y="40" width="26" height="26"/>'+T(64,57,'Gondviselés Gyógyszertár',8)+R(150,80,60,20,10,BL)+T(180,94,'Telepítés',8,'#fff','middle')+ring(180,90))},
-  {t:'Kész!',d:'Az alkalmazás ikonját a főképernyőn (vagy az alkalmazások között) találod.',s:HOME}];}
- var top=bar==='t',sx=top?216:118,sy=top?16:111;
- var bars=top?R(8,5,224,22,11,'#e2e5e9')+T(120,20,'11117.github.io',8,'#555','middle')+g(sx,16,SH)+R(0,106,240,24,0,'#e9ebee'):R(8,98,224,28,14,'#f7f7f9','#ccc')+g(40,112,'<path d="M3-6l-6 6 6 6"/>','#333')+g(118,111,SH)+g(160,112,'<path d="M-6-5h5a2 2 0 0 1 2 2v9a2 2 0 0 0-2-2h-5zM6-5h-5"/>','#333')+R(194,104,12,12,3,'none','#333');
- var oy=top?30:14;
- return[{t:'Koppints a Megosztás ikonra',d:'A '+(top?'címsor jobb szélén':'böngésző alsó sávjában')+' lévő '+g(0,0,SH).replace('<g','<svg width="16" height="16" viewBox="-9 -10 18 20"><g').replace('</g>','</g></svg>')+' <b>'+L.share+'</b> ikon. Ha nem látod, nyisd meg előbb a <b>⋯</b> menüt.',s:S(bars+ring(sx,sy>20?sy:16))},
- {t:'Továbbiak megtekintése',d:'A megosztási panel alján, a műveletek sorának végén koppints a '+g(0,0,CHV,'#333').replace('<g','<svg width="16" height="14" viewBox="-8 -6 16 12"><g').replace('</g>','</g></svg>')+' <b>'+L.more+'</b> gombra.',s:S(R(14,oy-6,212,112,12,'#fff','#ccc')+[0,1,2].map(function(n){return C(44+n*56,oy+68,14,'#e3e6ea')+T(44+n*56,oy+96,['Másolás','Üzenetek','Mail'][n],7,'#555','middle')}).join('')+C(212,oy+68,14,'#e3e6ea')+g(212,oy+68,CHV,'#333')+ring(212,oy+68)+T(120,oy+14,'Gondviselés Gyógyszertár',8,'#111','middle'))},
- {t:'Főképernyőhöz adás',d:'A lista alján válaszd a '+g(0,0,PLUS,'#333').replace('<g','<svg width="16" height="16" viewBox="-8 -8 16 16"><g').replace('</g>','</g></svg>')+' <b>'+L.add+'</b> sort. Ha nem látod, görgess lejjebb.',s:S(R(14,8,212,114,12,'#fff','#ccc')+T(26,30,'Hozzáadás a könyvjelzőkhöz',8)+T(26,52,'Hozzáadás az olvasólistához',8)+T(26,74,'Keresés az oldalon',8)+g(204,70,'<path d="M-4-5h8v10h-8z"/>','#333')+T(26,100,L.add,8,'#111')+g(206,97,PLUS,'#333')+box(18,86,196,20))},
- {t:'Hozzáadás',d:'Hagyd bekapcsolva a <b>'+L.web+'</b> kapcsolót (iOS 26), majd koppints a jobb felső <b>'+L.addb+'</b> gombra.',s:S(R(14,6,212,118,12,'#fff','#ccc')+T(28,24,'Mégse',8,BL)+T(212,24,L.addb,8,BL,'end')+ring(196,21)+'<image href="'+ICON+'" x="28" y="36" width="30" height="30"/>'+T(66,56,'Gondviselés Gyógyszertár',8)+R(28,82,184,26,6,'#f2f3f5')+T(36,99,L.web,7.5)+R(170,87,32,16,8,'#34c759')+C(194,95,6,'#fff'))},
- {t:'Kész!',d:'Az alkalmazás ikonja megjelent a főképernyőn. Nyisd meg onnan!',s:HOME}];
-}
-// --- Felület ---
-var pop=D.createElement('div');pop.className='ig-pop';pop.setAttribute('role','dialog');pop.innerHTML='<img src="'+ICON+'" alt=""><div><b>Töltse le alkalmazásunkat!</b><span>Gyorsabb elérés a főképernyőről.</span></div><button class="ig-btn" type="button">Letöltés</button><button class="ig-x" type="button" aria-label="Bezárás">&times;</button>';
-var card=D.createElement('div');card.className='ig-card bot';card.setAttribute('role','dialog');card.setAttribute('aria-label','Telepítési útmutató');
+ var top=bar==='t';
+ if(br==='g')return[{t:iOS?'Nyisd meg Safariban':'Nyisd meg Chrome-ban',d:iOS?'A Google appból nem telepíthető. Koppints a '+ic('<circle r="7"/><path d="M-2.5-2.5l5-2-2 5-5 2z"/>')+' <b>Megnyitás Safariban</b> gombra, és ott folytasd.':'Koppints a <b>⋮</b> menüre, majd a <b>Megnyitás Chrome-ban</b> lehetőségre.',s:S(R(30,20,180,40,10,'#fff')+T(120,45,'Megnyitás böngészőben',11,'#222','middle')+box(34,24,172,32))}];
+ if(AND){return[
+ {t:'Menü megnyitása',d:'Koppints a <b>⋮</b> (három pont) gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.',s:S(top?R(6,6,228,22,11,'#dfe3e8')+T(110,21,'11117.github.io',10,'#555','middle')+g(222,17,DV,'#333',1)+ring(222,17,13)+R(6,36,228,38,8,'#d5dae0'):R(6,6,228,22,11,'#dfe3e8')+T(120,21,'11117.github.io',10,'#555','middle')+R(6,54,228,22,11,'#dfe3e8')+g(222,65,DV,'#333',1)+ring(222,65,13))},
+ {t:'Telepítés',d:'Válaszd az <b>Alkalmazás telepítése</b> vagy a <b>Hozzáadás a kezdőképernyőhöz</b> menüpontot.',s:S(R(104,2,132,76,8,'#fff','#ccc')+T(112,18,'Új lap',9.5)+T(112,34,'Könyvjelzők',9.5)+T(112,50,'Alkalmazás telepítése',9.5)+T(112,66,'Beállítások',9.5)+box(106,38,128,16))},
+ {t:'Megerősítés',d:'Koppints a <b>Telepítés</b> (vagy <b>Hozzáadás</b>) gombra.',s:S(R(24,6,192,68,12,'#fff','#ccc')+'<image href="'+ICON+'" x="34" y="16" width="26" height="26"/>'+T(68,33,NAME,11)+R(146,50,60,18,9,BL)+T(176,63,'Telepítés',10,'#fff','middle')+box(142,46,68,26))},
+ {t:'Kész!',d:'Az ikont a főképernyőn vagy az alkalmazások között találod.',s:HOME()}]}
+ var s1=top?S(R(6,6,228,26,13,'#d1d1d6')+T(120,23,'11117.github.io',11,'#333','middle')+g(214,19,SH,'#333',1)+ring(214,19,15)+R(6,40,228,34,8,'#dfe3e8')):
+  br==='b'?S(R(6,6,228,26,13,'#1c1c1e')+T(120,23,'11117.github.io',11,'#fff','middle')+R(0,40,240,40,0,'#2c2c2e')+g(24,60,BK,'#fff')+g(71,60,SH,'#fff',1)+ring(71,60,15)+g(118,60,'<path d="M0-7v14M-7 0h14"/>','#fff',1)+R(158,53,14,14,3,'none','#fff')+g(211,60,DH,'#fff'),'#555'):
+  S(R(6,4,228,24,12,'#1c1c1e')+T(120,20,'11117.github.io',11,'#fff','middle')+R(6,36,228,40,20,'#f2f2f7','#c7c7cc')+g(32,56,BK)+g(75,56,BK,'#bbb')+g(117,56,SH)+ring(117,56,15)+g(161,56,BM)+R(197,49,16,14,3,'none','#333'));
+ var it={s:[[CP,'Másolás'],[BM,'Hozzáadás|ehhez:|Könyvjelzők'],[GL,'Hozzáadás az|olvasási|listához']],c:[[CP,'Másolás'],[LP,'Hozzáadás az|Olvasólistá-|hoz'],[ST,'Hozzáadás a|könyvjelzők-|höz']],b:[[CP,'Másolás'],[DC,'Tiszta|hivatkozás|másolása'],[RM,'Olvasó mód|átkapcsolása']]}[br==='c'?'c':br==='s'?'s':'b'].concat([[CV,'Továbbiak|megtekintése']]);
+ var s2=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+it.map(function(a,n){var x=32+n*57;return C(x,26,16,'#e5e5ea')+g(x,26,a[0],'#333',1.1)+T(x,52,a[1],7.5,'#333','middle')}).join('')+ring(203,26,19));
+ var s3=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+T(14,22,'Keresés az oldalon',10.5)+g(216,18,SR,'#333',.9)+'<path d="M14 29H226M14 55H226" stroke="#d1d1d6"/>'+T(14,46,'Főképernyőhöz adás',10.5,'#111',0,1)+g(216,42,PL,'#333',.9)+T(14,70,'Nyomtatás',10.5)+box(8,32,224,20));
+ var s4=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+T(14,18,'Mégse',10,BL)+T(120,18,'Főképernyőhöz adás',10,'#111','middle',1)+T(226,18,'Hozzáadás',10,BL,'end',1)+box(168,6,62,16)+'<image href="'+ICON+'" x="12" y="28" width="24" height="24"/>'+R(42,28,184,24,6,'#fff')+T(50,44,NAME,10.5)+T(14,70,'Megnyitás webalkalmazásként',9)+R(190,60,32,16,8,'#34c759')+C(214,68,6,'#fff'));
+ return[{t:'Megosztás',d:'Koppints a '+ic(SH)+' <b>Megosztás</b> ikonra '+(top?'a címsor jobb szélén.':'az alsó sávban. Nem látod? Nyisd meg a <b>⋯</b> menüt.'),s:s1},
+ {t:'Továbbiak',d:'A panel alján koppints a '+ic(CV)+' <b>Továbbiak megtekintése</b> gombra.',s:s2},
+ {t:'Főképernyőhöz adás',d:'A listán válaszd a '+ic(PL)+' <b>Főképernyőhöz adás</b> sort (görgess, ha nem látod).',s:s3},
+ {t:'Hozzáadás',d:'Hagyd bekapcsolva a <b>Megnyitás webalkalmazásként</b> kapcsolót, majd koppints a <b>Hozzáadás</b> gombra.',s:s4},
+ {t:'Kész!',d:'Az ikon a főképernyőn van, onnan nyisd meg.',s:HOME()}]}
+// ---- Felület ----
+var pop=D.createElement('div');pop.className='ig-pop';pop.setAttribute('role','dialog');pop.innerHTML='<img src="'+ICON+'" alt=""><div><b>Töltse le alkalmazásunkat!</b><span>Gyorsabb elérés a főképernyőről</span></div><button class="ig-btn" type="button">Letöltés</button><button class="ig-x" type="button" aria-label="Bezárás">&times;</button>';
+var card=D.createElement('div');card.className='ig-card';card.setAttribute('role','dialog');card.setAttribute('aria-label','Telepítési útmutató');
 var arr=D.createElement('div');arr.className='ig-arr';
 D.body.appendChild(pop);D.body.appendChild(card);D.body.appendChild(arr);
-var idx=0,auto=true,tm,jt,list=[],defer=null;
-function dismiss(){pop.classList.remove('on');LS('pwaBannerDismissedAt',String(Date.now()))}
+var idx=0,auto=true,tm,jt,list=[],defer=null,arrowOn=true;
+function setTop(){var n=D.querySelector('nav'),h=n?n.getBoundingClientRect().bottom:0;D.documentElement.style.setProperty('--ig-top',Math.max(h,0)+'px')}
 function stop(){auto=false;clearInterval(tm)}
 function render(){
  var s=list[idx];
- card.innerHTML='<button class="ig-x" aria-label="Bezárás">&times;</button><div class="ig-row"><button class="ig-nav" aria-label="Előző">&#8249;</button><div class="ig-sl" aria-live="polite"><small>'+(idx+1)+' / '+list.length+'. lépés</small>'+s.s+'<h4>'+(idx+1)+'. '+s.t+'</h4><p>'+s.d+'</p></div><button class="ig-nav" aria-label="Következő">&#8250;</button></div><div class="ig-dots">'+list.map(function(_,n){return'<i class="'+(n===idx?'on':'')+'">'+(n+1)+'</i>'}).join('')+'</div>'+(iOS&&br!=='g'?'<a class="ig-alt" href="#">Nálad a címsor '+(bar==='t'?'lent':'fent')+' van? Váltás</a>':'');
- var b=card.querySelectorAll('.ig-nav');
- b[0].onclick=function(){stop();go(idx-1)};b[1].onclick=function(){stop();go(idx+1)};
+ card.innerHTML='<div class="ig-row"><button class="ig-nav" aria-label="Előző">&#8249;</button><div class="ig-body" aria-live="polite"><div class="ig-ill">'+s.s+'</div><div class="ig-tx"><b>'+(idx+1)+'. '+s.t+'</b><p>'+s.d+'</p></div></div><button class="ig-nav" aria-label="Következő">&#8250;</button></div><div class="ig-foot"><a class="ig-alt" href="#">'+(iOS&&br!=='g'?'Címsor máshol?':'')+'</a><span class="ig-dots">'+list.map(function(_,n){return'<i class="'+(n===idx?'on':'')+'">'+(n+1)+'</i>'}).join('')+'</span><button class="ig-x" type="button">Bezárás &times;</button></div>';
+ var b=card.querySelectorAll('.ig-nav');b[0].onclick=function(){stop();go(idx-1)};b[1].onclick=function(){stop();go(idx+1)};
  card.querySelector('.ig-x').onclick=close;
- var al=card.querySelector('.ig-alt');if(al)al.onclick=function(e){e.preventDefault();bar=bar==='t'?'b':'t';LS('igBar',bar);open()};
- arr.classList.toggle('on',idx===0&&card.classList.contains('on'));
+ var al=card.querySelector('.ig-alt');al.onclick=function(e){e.preventDefault();if(!al.textContent)return;bar=bar==='t'?'b':'t';LS('igBar',bar);open()};
+ arr.classList.toggle('on',idx===0&&arrowOn&&card.classList.contains('on'));
 }
 function go(n){idx=(n+list.length)%list.length;render()}
-function arrow(){ // nyíl a megfelelő gombra mutat (csak az 1. lépésnél)
- var up=AND?br!=='o':bar==='t';
- arr.textContent=up?'\u25B2':'\u25BC';arr.style.cssText=up?'top:2px;right:'+(AND?'10px':'22px'):'bottom:calc(2px + env(safe-area-inset-bottom,0px));'+(AND&&br==='o'?'right:10px':iOS?'left:46%':'left:50%');
-}
 function close(){clearInterval(tm);clearTimeout(jt);card.classList.remove('on');arr.classList.remove('on')}
 function open(){
- pop.classList.remove('on');list=steps();idx=0;auto=!matchMedia('(prefers-reduced-motion: reduce)').matches;
- var nav=D.querySelector('nav'),h=nav?nav.getBoundingClientRect().bottom:64;card.style.setProperty('--ig-top',Math.max(h,0)+'px');
- card.className='ig-card on bot';render();arrow();clearInterval(tm);clearTimeout(jt);
+ pop.classList.remove('on');clearInterval(tm);clearTimeout(jt);list=steps();idx=0;arrowOn=br!=='g';setTop();
+ auto=!matchMedia('(prefers-reduced-motion: reduce)').matches;var tp=bar==='b';
+ card.className='ig-card on '+(tp?(arrowOn?'ig-bot ar':'ig-top'):'ig-bot');
+ var up=bar==='t';arr.textContent=up?'\u25B2':'\u25BC';
+ arr.style.cssText=up?'top:2px;right:'+(iOS?'20px':'8px'):'bottom:calc(2px + '+SAFE+');'+(AND?'right:8px':'left:'+(br==='b'?'27%':'47%'));
+ render();
  tm=setInterval(function(){if(auto)go(idx+1)},5000);
- // alsó sávos böngészőnél a panel pár mp múlva a fejléc alá ugrik (hogy a Megosztás-panel ne takarja)
- if(iOS&&bar==='b'&&br!=='g')jt=setTimeout(function(){card.classList.replace('bot','top');arr.classList.add('on')},3500);
- card.addEventListener('pointerdown',stop,{once:true});
- var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
+ // alsó sávos böngészőnél a panel pár mp múlva a fejléc alá ugrik (a megosztási panel ne takarja)
+ if(tp&&arrowOn)jt=setTimeout(function(){card.className='ig-card on ig-top'},3500);
+ card.onpointerdown=stop;var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
 }
-pop.querySelector('.ig-x').onclick=dismiss;
+pop.querySelector('.ig-x').onclick=function(){pop.classList.remove('on')}; // csak az oldal következő újratöltéséig tűnik el
 pop.querySelector('.ig-btn').onclick=function(){
  if(defer){var p=defer;defer=null;pop.classList.remove('on');p.prompt();p.userChoice.then(function(c){if(c.outcome!=='accepted')open()})}else open()};
-window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
-window.addEventListener('appinstalled',function(){pop.classList.remove('on');close();LS('pwaBannerDismissedAt',String(Date.now()))});
+addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
+addEventListener('appinstalled',function(){pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){var t=parseInt(LS('pwaBannerDismissedAt')||'0',10);if(Date.now()-t<12096e5)return;setTimeout(function(){pop.classList.add('on')},1200)}
+function reveal(){setTimeout(function(){setTop();pop.className='ig-pop on '+(bar==='b'?'ig-top':'ig-bot')},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
-// hamburger menü gombja (a "Kapcsolat" alatt)
-var mb=D.getElementById('pwa-menu-dl');
 if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;open()});
 if(/[?&]app=1/.test(location.search))setTimeout(open,600);
 })();
