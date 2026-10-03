@@ -101,7 +101,12 @@
         .logo { font-weight: bold; color: white; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
         .logo .logo-badge { height: 44px; width: 44px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
         .logo img { height: 38px; width: 38px; object-fit: contain; display: block; }
-        @media screen and (max-width: 480px) { .logo span { display: none; } }
+        @media screen and (max-width: 480px) {
+            nav { padding-left: 4% !important; padding-right: 4% !important; }
+            .logo { gap: 8px; font-size: 0.95rem; flex: 1 1 auto; min-width: 0; }
+            .logo > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+        }
+        @media screen and (max-width: 360px) { .logo { font-size: 0.82rem; } }
         .nav-links { display: flex; list-style: none; align-items: center; }
         .nav-links li { margin-left: 20px; }
         .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: 0.3s; font-weight: 500; }
@@ -134,11 +139,12 @@
         section { padding: 80px 5%; width: 100%; max-width: 1200px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 2rem; margin-bottom: 30px; font-weight: 800; color: #1a1a1a; }
         /* Főoldali szekciók: minimális függőleges margó előttük és utánuk */
-        #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat { padding-top: 40px; padding-bottom: 40px; }
-        #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title { margin-bottom: 16px; }
+        #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat, #terkep-szekcio { padding-top: 40px; padding-bottom: 40px; }
+        #terkep-szekcio .map-address { margin-bottom: 14px; }
+        #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title, #terkep-szekcio .section-title { margin-bottom: 16px; }
         @media screen and (max-width: 768px) {
-            #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat { padding-top: 16px; padding-bottom: 16px; }
-            #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title { margin-bottom: 10px; }
+            #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat, #terkep-szekcio { padding-top: 16px; padding-bottom: 16px; }
+            #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title, #terkep-szekcio .section-title { margin-bottom: 10px; }
         }
 
         .services-info {
@@ -195,8 +201,8 @@
                 font-size: 1.25rem; transition: transform .15s ease, background .15s ease;
             }
             .szimp-nav-btn:active { transform: scale(0.92); background: #006b3c; }
-            .szimp-nav-btn.up { top: 0; }
-            .szimp-nav-btn.down { bottom: 0; }
+            .szimp-nav-btn.up { top: 50%; margin-top: -49px; }
+            .szimp-nav-btn.down { top: 50%; margin-top: 7px; }
             .szimp-nav-btn .ico { font-size: 1.25rem; }
         }
 
@@ -219,7 +225,7 @@
 
         #terkep-szekcio { 
             background-color: #f4f7f5; 
-            padding: 80px 20px; 
+            padding: 40px 20px; 
             text-align: center;
             width: 100%;
             display: flex;
@@ -227,6 +233,7 @@
             align-items: center;
         }
 
+        @media screen and (max-width: 768px) { #terkep-szekcio { padding-top: 16px; padding-bottom: 16px; } }
         .map-address { margin-bottom: 25px; color: #444; font-size: 1.1rem; font-weight: 500; text-align: center; }
         .map-address .ico { color: #d32f2f; margin-right: 8px; }
         .map-container { max-width: 1000px; margin: 0 auto; width: 100%; }

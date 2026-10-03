@@ -64,7 +64,12 @@
   .logo { font-weight: bold; color: white; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
   .logo .logo-badge { height: 44px; width: 44px; border-radius: 50%; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
   .logo img { height: 38px; width: 38px; object-fit: contain; display: block; }
-  @media screen and (max-width: 480px) { .logo span { display: none; } }
+  @media screen and (max-width: 480px) {
+            nav { padding-left: 4% !important; padding-right: 4% !important; }
+            .logo { gap: 8px; font-size: 0.95rem; flex: 1 1 auto; min-width: 0; }
+            .logo > span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+        }
+        @media screen and (max-width: 360px) { .logo { font-size: 0.82rem; } }
   .nav-links { display: flex; list-style: none; align-items: center; }
   .nav-links li { margin-left: 20px; }
   .nav-links a { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.9rem; transition: 0.3s; font-weight: 500; }
@@ -320,10 +325,10 @@
     position: fixed; inset: 0; z-index: 97500;
     display: flex; flex-direction: column; flex-wrap: nowrap;
     align-items: center; justify-content: center;
-    width: 100vw; height: 100vh; height: 100dvh; max-width: none; margin: 0;
-    background: #0d1117; gap: 6px; box-sizing: border-box;
-    padding: 8px; padding-top: calc(8px + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    top: 0; right: 0; bottom: 0; left: 0; width: auto; height: auto; max-width: none; margin: 0;
+    background: #0d1117; gap: 4px; box-sizing: border-box;
+    padding: 4px; padding-top: calc(4px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
     overflow: hidden; touch-action: none; overscroll-behavior: none;
   }
   .game-layout.pseudo-fullscreen .game-column {
@@ -339,9 +344,12 @@
   .game-layout.pseudo-fullscreen #fullscreen-btn .ico { font-size:1.2rem; }
   .game-layout.pseudo-fullscreen .stage-wrap { flex: none; max-width: none; margin: 0; }
   .game-layout.pseudo-fullscreen canvas#game { width: 100%; height: 100%; }
-  .game-layout.pseudo-fullscreen .dpad { flex-shrink: 0; }
+  .game-layout.pseudo-fullscreen .dpad { flex-shrink: 0; margin: 2px auto 0; gap: 4px; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(3, 46px); }
+  .game-layout.pseudo-fullscreen .dpad button { font-size: 1.05rem; border-radius: 11px; }
+  .game-layout.pseudo-fullscreen .dpad .playpause-btn { font-size: 0.95rem; }
+  .game-layout.pseudo-fullscreen .hud-row .pill { padding: 3px 8px; }
   /* Teljes képernyőn semmi nem görgethető, és a Szabály gomb sem lebeg a HUD fölött */
-  html.pseudo-fs-lock, html.pseudo-fs-lock body { overflow: hidden; height: 100%; overscroll-behavior: none; }
+  html.pseudo-fs-lock, html.pseudo-fs-lock body { overflow: hidden; height: 100%; overscroll-behavior: none; background: #0d1117 !important; padding-bottom: 0 !important; }
   html.pseudo-fs-lock .rules-fab { display: none; }
 
   .hud-row { max-width:1100px; margin:0 auto 10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
@@ -377,16 +385,16 @@
   .game-overlay { position:absolute; inset:0; background:rgba(10,14,20,0.86); border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px; color:#fff; }
   /* ===================== "Push" jellegű értesítés a Kórokozó-riasztáshoz ===================== */
   .push-notif {
-    position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    position:relative; flex:none; order:-1; margin:0 0 16px;
     display:flex; align-items:center; gap:10px; background:#fff; color:#1a1a1a;
     border-radius:14px; padding:10px 16px; box-shadow:0 8px 22px rgba(0,0,0,0.35);
-    cursor:pointer; max-width:90%; z-index:5; border-left:5px solid #e53935;
+    cursor:pointer; max-width:92%; border-left:5px solid #e53935;
   }
   .push-notif.hidden { display:none; }
   .push-notif__icon { color:#e53935; font-size:1.05rem; flex-shrink:0; }
   .push-notif__text { font-weight:700; font-size:0.88rem; text-align:left; }
   .push-notif:hover { background:#fafafa; }
-  @keyframes pushNotifPop { 0% { transform:translateX(-50%) translateY(0); } 40% { transform:translateX(-50%) translateY(-7px); } 100% { transform:translateX(-50%) translateY(0); } }
+  @keyframes pushNotifPop { 0% { transform:translateY(0); } 40% { transform:translateY(-7px); } 100% { transform:translateY(0); } }
   .push-notif.pop { animation: pushNotifPop 0.5s ease; }
   @media (display-mode: standalone) {
       .game-overlay { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)); }
@@ -413,6 +421,11 @@
   .pathogen-msg.is-unread .pathogen-msg__bubble { background:#fff4d1; box-shadow:0 0 0 2px #ffe08a, 0 2px 6px rgba(20,30,45,0.08); }
   .push-notif__body { display:flex; flex-direction:column; align-items:flex-start; text-align:left; }
   .push-notif__sub { font-size:0.72rem; font-weight:500; color:#6b7782; margin-top:1px; }
+
+  /* Információs szövegdobozok: legfeljebb 2 sor, utána vastag "Továbbiak..." */
+  .clamp2 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden; }
+  .clamp2.expanded { display:block; -webkit-line-clamp:unset; line-clamp:unset; overflow:visible; }
+  .more-btn { display:inline-block; background:none; border:0; padding:4px 0 0; margin:0; font:inherit; font-weight:800; text-decoration:underline; cursor:pointer; color:inherit; -webkit-tap-highlight-color:transparent; }
   .game-overlay.hidden { display:none; }
   .game-overlay h2 { font-size:1.3rem; margin-bottom:10px; }
   .game-overlay p { font-size:0.92rem; color:#dbe3ea; margin-bottom:16px; max-width:380px; }
@@ -477,7 +490,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
   <div class="promo-card" style="margin-bottom:18px;">
     <svg class="ico ico-circle-info"><use href="#ico-circle-info"></use></svg>
-    <p><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p>
+    <p class="clamp2"><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p>
   </div>
 
   <div class="game-layout">
@@ -1988,6 +2001,37 @@ if ('serviceWorker' in navigator) {
   }
 
   initChat();
+})();
+</script>
+
+<script>
+(function(){
+  function setup(){
+    document.querySelectorAll('.clamp2').forEach(function(el){
+      if (el.dataset.clampInit) return;
+      el.dataset.clampInit = '1';
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'more-btn'; btn.textContent = 'Továbbiak...'; btn.hidden = true;
+      el.insertAdjacentElement('afterend', btn);
+      btn.addEventListener('click', function(){
+        var open = el.classList.toggle('expanded');
+        btn.textContent = open ? 'Kevesebb' : 'Továbbiak...';
+      });
+      el._clampBtn = btn;
+    });
+    check();
+  }
+  function check(){
+    document.querySelectorAll('.clamp2').forEach(function(el){
+      var btn = el._clampBtn; if (!btn) return;
+      if (el.classList.contains('expanded')) { btn.hidden = false; return; }
+      btn.hidden = !(el.scrollHeight > el.clientHeight + 1);
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup); else setup();
+  window.addEventListener('load', check);
+  window.addEventListener('resize', check);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
 })();
 </script>
 </body>
