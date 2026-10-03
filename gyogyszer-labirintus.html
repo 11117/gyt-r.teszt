@@ -332,7 +332,11 @@
   }
   .game-layout.pseudo-fullscreen .hud-row { margin: 0; gap: 5px; }
   .game-layout.pseudo-fullscreen .hud-row .pill { padding: 4px 9px; font-size: 0.72rem; }
-  .game-layout.pseudo-fullscreen .hud-btn { padding: 4px 10px; font-size: 0.72rem; }
+  .game-layout.pseudo-fullscreen .hud-btn { padding: 6px 12px; font-size: 0.78rem; }
+  /* Felső eszköztár: a kilépés gomb mindig jól látható, a tartalom fölött külön sorban (nem takar ki semmit) */
+  .game-layout.pseudo-fullscreen .hud-actions { order: -1; width: 100%; margin: 0; justify-content: space-between; flex-wrap: nowrap; }
+  .game-layout.pseudo-fullscreen #fullscreen-btn { background:#ffb300; color:#1a1a1a; border-color:#ffd666; width:44px; height:44px; padding:0; justify-content:center; border-radius:50%; box-shadow:0 0 0 3px rgba(255,179,0,0.28), 0 4px 12px rgba(0,0,0,0.4); }
+  .game-layout.pseudo-fullscreen #fullscreen-btn .ico { font-size:1.2rem; }
   .game-layout.pseudo-fullscreen .stage-wrap { flex: none; max-width: none; margin: 0; }
   .game-layout.pseudo-fullscreen canvas#game { width: 100%; height: 100%; }
   .game-layout.pseudo-fullscreen .dpad { flex-shrink: 0; }
@@ -390,6 +394,7 @@
   }
 
   /* ===================== HUD gombok (teljes képernyő + riasztások) ===================== */
+  .hud-actions { max-width:1100px; margin:0 auto 10px; display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-items:center; }
   .hud-btn { position:relative; background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,0.25); border-radius:30px; padding:6px 12px; font-family:inherit; font-weight:700; font-size:0.82rem; display:flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; box-shadow:0 3px 8px rgba(32,48,64,0.15); -webkit-tap-highlight-color:transparent; }
   .hud-btn:hover { background:#333; }
   .hud-btn:active { transform:scale(0.96); }
@@ -488,9 +493,12 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <span class="pill best">🏆 Legjobb pontszám: <span id="hud-best-score">0</span></span>
     <span class="pill best"><span class="tabicon"></span> Legjobb: <span id="hud-best-tablet">0</span></span>
     <span class="pill best"><span class="capicon"></span> Legjobb: <span id="hud-best-capsule">0</span></span>
-    <button type="button" class="hud-btn" id="fullscreen-btn" aria-label="Teljes képernyő"><svg class="ico ico-expand" id="fullscreen-icon"><use href="#ico-expand"></use></svg><span id="fullscreen-label">Teljes képernyő</span></button>
-    <button type="button" class="hud-btn" id="chat-open-btn" aria-label="Kórokozó-riasztás megnyitása"><svg class="ico" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z"/></svg><span class="pathogen-chat__badge" id="pathogen-chat-badge">1</span></button>
   </div>
+  <div class="hud-actions">
+    <button type="button" class="hud-btn hud-btn--exit" id="fullscreen-btn" aria-label="Teljes képernyő"><svg class="ico ico-expand" id="fullscreen-icon"><use href="#ico-expand"></use></svg><span id="fullscreen-label">Teljes képernyő</span></button>
+    <button type="button" class="hud-btn" id="reload-btn" aria-label="Játék újratöltése"><svg class="ico" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M463.5 224H472c13.3 0 24-10.7 24-24V72c0-9.7-5.8-18.5-14.8-22.2s-19.3-1.7-26.2 5.2L413.4 96.6c-87.6-86.5-228.7-86.2-315.8 1c-87.5 87.5-87.5 229.3 0 316.8s229.3 87.5 316.8 0c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0c-62.5 62.5-163.8 62.5-226.3 0s-62.5-163.8 0-226.3c62.2-62.2 162.7-62.5 225.3-1L327 183c-6.9 6.9-8.9 17.2-5.2 26.2s12.5 14.8 22.2 14.8H463.5z"/></svg><span>Játék újratöltése</span></button>
+    <button type="button" class="hud-btn" id="chat-open-btn" aria-label="Kórokozó-riasztás megnyitása"><svg class="ico" viewBox="0 0 512 512" fill="currentColor" aria-hidden="true"><path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32z"/></svg><span>Chat</span><span class="pathogen-chat__badge" id="pathogen-chat-badge">1</span></button>
+</div>
 
   <div class="stage-wrap">
     <canvas id="game"></canvas>
@@ -1268,19 +1276,43 @@ if (pushNotifEl) {
 }
 
 /* ===================== Játékciklus ===================== */
+var loopErrors = 0;
 function loop(ts) {
   if (!running) return;
-  if (!lastTs) lastTs = ts;
-  var dt = Math.min(0.05, (ts - lastTs) / 1000);
-  lastTs = ts;
-  if (!paused && !rulesOpen && !chatOpen) {
-    updatePlayer(dt);
-    state.ghosts.forEach(function (g) { updateGhost(g, dt); });
-    checkCollisions();
+  try {
+    if (!lastTs) lastTs = ts;
+    var dt = Math.min(0.05, (ts - lastTs) / 1000);
+    lastTs = ts;
+    if (!paused && !rulesOpen && !chatOpen) {
+      updatePlayer(dt);
+      state.ghosts.forEach(function (g) { updateGhost(g, dt); });
+      checkCollisions();
+    }
+    render();
+    loopErrors = 0;
+  } catch (err) {
+    // Egy váratlan hiba korábban végleg leállította a ciklust (a játék "lefagyott").
+    loopErrors++;
+    try { console.error('Labirintus hiba:', err); } catch (e2) {}
+    if (loopErrors >= 5) {
+      running = false;
+      overlayTitle.textContent = 'Hiba történt';
+      overlayText.textContent = 'A játék váratlanul megállt. Koppints az Újratöltés gombra.';
+      overlayBtn.textContent = 'Újratöltés';
+      overlay.classList.remove('hidden');
+      overlayBtn.onclick = function () { location.reload(); };
+      return;
+    }
+    try { spawnEntities(); lastTs = 0; } catch (e3) {}
   }
-  render();
   rafId = requestAnimationFrame(loop);
 }
+// iOS/PWA: háttérből visszatéréskor biztosan fusson tovább a ciklus
+function resumeLoopIfNeeded() {
+  if (running && !document.hidden) { lastTs = 0; if (rafId) cancelAnimationFrame(rafId); rafId = requestAnimationFrame(loop); }
+}
+document.addEventListener('visibilitychange', resumeLoopIfNeeded);
+window.addEventListener('pageshow', resumeLoopIfNeeded);
 function startLoop() {
   running = true; lastTs = 0;
   if (rafId) cancelAnimationFrame(rafId);
@@ -1423,6 +1455,19 @@ document.getElementById('rules-close').addEventListener('click', closeRules);
   window.__fitFsStage = fitStage;
   window.addEventListener('resize', fitStage);
   window.addEventListener('orientationchange', function () { setTimeout(fitStage, 150); });
+  window.__setFs = setState;
+  var RELOAD_FS_KEY = 'labirintus_fs_after_reload';
+  var reloadBtn = document.getElementById('reload-btn');
+  if (reloadBtn) reloadBtn.addEventListener('click', function () {
+    try { if (isOn()) sessionStorage.setItem(RELOAD_FS_KEY, '1'); } catch (e) {}
+    location.reload();
+  });
+  try {
+    if (sessionStorage.getItem(RELOAD_FS_KEY) === '1') {
+      sessionStorage.removeItem(RELOAD_FS_KEY);
+      setState(true);
+    }
+  } catch (e) {}
   layoutEl.addEventListener('touchmove', function (e) {
     if (isOn()) e.preventDefault();
   }, { passive: false });

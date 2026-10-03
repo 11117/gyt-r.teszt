@@ -133,6 +133,13 @@
 
         section { padding: 80px 5%; width: 100%; max-width: 1200px; margin: 0 auto; text-align: center; }
         .section-title { font-size: 2rem; margin-bottom: 30px; font-weight: 800; color: #1a1a1a; }
+        /* Főoldali szekciók: minimális függőleges margó előttük és utánuk */
+        #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat { padding-top: 40px; padding-bottom: 40px; }
+        #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title { margin-bottom: 16px; }
+        @media screen and (max-width: 768px) {
+            #akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat { padding-top: 16px; padding-bottom: 16px; }
+            #akciok-szekcio .section-title, #szolgaltatasok .section-title, #nyitvatartas .section-title, #kapcsolat .section-title { margin-bottom: 10px; }
+        }
 
         .services-info {
             max-width: 850px; margin: 0 auto; padding: 35px; background: white; 
@@ -170,7 +177,7 @@
         /* A Szimpatika oldal fejlécét kivágjuk: az iframe felfelé eltolva töltődik, a keret levágja.
            Ha a fejléc még látszik / túl sokat vág, csak ezt az egy értéket kell állítani. */
         :root { --szimp-offset: 150px; }
-        @media screen and (max-width: 700px) { :root { --szimp-offset: 120px; } }
+        @media screen and (max-width: 700px) { :root { --szimp-offset: 258px; } }
         .szimpatika-frame-wrap iframe { width: 100%; height: calc(600px + var(--szimp-offset)); margin-top: calc(-1 * var(--szimp-offset)); border: 0; display: block; }
         @media screen and (max-width: 700px) { .szimpatika-frame-wrap iframe { height: calc(68vh + var(--szimp-offset)); min-height: calc(520px + var(--szimp-offset)); } .szimpatika-frame-wrap { border-radius: 14px; } }
 
@@ -465,6 +472,8 @@
         #view-kihivas .spin:disabled { opacity:.65; cursor:wait }
         #view-kihivas .wheelbox { cursor:pointer; -webkit-tap-highlight-color:transparent }
         #view-kihivas .result { scroll-margin-bottom:24px }
+        @keyframes resultFlash { 0% { transform:scale(1); background:#fff; } 35% { transform:scale(1.045); background:#fff4b8; box-shadow:0 14px 34px #e0b40040; } 100% { transform:scale(1); background:#fff; } }
+        #view-kihivas .result.flash { animation: resultFlash 1.1s ease-in-out 1; }
         @media (display-mode: standalone) { #view-kihivas .result { scroll-margin-bottom:calc(110px + env(safe-area-inset-bottom, 0px)) } }
         #view-kihivas .result { margin:28px auto 0; background:#fff; border-radius:17px; padding:23px; box-shadow:0 10px 25px #20304012; max-width:550px; min-height:98px }
         #view-kihivas .result h2 { font:800 1rem Montserrat; color:var(--g); margin:0 0 9px }
@@ -674,7 +683,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
         <section id="akciok-szekcio" style="background-color: #ffffff; border-bottom: 1px solid #eee;">
             <h2 class="section-title">Aktuális Szimpatika akcióink</h2>
-            <p style="margin-bottom: 25px; color: #666;"><strong>Tekintse meg a Szimpatika hálózat legfrissebb kedvezményeit!</strong><br>(Az árak tájékoztató jellegűek, nem minősülnek ajánlattételnek. Az aktuális árakról érdeklődjön személyesen a gyógyszertárban!)</p>
+            <p style="margin-bottom: 25px; color: #666;"><strong>Tekintse meg a Szimpatika hálózat legfrissebb kedvezményeit!</strong></p>
             <div class="szimp-stage">
             <button type="button" class="szimp-nav-btn up" data-szimp-nav="up" aria-label="Vissza a kezdőlapra"><svg class="ico ico-chevron-up fas"><use href="#ico-chevron-up"></use></svg></button>
             <div class="szimpatika-frame-wrap ext-embed">
@@ -695,6 +704,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             <button type="button" class="szimp-nav-btn down" data-szimp-nav="down" aria-label="Tovább a szolgáltatásokhoz"><svg class="ico ico-chevron-down fas"><use href="#ico-chevron-down"></use></svg></button>
             </div>
             <p style="margin-top: 14px;"><a href="https://szimpatika.hu/shop/akciok" rel="noopener" style="color:#00824b; font-weight:700; text-decoration:none; font-size:0.9rem;"><svg class="ico ico-arrow-up-right-from-square"><use href="#ico-arrow-up-right-from-square"></use></svg> Ha a fenti tartalom nem töltődik be, megnyitás új lapon</a></p>
+            <p style="margin-top: 10px; color: #666; font-size: 0.85rem;">(Az árak tájékoztató jellegűek, nem minősülnek ajánlattételnek. Az aktuális árakról érdeklődjön személyesen a gyógyszertárban!)</p>
         </section>
 
         <section id="szolgaltatasok">
@@ -1672,6 +1682,10 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             // a kihívás szövegének aljára ugrunk, hogy a felhasználó el tudja olvasni
             const box=r_spin.closest('.result')||r_spin;
             box.scrollIntoView({behavior:'smooth',block:'end'});
+            setTimeout(()=>{
+                box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+                box.addEventListener('animationend',()=>box.classList.remove('flash'),{once:true});
+            },450);
         },4600)
     }
     if(b_spin){
