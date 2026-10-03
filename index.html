@@ -573,6 +573,19 @@
             .pwa-pill-nav { z-index: 98500; }
             .news-modal::after { content: ""; display: block; height: calc(92px + env(safe-area-inset-bottom, 0px)); }
         }
+        /* Hamburger menü PWA-ban: a lenyíló menü ne takarja el a nyitott állapotú ikont */
+        @media (display-mode: standalone) {
+            .menu-toggle { position: relative; z-index: 10001; }
+            .menu-toggle .ico { display: inline-block; fill: currentColor; color: #fff; }
+        }
+        @media (display-mode: standalone) and (max-width: 768px) {
+            .nav-links {
+                top: calc(60px + env(safe-area-inset-top, 0px)) !important;
+                height: calc(100vh - 60px - env(safe-area-inset-top, 0px)) !important;
+                padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)) !important;
+                box-sizing: border-box;
+            }
+        }
         html.ios-pwa-glass .hero { min-height: calc(100svh - 64px - env(safe-area-inset-top, 0px)); }
         html.ios-pwa-glass .pwa-pill-nav {
             background-color: rgba(28,28,30,0.55) !important;
