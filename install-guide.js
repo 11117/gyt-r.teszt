@@ -40,13 +40,13 @@ function steps(){
  var top=bar==='t';
  if(br==='g')return[{t:iOS?'Nyisd meg Safariban':'Nyisd meg Chrome-ban',d:iOS?'A Google appból nem telepíthető. Koppints a '+ic('<circle r="7"/><path d="M-2.5-2.5l5-2-2 5-5 2z"/>')+' <b>Megnyitás Safariban</b> gombra, és ott folytasd.':'Koppints a <b>⋮</b> menüre, majd a <b>Megnyitás Chrome-ban</b> lehetőségre.',s:S(R(30,20,180,40,10,'#fff')+T(120,45,'Megnyitás böngészőben',11,'#222','middle')+box(34,24,172,32))}];
  if(AND){return[
- {t:'Menü megnyitása',d:'Koppints a <b>⋮</b> (három pont) gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.',s:S(top?R(6,6,228,22,11,'#dfe3e8')+T(110,21,'11117.github.io',10,'#555','middle')+g(222,17,DV,'#333',1)+ring(222,17,13)+R(6,36,228,38,8,'#d5dae0'):R(6,6,228,22,11,'#dfe3e8')+T(120,21,'11117.github.io',10,'#555','middle')+R(6,54,228,22,11,'#dfe3e8')+g(222,65,DV,'#333',1)+ring(222,65,13))},
+ {t:'Menü megnyitása',d:'Koppints a <b>⋮</b> (három pont) gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.',s:S(top?R(6,6,228,22,11,'#dfe3e8')+T(110,21,'gyogyszertarorgovany.hu',10,'#555','middle')+g(222,17,DV,'#333',1)+ring(222,17,13)+R(6,36,228,38,8,'#d5dae0'):R(6,6,228,22,11,'#dfe3e8')+T(120,21,'gyogyszertarorgovany.hu',10,'#555','middle')+R(6,54,228,22,11,'#dfe3e8')+g(222,65,DV,'#333',1)+ring(222,65,13))},
  {t:'Telepítés',d:'Válaszd az <b>Alkalmazás telepítése</b> vagy a <b>Hozzáadás a kezdőképernyőhöz</b> menüpontot.',s:S(R(104,2,132,76,8,'#fff','#ccc')+T(112,18,'Új lap',9.5)+T(112,34,'Könyvjelzők',9.5)+T(112,50,'Alkalmazás telepítése',9.5)+T(112,66,'Beállítások',9.5)+box(106,38,128,16))},
  {t:'Megerősítés',d:'Koppints a <b>Telepítés</b> (vagy <b>Hozzáadás</b>) gombra.',s:S(R(24,6,192,68,12,'#fff','#ccc')+'<image href="'+ICON+'" x="34" y="16" width="26" height="26"/>'+T(68,33,NAME,11)+R(146,50,60,18,9,BL)+T(176,63,'Telepítés',10,'#fff','middle')+box(142,46,68,26))},
  {t:'Kész!',d:'Az ikont a főképernyőn vagy az alkalmazások között találod.',s:HOME()}]}
- var s1=top?S(R(6,6,228,26,13,'#d1d1d6')+T(120,23,'11117.github.io',11,'#333','middle')+g(214,19,SH,'#333',1)+ring(214,19,15)+R(6,40,228,34,8,'#dfe3e8')):
-  br==='b'?S(R(6,6,228,26,13,'#1c1c1e')+T(120,23,'11117.github.io',11,'#fff','middle')+R(0,40,240,40,0,'#2c2c2e')+g(24,60,BK,'#fff')+g(71,60,SH,'#fff',1)+ring(71,60,15)+g(118,60,'<path d="M0-7v14M-7 0h14"/>','#fff',1)+R(158,53,14,14,3,'none','#fff')+g(211,60,DH,'#fff'),'#555'):
-  S(R(6,4,228,24,12,'#1c1c1e')+T(120,20,'11117.github.io',11,'#fff','middle')+R(6,36,228,40,20,'#f2f2f7','#c7c7cc')+g(32,56,BK)+g(75,56,BK,'#bbb')+g(117,56,SH)+ring(117,56,15)+g(161,56,BM)+R(197,49,16,14,3,'none','#333'));
+ var s1=top?S(R(6,6,228,26,13,'#d1d1d6')+T(120,23,'gyogyszertarorgovany.hu',11,'#333','middle')+g(214,19,SH,'#333',1)+ring(214,19,15)+R(6,40,228,34,8,'#dfe3e8')):
+  br==='b'?S(R(6,6,228,26,13,'#1c1c1e')+T(120,23,'gyogyszertarorgovany.hu',11,'#fff','middle')+R(0,40,240,40,0,'#2c2c2e')+g(24,60,BK,'#fff')+g(71,60,SH,'#fff',1)+ring(71,60,15)+g(118,60,'<path d="M0-7v14M-7 0h14"/>','#fff',1)+R(158,53,14,14,3,'none','#fff')+g(211,60,DH,'#fff'),'#555'):
+  S(R(6,4,228,24,12,'#1c1c1e')+T(120,20,'gyogyszertarorgovany.hu',11,'#fff','middle')+R(6,36,228,40,20,'#f2f2f7','#c7c7cc')+g(32,56,BK)+g(75,56,BK,'#bbb')+g(117,56,SH)+ring(117,56,15)+g(161,56,BM)+R(197,49,16,14,3,'none','#333'));
  var it={s:[[CP,'Másolás'],[BM,'Hozzáadás|ehhez:|Könyvjelzők'],[GL,'Hozzáadás az|olvasási|listához']],c:[[CP,'Másolás'],[LP,'Hozzáadás az|Olvasólistá-|hoz'],[ST,'Hozzáadás a|könyvjelzők-|höz']],b:[[CP,'Másolás'],[DC,'Tiszta|hivatkozás|másolása'],[RM,'Olvasó mód|átkapcsolása']]}[br==='c'?'c':br==='s'?'s':'b'].concat([[CV,'Továbbiak|megtekintése']]);
  var s2=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+it.map(function(a,n){var x=32+n*57;return C(x,26,16,'#e5e5ea')+g(x,26,a[0],'#333',1.1)+T(x,52,a[1],7.5,'#333','middle')}).join('')+ring(203,26,19));
  var s3=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+T(14,22,'Keresés az oldalon',10.5)+g(216,18,SR,'#333',.9)+'<path d="M14 29H226M14 55H226" stroke="#d1d1d6"/>'+T(14,46,'Főképernyőhöz adás',10.5,'#111',0,1)+g(216,42,PL,'#333',.9)+T(14,70,'Nyomtatás',10.5)+box(8,32,224,20));
@@ -70,7 +70,7 @@ function render(){
  var b=card.querySelectorAll('.ig-nav');b[0].onclick=function(){stop();go(idx-1)};b[1].onclick=function(){stop();go(idx+1)};
  card.querySelector('.ig-x').onclick=close;
  var al=card.querySelector('.ig-alt');al.onclick=function(e){e.preventDefault();if(!al.textContent)return;bar=bar==='t'?'b':'t';LS('igBar',bar);open()};
- arr.classList.toggle('on',idx===0&&arrowOn&&card.classList.contains('on'));
+ arr.classList.toggle('on',arrowOn&&card.classList.contains('on'));
 }
 function go(n){idx=(n+list.length)%list.length;render()}
 function close(){clearInterval(tm);clearTimeout(jt);card.classList.remove('on');arr.classList.remove('on')}
@@ -81,7 +81,7 @@ function open(){
  var up=bar==='t';arr.textContent=up?'\u25B2':'\u25BC';
  arr.style.cssText=up?'top:2px;right:'+(iOS?'20px':'8px'):'bottom:calc(2px + '+SAFE+');'+(AND?'right:8px':'left:'+(br==='b'?'27%':'47%'));
  render();
- tm=setInterval(function(){if(auto)go(idx+1)},5000);
+ tm=setInterval(function(){if(auto)go(idx+1)},3800);
  // alsó sávos böngészőnél a panel pár mp múlva a fejléc alá ugrik (a megosztási panel ne takarja)
  if(tp&&arrowOn)jt=setTimeout(function(){card.className='ig-card on ig-top'},3500);
  card.onpointerdown=stop;var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
