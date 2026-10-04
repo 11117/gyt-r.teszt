@@ -1415,6 +1415,12 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
             applyConsent(consent || { necessary: true, external: false });
             if (banner && !consent) { banner.style.display = 'block'; lockPage(); }
+            // Biztonsági háló: ha az oldal zárolva maradt, de a süti-panel nem látszik (pl. PWA-ablakban), a görgetés feloldódik
+            setTimeout(function () {
+                try {
+                    if (document.documentElement.classList.contains('gyszt-lock') && (!banner || getComputedStyle(banner).display === 'none')) unlockPage();
+                } catch (e) {}
+            }, 800);
 
             if (acceptBtn) acceptBtn.onclick = function () {
                 const c = saveConsent(true);
@@ -1921,6 +1927,46 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         window.addEventListener('resize', updateHero);
         updateHero();
     }
+
+    // Összehangolás: a csúszka követi a hamburger menüt, a hash-t és a görgetést is
+    var KEYMAP = {'akciok-szekcio':'akciok-szekcio','szolgaltatasok':'akciok-szekcio','nyitvatartas':'nyitvatartas','terkep-szekcio':'nyitvatartas','kapcsolat':'kapcsolat','jatekok':'jatekok','egeszsegugyi-kviz':'jatekok','napi-kihivas':'jatekok','gyogynoveny-teszt':'jatekok'};
+    var spyLock = 0;
+    function activateKey(k){ var it = document.querySelector('.pwa-pill-item[data-key="' + k + '"]'); if (it && !it.classList.contains('active')) setActive(it); }
+    function syncFromHash(){ var h = location.hash.replace('#', ''); if (KEYMAP[h]) { spyLock = Date.now() + 1200; activateKey(KEYMAP[h]); } }
+    window.addEventListener('hashchange', syncFromHash);
+    var spyTick = false;
+    window.addEventListener('scroll', function(){
+        if (spyTick || Date.now() < spyLock || newsIsOpen()) return;
+        spyTick = true;
+        requestAnimationFrame(function(){
+            spyTick = false;
+            var view = document.getElementById('view-index');
+            if (!view || !view.classList.contains('active')) return;
+            var line = window.innerHeight * 0.4, key = null;
+            ['akciok-szekcio','szolgaltatasok','nyitvatartas','terkep-szekcio','kapcsolat'].forEach(function(id){
+                var el = document.getElementById(id);
+                if (el && el.getBoundingClientRect().top <= line) key = KEYMAP[id];
+            });
+            activateKey(key || 'akciok-szekcio');
+        });
+    }, { passive: true });
+    document.querySelectorAll('.nav-links a').forEach(function(a){
+        a.addEventListener('click', function(){
+            var h = (a.getAttribute('href') || '').replace('#', '');
+            if (KEYMAP[h]) { spyLock = Date.now() + 1200; activateKey(KEYMAP[h]); }
+        });
+    });
+    if (newsBtn && newsPill) {
+        newsBtn.addEventListener('click', function(){
+            if (!newsPill.classList.contains('active')) {
+                var cur = document.querySelector('.pwa-pill-item.active');
+                if (cur) prevActive = cur;
+                setActive(newsPill);
+            }
+        });
+    }
+    var menuCheck = document.getElementById('check');
+    items.forEach(function(it){ it.addEventListener('click', function(){ if (menuCheck) menuCheck.checked = false; spyLock = Date.now() + 1200; }); });
 
     var initialActive = document.querySelector('.pwa-pill-item.active');
     requestAnimationFrame(function(){

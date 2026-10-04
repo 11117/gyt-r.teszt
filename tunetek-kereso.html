@@ -1130,6 +1130,12 @@ topicsEl.addEventListener('click', (e) => {
 
             applyConsent(consent || { necessary: true, external: false });
             if (banner && !consent) { banner.style.display = 'block'; lockPage(); }
+            // Biztonsági háló: ha az oldal zárolva maradt, de a süti-panel nem látszik (pl. PWA-ablakban), a görgetés feloldódik
+            setTimeout(function () {
+                try {
+                    if (document.documentElement.classList.contains('gyszt-lock') && (!banner || getComputedStyle(banner).display === 'none')) unlockPage();
+                } catch (e) {}
+            }, 800);
 
             if (acceptBtn) acceptBtn.onclick = function () {
                 const c = saveConsent(true);
