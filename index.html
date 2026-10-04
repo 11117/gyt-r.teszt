@@ -185,7 +185,8 @@
         :root { --szimp-offset: 150px; }
         @media screen and (max-width: 700px) { :root { --szimp-offset: 258px; } }
         .szimpatika-frame-wrap iframe { width: 100%; height: calc(600px + var(--szimp-offset)); margin-top: calc(-1 * var(--szimp-offset)); border: 0; display: block; }
-        @media screen and (max-width: 700px) { .szimpatika-frame-wrap iframe { height: calc(68vh + var(--szimp-offset)); min-height: calc(520px + var(--szimp-offset)); } .szimpatika-frame-wrap { border-radius: 14px; } }
+        /* Mobilon a Szimpatika oldalt telefonszélességű (kb. 1,25x) elrendezéssel töltjük be, és kicsinyítjük, hogy a terméknevek ne folyjanak egymásba */
+        @media screen and (max-width: 700px) { .szimpatika-frame-wrap { border-radius: 14px; height: 68vh; min-height: 520px; } .szimpatika-frame-wrap iframe { width: 125%; height: calc(68vh / .8 + var(--szimp-offset)); min-height: calc(520px / .8 + var(--szimp-offset)); margin-top: calc(-.8 * var(--szimp-offset)); transform: scale(.8); transform-origin: 0 0; } }
 
         /* Iframe körüli kezelőfelület: vastagabb oldalsó margó + lapozó gombok (csak mobilnézetben) */
         .szimp-stage { position: relative; max-width: 900px; margin: 0 auto; }

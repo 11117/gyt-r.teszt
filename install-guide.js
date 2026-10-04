@@ -14,7 +14,7 @@ var st=D.createElement('style');st.textContent='.ig-pop,.ig-card{position:fixed;
 '.ig-top{top:var(--ig-top,0)}.ig-bot{bottom:calc(8px + '+SAFE+')}.ig-bot.ar{bottom:calc(56px + '+SAFE+')}'+
 '.ig-card{display:none;padding:5px 3px 3px}.ig-card.on{display:block}.ig-row{display:flex;align-items:center;gap:2px}.ig-nav{flex:none;width:24px;height:40px;border:0;border-radius:12px;background:#eef1f4;font-size:20px;color:#333;padding:0}'+
 '.ig-body{flex:1;min-width:0;display:flex;gap:7px;align-items:center}.ig-ill{flex:0 0 46%}.ig-svg{display:block;width:100%;height:auto;border-radius:8px}.ig-tx{flex:1;min-width:0}.ig-tx b{display:block;font-size:.8rem}.ig-tx p{margin:2px 0 0;font-size:.7rem;line-height:1.28;color:#444}'+
-'.ig-h{font-size:.66rem;font-weight:700;color:#555;padding:0 8px 2px}.ig-foot{display:flex;align-items:center;justify-content:space-between;padding:3px 8px 0}.ig-alt{min-width:78px;font-size:.62rem;color:#777}.ig-dots{display:flex;gap:4px}.ig-dots i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#dde2e7;color:#555;font-size:.62rem;line-height:18px;text-align:center}.ig-dots i.on{background:'+BL+';color:#fff}'+
+'.ig-h{font-size:.66rem;font-weight:700;color:#555;padding:0 8px 2px}.ig-foot{display:flex;align-items:center;justify-content:space-between;padding:3px 8px 0}.ig-alt{min-width:104px;font-size:.62rem;color:#777}.ig-dots{display:flex;gap:4px}.ig-dots i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#dde2e7;color:#555;font-size:.62rem;line-height:18px;text-align:center}.ig-dots i.on{background:'+BL+';color:#fff}'+
 '.ig-x{background:#222;color:#fff;border:0;border-radius:999px;font-size:.74rem;font-weight:700;padding:7px 13px;white-space:nowrap}.ig-pop .ig-x{background:none;color:#888;font-size:22px;font-weight:400;padding:0 2px}'+
 '.ig-arr{position:fixed;z-index:99001;font-size:46px;line-height:1;color:#e53935;display:none;animation:igb .85s ease-in-out infinite;text-shadow:0 0 6px #fff,0 0 16px rgba(255,255,255,.9);filter:drop-shadow(0 0 8px rgba(229,57,53,.95));pointer-events:none}.ig-arr.on{display:block}@keyframes igb{0%,100%{transform:translateY(0) scale(1);opacity:1}50%{transform:translateY(var(--d,12px)) scale(1.3);opacity:.55}}.ig-ring{animation:igp 1.2s infinite}@keyframes igp{50%{opacity:.25}}@media(prefers-reduced-motion:reduce){.ig-arr,.ig-ring,.ig-mk{animation:none}}'+
 '.ig-bg{display:none;position:fixed;left:0;right:0;top:var(--ig-top,0);bottom:0;z-index:98900;background:#3b3f45;flex-direction:column;align-items:center;box-sizing:border-box;font:13px/1.3 -apple-system,system-ui,sans-serif}.ig-bg.on{display:flex}.ig-or{margin:2px 0 6px;font-size:.7rem;color:#c9ced6;letter-spacing:.08em}.ig-lbl{margin:0 0 6px;font-size:.78rem;font-weight:700;color:#fff;text-align:center}.ig-bg.rev .ig-lbl{order:1}.ig-bg.rev .ig-vw{order:2}.ig-bg.rev .ig-or{order:3;margin:6px 0 2px}.ig-vw{position:relative;flex:1;min-height:0;aspect-ratio:360/736;max-width:100%;border:6px solid #1c1c1e;border-radius:24px;box-sizing:border-box;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.25)}.ig-vw video{width:100%;height:100%;display:block;object-fit:cover}.ig-mk{position:absolute;border:3px solid #e53935;box-sizing:border-box;transform:translate(-50%,-50%);display:none;animation:igp 1.2s infinite;pointer-events:none}';
@@ -35,7 +35,7 @@ GL='<circle cx="-4.5" cy="1" r="3.5"/><circle cx="4.5" cy="1" r="3.5"/><path d="
 LP='<circle cx="-4" cy="-5" r="3"/><path d="M-4-6.5v3M-5.5-5h3M1-5h7M-7 0h15M-7 5h15"/>',DC='<rect x="-5" y="-6" width="10" height="13" rx="2"/><path d="M-2 0l2 2 3-4"/>',
 RM='<rect x="-6" y="-7" width="12" height="14" rx="2.5"/><path d="M-3-3h6M-3 0h6M-3 3h3"/>',SR='<circle cx="-1.5" cy="-1.5" r="5"/><path d="M2 2l5 5"/>',
 DH='<circle cx="-5" r="1.6" fill="#fff"/><circle r="1.6" fill="#fff"/><circle cx="5" r="1.6" fill="#fff"/>',DV='<circle cy="-5" r="1.6" fill="#333"/><circle r="1.6" fill="#333"/><circle cy="5" r="1.6" fill="#333"/>',
-BK='<path d="M2-6l-6 6 6 6"/>';
+BK='<path d="M2-6l-6 6 6 6"/>',FW='<path d="M-2-6l6 6-6 6"/>',BOOK='<path d="M0-4v11M0-4C-2-6-6-6-9-5v11c3-1 7-1 9 1 2-2 6-2 9-1V-5C6-6 2-6 0-4z"/>',TABS='<rect x="-7" y="-4" width="11" height="11" rx="2.5"/><path d="M-4-7h8a3 3 0 0 1 3 3v8"/>',LINES='<path d="M-6-3h12M-6 0h8M-6 3h5"/>',RELOAD='<path d="M5-2a5 5 0 1 0 1 4M5-6v4h-4"/>';
 function HOME(){return S([20,78,136].map(function(x){return R(x,10,36,36,9,'#fff')}).join('')+'<image href="'+ICON+'" x="188" y="10" width="36" height="36"/>'+ring(206,28,27)+T(206,62,NAME,9,'#222','middle'),'#cfe0f0')}
 function steps(){
  var top=bar==='t';
@@ -47,7 +47,7 @@ function steps(){
  {t:'Kész!',d:'Az ikont a főképernyőn vagy az alkalmazások között találod.',s:HOME()}]}
  var s1=top?S(R(6,6,228,26,13,'#d1d1d6')+T(120,23,'gyogyszertarorgovany.hu',11,'#333','middle')+g(214,19,SH,'#333',1)+ring(214,19,15)+R(6,40,228,34,8,'#dfe3e8')):
   br==='b'?S(R(6,6,228,26,13,'#1c1c1e')+T(120,23,'gyogyszertarorgovany.hu',11,'#fff','middle')+R(0,40,240,40,0,'#2c2c2e')+g(24,60,BK,'#fff')+g(71,60,SH,'#fff',1)+ring(71,60,15)+g(118,60,'<path d="M0-7v14M-7 0h14"/>','#fff',1)+R(158,53,14,14,3,'none','#fff')+g(211,60,DH,'#fff'),'#555'):
-  S(R(6,4,228,24,12,'#1c1c1e')+T(120,20,'gyogyszertarorgovany.hu',11,'#fff','middle')+R(6,36,228,40,20,'#f2f2f7','#c7c7cc')+g(32,56,BK)+g(75,56,BK,'#bbb')+g(117,56,SH)+ring(117,56,15)+g(161,56,BM)+R(197,49,16,14,3,'none','#333'));
+  S(R(6,4,228,24,12,'#1c1c1e')+T(120,20,'gyogyszertarorgovany.hu',11,'#fff','middle')+g(24,16,LINES,'#fff',.9)+g(216,16,RELOAD,'#fff',.9)+R(6,36,228,40,20,'#f2f2f7','#c7c7cc')+g(32,56,BK)+g(75,56,FW,'#bbb')+g(117,56,SH)+ring(117,56,15)+g(161,56,BOOK)+g(205,56,TABS));
  var it={s:[[CP,'Másolás'],[BM,'Hozzáadás|ehhez:|Könyvjelzők'],[GL,'Hozzáadás az|olvasási|listához']],c:[[CP,'Másolás'],[LP,'Hozzáadás az|Olvasólistá-|hoz'],[ST,'Hozzáadás a|könyvjelzők-|höz']],b:[[CP,'Másolás'],[DC,'Tiszta|hivatkozás|másolása'],[RM,'Olvasó mód|átkapcsolása']]}[br==='c'?'c':br==='s'?'s':'b'].concat([[CV,'Továbbiak|megtekintése']]);
  var s2=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+it.map(function(a,n){var x=32+n*57;return C(x,26,16,'#e5e5ea')+g(x,26,a[0],'#333',1.1)+T(x,52,a[1],7.5,'#333','middle')}).join('')+ring(203,26,19));
  var s3=S(R(4,2,232,76,14,'#f2f2f7','#c7c7cc')+T(14,22,'Keresés az oldalon',10.5)+g(216,18,SR,'#333',.9)+'<path d="M14 29H226M14 55H226" stroke="#d1d1d6"/>'+T(14,46,'Főképernyőhöz adás',10.5,'#111',0,1)+g(216,42,PL,'#333',.9)+T(14,70,'Nyomtatás',10.5)+box(8,32,224,20));
@@ -73,7 +73,7 @@ function setTop(){var n=D.querySelector('nav'),h=n?n.getBoundingClientRect().bot
 function stop(){auto=false;clearInterval(tm)}
 function render(){
  var s=list[idx];
- card.innerHTML='<div class="ig-h">Lépésről lépésre az alkalmazás telepítéséhez</div><div class="ig-row"><button class="ig-nav" aria-label="Előző">&#8249;</button><div class="ig-body" aria-live="polite"><div class="ig-ill">'+s.s+'</div><div class="ig-tx"><b>'+(idx+1)+'. '+s.t+'</b><p>'+s.d+'</p></div></div><button class="ig-nav" aria-label="Következő">&#8250;</button></div><div class="ig-foot"><a class="ig-alt" href="#">'+(iOS&&br!=='g'?'Címsor máshol?':'')+'</a><span class="ig-dots">'+list.map(function(_,n){return'<i class="'+(n===idx?'on':'')+'">'+(n+1)+'</i>'}).join('')+'</span><button class="ig-x" type="button">Bezárás &times;</button></div>';
+ card.innerHTML='<div class="ig-h">Az alkalmazás telepítése lépésről lépésre</div><div class="ig-row"><button class="ig-nav" aria-label="Előző">&#8249;</button><div class="ig-body" aria-live="polite"><div class="ig-ill">'+s.s+'</div><div class="ig-tx"><b>'+(idx+1)+'. '+s.t+'</b><p>'+s.d+'</p></div></div><button class="ig-nav" aria-label="Következő">&#8250;</button></div><div class="ig-foot"><a class="ig-alt" href="#">'+(iOS&&br!=='g'?(bar==='t'?'Alul van a címsor?':'Felül van a címsor?'):'')+'</a><span class="ig-dots">'+list.map(function(_,n){return'<i class="'+(n===idx?'on':'')+'">'+(n+1)+'</i>'}).join('')+'</span><button class="ig-x" type="button">Bezárás &times;</button></div>';
  var b=card.querySelectorAll('.ig-nav');b[0].onclick=function(){stop();go(idx-1)};b[1].onclick=function(){stop();go(idx+1)};
  card.querySelector('.ig-x').onclick=close;
  var al=card.querySelector('.ig-alt');al.onclick=function(e){e.preventDefault();if(!al.textContent)return;bar=bar==='t'?'b':'t';LS('igBar',bar);open()};
@@ -94,7 +94,7 @@ function open(){
  var up=bar==='t';arr.textContent=up?'\u25B2':'\u25BC';arr.style.setProperty('--d',up?'-12px':'12px');
  arr.style.cssText=(up?'--d:-12px;top:2px;right:'+(iOS?'20px':'8px'):'--d:12px;bottom:calc(2px + '+SAFE+');'+(AND?'right:8px':'left:'+(br==='b'?'27%':'47%')));
  render();fit();if(!opened){opened=true;try{history.pushState({ig:1},'')}catch(e){}}
- tm=setInterval(function(){if(auto)go(idx+1)},3800);
+ tm=setInterval(function(){if(auto)go(idx+1)},4300);
  // alsó sávos böngészőnél a panel pár mp múlva a fejléc alá ugrik (a megosztási panel ne takarja)
  if(tp&&arrowOn&&!bgOn)jt=setTimeout(function(){card.className='ig-card on ig-top'},3500);
  card.onpointerdown=stop;var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
@@ -105,8 +105,9 @@ pop.querySelector('.ig-btn').onclick=function(){
 addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
 addEventListener('appinstalled',function(){pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){setTimeout(function(){setTop();pop.className='ig-pop on '+(bar==='b'?'ig-top':'ig-bot')},1200)}
+function reveal(){setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
+var ck=D.getElementById('check'),popWas=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on'))close()}else if(popWas){popWas=false;pop.classList.add('on')}});
 if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;open()});
 if(/[?&]app=1/.test(location.search))setTimeout(open,600);
 })();
