@@ -3,7 +3,7 @@ var D=document,ua=navigator.userAgent;
 var iOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 if(!(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true))return; // csak telepített alkalmazásban (PWA)
 var LS=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
-var G='#2E7D32',G2='#4CAF50';
+var G='#2E7D32',G2='#4CAF50',isIndex=!!D.getElementById('view-index');
 if(!LS('gyFirstRun'))LS('gyFirstRun',new Date().toISOString());
 
 /* ---------- stílus ---------- */
@@ -22,6 +22,7 @@ st.textContent='footer{display:none!important}'+
 '.pt-bub{position:fixed;z-index:99903;left:50%;transform:translateX(-50%);width:min(88vw,340px);box-sizing:border-box;background:#fff;color:#1a1a1a;border-radius:16px;padding:14px 16px 12px;box-shadow:0 12px 34px rgba(0,0,0,.4);font:14px/1.45 inherit;font-family:inherit}'+
 '.pt-bub h4{margin:0 0 4px;font-size:1rem;color:'+G+'}.pt-bub p{margin:0 0 12px}.pt-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.pt-n{font-size:.75rem;color:#889}.pt-next{border:0;border-radius:999px;background:'+G+';color:#fff;font-weight:700;font-size:.9rem;padding:9px 20px}.pt-skip{display:block;margin:10px auto 0;border:0;background:none;color:#778;font-size:.74rem;text-decoration:underline;padding:2px 6px}'+
 '@media(prefers-reduced-motion:reduce){.pt-arr{animation:none}.pt-spot{transition:none}}';
+if(!isIndex)st.textContent+='.menu-toggle{position:relative;z-index:10001}@media(max-width:768px){.nav-links{top:calc(60px + env(safe-area-inset-top,0px))!important;height:calc(100vh - 60px - env(safe-area-inset-top,0px))!important;height:calc(100dvh - 60px - env(safe-area-inset-top,0px))!important;padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))!important;box-sizing:border-box}}';
 D.head.appendChild(st);
 
 /* ---------- biztonsági háló: beragadt görgetés oldása ---------- */
@@ -44,7 +45,7 @@ setInterval(unstick,3000);
 if(iOS){
  var tx,ty,tt,tel,clicked=false;
  addEventListener('click',function(){clicked=true},true);
- D.addEventListener('touchstart',function(e){var t=e.touches[0];tx=t.clientX;ty=t.clientY;tt=Date.now();tel=e.target.closest&&e.target.closest('a[href],button,label,[role=button],.card,.answer,.opt,.game-filter,.pwa-pill-item')},{passive:true,capture:true});
+ D.addEventListener('touchstart',function(e){var t=e.touches[0];tx=t.clientX;ty=t.clientY;tt=Date.now();tel=e.target.closest&&e.target.closest('.pwa-pill-item,.nav-links a,label.menu-toggle,#view-jatekok a,#view-jatekok button,#view-jatekok [role=button]')},{passive:true,capture:true});
  D.addEventListener('touchend',function(e){
   if(!tel)return;var t=e.changedTouches[0];
   if(Math.abs(t.clientX-tx)>10||Math.abs(t.clientY-ty)>10||Date.now()-tt>600)return;
@@ -100,7 +101,7 @@ function build(){
   if(b.classList.contains('pw-back')){back();return}
   var go=b.getAttribute('data-go'),act=b.getAttribute('data-act');
   if(go)page(go);
-  else if(act==='tour'){closeSettings();startTour(true)}
+  else if(act==='tour'){closeSettings();if(isIndex)startTour(true);else location.href='index.html?tour=1'}
   else if(act==='reload')location.reload();
   else if(act==='cookie'&&typeof openCookieSettings==='function')openCookieSettings();
  });
@@ -133,13 +134,13 @@ D.querySelectorAll('.pwa-pill-item').forEach(function(a){a.addEventListener('cli
 /* ---------- Rövid útmutató: Mit hol talál? ---------- */
 var tour=null;
 function steps(){
- var S=[{t:'Rövid útmutató',d:'Mit hol talál az alkalmazásban? Koppintson a képernyőre vagy a Tovább gombra, és végigvezetjük.',menu:0},
+ var S=[{t:'Rövid útmutató',d:'Végig vezetjük, hogy mit hol talál az alkalmazásban. Koppintson a képernyőre vagy a "Tovább" gombra, és lépésről lépésre bemutatjuk.',menu:0},
  {sel:'.menu-toggle',t:'Főmenü',d:'Itt nyílik a menü – nézzük meg, mi található benne.',menu:0}];
  [['a[href="#akciok-szekcio"]','Akcióink','Az aktuális akciós termékek.'],
   ['a[href="#szolgaltatasok"]','Szolgáltatások','Mit nyújt gyógyszertárunk, fizetési lehetőségek.'],
   ['#news-menu-btn','Híreink','Fontos hírek és közlemények.'],
-  ['a[href="#jatekok"]','Ismeretterjesztő játékok','Egészségügyi kvíz, labirintus, napi kihívás, színezők.'],
-  ['.nav-links a[href="web-gyogyszeresz.html"]','Web gyógyszerész','Panaszkereső, receptek és egészségügyi tudnivalók.'],
+  ['a[href="#jatekok"]','Ismeretterjesztő játékok','Egészségügyi kvíz, videójátékok, napi kihívás és színezők.'],
+  ['.nav-links a[href="web-gyogyszeresz.html"]','Web gyógyszerész','Panaszkereső, diétás és egészséges receptek, egészségügyi tudnivalók.'],
   ['.nav-links a[href="#nyitvatartas"]','Nyitvatartás','Mikor várjuk Önt.'],
   ['.nav-links a[href="#terkep-szekcio"]','Térkép','Hol talál meg minket.'],
   ['.nav-links a[href="#kapcsolat"]','Kapcsolat','Telefon, e-mail és elérhetőségek.'],
@@ -208,5 +209,6 @@ function startTour(force){
 }
 function consentOk(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts)}catch(e){return false}}
 function maybeStart(){if(LS('gyTourDone'))return;setTimeout(function(){startTour(false)},1200)}
-if(consentOk())maybeStart();else{addEventListener('cookieConsentDecided',maybeStart,{once:true});D.addEventListener('cookieConsentDecided',maybeStart,{once:true})}
+if(!isIndex){}else if(/[?&]tour=1/.test(location.search)){setTimeout(function(){startTour(true)},900)}
+else if(consentOk())maybeStart();else{addEventListener('cookieConsentDecided',maybeStart,{once:true});D.addEventListener('cookieConsentDecided',maybeStart,{once:true})}
 })();
