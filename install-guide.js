@@ -108,9 +108,9 @@ pop.querySelector('.ig-btn').onclick=start;
 addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
 addEventListener('appinstalled',function(){pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
+function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
-var ck=D.getElementById('check'),popWas=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on'))close()}else if(popWas){popWas=false;pop.classList.add('on')}});
-if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;start()});
+var ck=D.getElementById('check'),popWas=false,popOff=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on'))close()}else if(popWas&&!popOff){popWas=false;pop.classList.add('on')}});
+if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;popOff=true;popWas=false;pop.classList.remove('on');start()});
 if(/[?&]app=1/.test(location.search))setTimeout(open,600);
 })();
