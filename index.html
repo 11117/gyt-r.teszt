@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="referrer" content="strict-origin-when-cross-origin">
 <script>(function(){try{var ua=navigator.userAgent||"";var isiOS=/iPhone|iPad|iPod/.test(ua)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);var isStandalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;if(isiOS&&isStandalone){document.documentElement.classList.add("ios-pwa-glass");}}catch(e){}})();</script>
+<script>window.__bip=null;window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();window.__bip=e;});</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
 
 <link rel="manifest" href="manifest.json">
@@ -95,7 +96,8 @@
         @media (display-mode: standalone) {
             nav { padding-top: env(safe-area-inset-top, 0px) !important; height: calc(60px + env(safe-area-inset-top, 0px)) !important; }
             body { padding-top: calc(60px + env(safe-area-inset-top, 0px)) !important; }
-            html, body { overscroll-behavior-y: none; scroll-padding-top: calc(76px + env(safe-area-inset-top, 0px)) !important; }
+            html, body { scroll-padding-top: calc(76px + env(safe-area-inset-top, 0px)) !important; }
+            html.ios-pwa-glass, html.ios-pwa-glass body { overscroll-behavior-y: none; }
             nav, .pwa-pill-nav, .quick-phone, .back-btn, .nav-links { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
         }
         .logo { font-weight: bold; color: white; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
@@ -186,7 +188,7 @@
         @media screen and (max-width: 700px) { :root { --szimp-offset: 258px; } }
         .szimpatika-frame-wrap iframe { width: 100%; height: calc(600px + var(--szimp-offset)); margin-top: calc(-1 * var(--szimp-offset)); border: 0; display: block; }
         /* Mobilon a Szimpatika oldalt telefonszélességű (kb. 1,25x) elrendezéssel töltjük be, és kicsinyítjük, hogy a terméknevek ne folyjanak egymásba */
-        @media screen and (max-width: 700px) { .szimpatika-frame-wrap { border-radius: 14px; height: 68vh; min-height: 520px; } .szimpatika-frame-wrap iframe { width: 125%; height: calc(68vh / .8 + var(--szimp-offset)); min-height: calc(520px / .8 + var(--szimp-offset)); margin-top: calc(-.8 * var(--szimp-offset)); transform: scale(.8); transform-origin: 0 0; } }
+        @media screen and (max-width: 700px) { .szimpatika-frame-wrap { position: relative; border-radius: 14px; height: 68vh; min-height: 520px; } .szimpatika-frame-wrap::before, .szimpatika-frame-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 22px; z-index: 5; touch-action: pan-y; } .szimpatika-frame-wrap::before { left: 0; } .szimpatika-frame-wrap::after { right: 0; } .szimpatika-frame-wrap iframe { width: 125%; height: calc(68vh / .8 + var(--szimp-offset)); min-height: calc(520px / .8 + var(--szimp-offset)); margin-top: calc(-.8 * var(--szimp-offset)); transform: scale(.8); transform-origin: 0 0; } }
 
         /* Iframe körüli kezelőfelület: vastagabb oldalsó margó + lapozó gombok (csak mobilnézetben) */
         .szimp-stage { position: relative; max-width: 900px; margin: 0 auto; }
@@ -717,8 +719,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         </div>
 
         <section id="akciok-szekcio" style="background-color: #ffffff; border-bottom: 1px solid #eee;">
-            <h2 class="section-title">Aktuális Szimpatika akcióink</h2>
-            <p style="margin-bottom: 25px; color: #666;"><strong>Tekintse meg a Szimpatika hálózat legfrissebb kedvezményeit!</strong></p>
+            <h2 class="section-title">Aktuális akcióink</h2>
             <div class="szimp-stage">
             <button type="button" class="szimp-nav-btn up" data-szimp-nav="up" aria-label="Vissza a kezdőlapra"><svg class="ico ico-chevron-up fas"><use href="#ico-chevron-up"></use></svg></button>
             <div class="szimpatika-frame-wrap ext-embed">
@@ -1931,6 +1932,10 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     // Összehangolás: a csúszka követi a hamburger menüt, a hash-t és a görgetést is
     var KEYMAP = {'akciok-szekcio':'akciok-szekcio','szolgaltatasok':'akciok-szekcio','nyitvatartas':'nyitvatartas','terkep-szekcio':'nyitvatartas','kapcsolat':'kapcsolat','jatekok':'jatekok','egeszsegugyi-kviz':'jatekok','napi-kihivas':'jatekok','gyogynoveny-teszt':'jatekok'};
     var spyLock = 0;
+    document.addEventListener('touchstart', function(){
+        var b = document.body;
+        if (b.style.overflow === 'hidden' && !newsIsOpen() && !document.documentElement.classList.contains('gyszt-lock')) b.style.overflow = 'auto';
+    }, { passive: true, capture: true });
     function activateKey(k){ var it = document.querySelector('.pwa-pill-item[data-key="' + k + '"]'); if (it && !it.classList.contains('active')) setActive(it); }
     function syncFromHash(){ var h = location.hash.replace('#', ''); if (KEYMAP[h]) { spyLock = Date.now() + 1200; activateKey(KEYMAP[h]); } }
     window.addEventListener('hashchange', syncFromHash);

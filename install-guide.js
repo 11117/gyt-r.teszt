@@ -70,7 +70,7 @@ var vid=bg.querySelector('video'),mk=bg.querySelector('.ig-mk'),raf;vid.muted=tr
 var K=[[0,3.9,.483,.938,.19,.093,1,0],[4,5.6,.828,.867,.2,.098,1,1],[6.2,8.5,.5,.733,.93,.058,0,1],[8.7,11.9,.795,.059,.31,.062,0,1],[12,14.8,.16,.092,.24,.117,1,1]];
 function tick(){var t=vid.currentTime,k=null;K.forEach(function(a){if(t>=a[0]&&t<a[1]&&(a[7]||br==='s'))k=a});var m=mk.style;if(k){m.display='block';m.left=k[2]*100+'%';m.top=k[3]*100+'%';m.width=k[4]*100+'%';m.height=k[5]*100+'%';m.borderRadius=k[6]?'50%':'14px'}else m.display='none';raf=requestAnimationFrame(tick)}
 D.body.appendChild(pop);D.body.appendChild(bg);D.body.appendChild(card);D.body.appendChild(arr);
-var idx=0,auto=true,tm,jt,list=[],defer=null,arrowOn=true;
+var idx=0,auto=true,tm,jt,list=[],defer=window.__bip||null,arrowOn=true;
 function setTop(){var n=D.querySelector('nav'),h=n?n.getBoundingClientRect().bottom:0;D.documentElement.style.setProperty('--ig-top',Math.max(h,0)+'px')}
 function stop(){auto=false;clearInterval(tm)}
 function render(){
@@ -101,14 +101,14 @@ function open(){
  if(tp&&arrowOn&&!bgOn)jt=setTimeout(function(){card.className='ig-card on ig-top'},3500);
  card.onpointerdown=stop;var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
 }
-pop.querySelector('.ig-x').onclick=function(){pop.classList.remove('on')}; // csak az oldal következő újratöltéséig tűnik el
+pop.querySelector('.ig-x').onclick=function(){pop.classList.remove('on');LS('igPopX',String(Date.now()))}; // kiikszelés után 12 óráig nem jelenik meg újra
 function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépéses útmutató csak tartalék
- if(defer){var p=defer;defer=null;pop.classList.remove('on');p.prompt()}else open()}
+ if(defer){var p=defer;defer=null;window.__bip=null;pop.classList.remove('on');p.prompt()}else open()}
 pop.querySelector('.ig-btn').onclick=start;
 addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
 addEventListener('appinstalled',function(){pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
+function reveal(){if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
 var ck=D.getElementById('check'),popWas=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on'))close()}else if(popWas){popWas=false;pop.classList.add('on')}});
 if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;start()});
