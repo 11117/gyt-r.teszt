@@ -151,9 +151,10 @@
 
         .services-info {
             max-width: 850px; margin: 0 auto; padding: 35px; background: white; 
-            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
+            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; font-size: 1.05rem;
         }
-        .services-info p { font-size: 1.2rem; color: #333; line-height: 1.8; font-weight: 500; }
+        @media (max-width: 480px) { .services-info { padding: 28px 22px; } }
+        .services-info p { font-size: 1.05rem; color: #333; line-height: 1.8; font-weight: 500; }
 
         .reviews-wrap { max-width: 500px; margin: 45px auto 0; }
         .reviews-caption { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; color: #444; font-weight: 700; }
@@ -163,8 +164,8 @@
         .reviews-stars { color: #fbbc04; font-size: 1.3rem; margin: 8px 0; }
         .reviews-count { color: #888; font-size: 0.9rem; margin-bottom: 18px; }
         .reviews-cta { font-size: 0.98rem; color: #444; line-height: 1.6; margin-bottom: 22px; }
-        .reviews-btns { display: flex; flex-direction: column; gap: 10px; }
-        .reviews-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 20px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+        .reviews-btns { display: flex; flex-direction: row; gap: 8px; }
+        .reviews-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 8px; border-radius: 16px; text-decoration: none; font-weight: 700; font-size: 0.8rem; line-height: 1.25; text-align: center; flex: 1 1 0; min-width: 0; }
         .reviews-btn.primary { background: #4285F4; color: white; }
         .reviews-btn.secondary { background: transparent; color: #4285F4; border: 1.5px solid #4285F4; }
 
@@ -679,6 +680,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         .szimpatika-frame-wrap { position: relative; }
         .szimp-hint { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px; box-sizing: border-box; text-align: center; color: #fff; font-weight: 700; font-size: 1.05rem; line-height: 1.35; background: rgba(34,40,34,0.55); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
         .szimp-hint.on { opacity: 1; }
+        .szimpatika-frame-wrap.ps iframe { pointer-events: none; }
         .szimp-hint svg { width: 52px; height: 52px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
         .szimp-hint b { background: #2E7D32; border-radius: 6px; padding: 1px 8px; margin: 0 2px; letter-spacing: .04em; }
         @media (prefers-reduced-motion: reduce) { .szimp-hint { transition: none; } }
@@ -754,7 +756,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         <section id="szolgaltatasok">
             <h2 class="section-title">Szolgáltatások</h2>
             <div class="services-info">
-                <div style="display:flex; justify-content:center; align-items:flex-start; gap:12px; text-align:left;"><svg class="ico ico-staff-snake" style="color:#2E7D32; flex-shrink:0; margin-top:3px;"><use href="#ico-staff-snake"></use></svg><div><ul style="margin:0; padding-left:20px; list-style:disc;"><li><strong>Gyógyszer</strong></li><li><strong>Gyógyhatású készítmény</strong></li><li><strong>Gyógyászati segédeszköz</strong></li></ul><div style="padding-left:20px;">ellátás</div></div></div><br><br>
+                <div style="display:flex; justify-content:center; align-items:flex-start; gap:8px; text-align:left;"><svg class="ico ico-staff-snake" style="color:#2E7D32; flex-shrink:0; margin-top:3px;"><use href="#ico-staff-snake"></use></svg><div><ul style="margin:0; padding-left:18px; list-style:disc;"><li><strong>Gyógyszer</strong></li><li><strong>Gyógyhatású készítmény</strong></li><li><strong>Gyógyászati segédeszköz</strong></li></ul><div style="padding-left:18px;">ellátás</div></div></div><br><br>
                 <p><svg class="ico ico-hand-holding-heart" style="color:#2E7D32;"><use href="#ico-hand-holding-heart"></use></svg> Gyógyszertárunk dolgozóinak legfőbb hivatása a gyógyítás, illetve az egészség megőrzése.</p><br>
                 <div style="text-align:left; max-width:420px; margin:0 auto;">
                     <strong style="display:block; margin-bottom:14px; text-align:center;">Fizetési lehetőségek:</strong>
@@ -797,7 +799,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     </div>
                     <div class="testimonial-slide">
                         <div class="testimonial-stars"><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg></div>
-                        <p class="testimonial-text">„Segítőkész gyógyszerészek”</p>
+                        <p class="testimonial-text">„Segítőkész szakemberek”</p>
                         <span class="testimonial-source"><svg class="ico ico-google"><use href="#ico-google"></use></svg> Google-értékelés</span>
                     </div>
                 </div>
@@ -807,8 +809,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <div class="reviews-card">
                     <p class="reviews-cta">Az Ön véleménye fontos számunkra – ha elégedett volt a kiszolgálással, kérjük, értékeljen minket a Google-on is!</p>
                     <div class="reviews-btns">
-                        <a class="reviews-btn primary" href="https://search.google.com/local/writereview?placeid=ChIJ32kFuKPJQ0cR9YqPs_fcol4" rel="noopener"><svg class="ico ico-pen"><use href="#ico-pen"></use></svg> Értékelem a gyógyszertárat</a>
                         <a class="reviews-btn secondary" href="https://search.google.com/local/reviews?placeid=ChIJ32kFuKPJQ0cR9YqPs_fcol4" rel="noopener">Összes vélemény megtekintése</a>
+                        <a class="reviews-btn primary" href="https://search.google.com/local/writereview?placeid=ChIJ32kFuKPJQ0cR9YqPs_fcol4" rel="noopener"><svg class="ico ico-pen"><use href="#ico-pen"></use></svg> Értékelem a gyógyszertárat</a>
                     </div>
                 </div>
             </div>
@@ -2010,7 +2012,7 @@ if ('serviceWorker' in navigator) {
   var hint=document.createElement('div');hint.className='szimp-hint';hint.setAttribute('aria-hidden','true');
   hint.innerHTML='<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><path d="M24 11v26M17 18l7-7 7 7M17 30l7 7 7-7"/></svg><span>Az akciók megtekintéséhez <b>ITT</b> görgessen</span>';
   wrap.appendChild(hint);
-  var timer=null,tick=false;
+  var timer=null,lockT=null,tick=false;
   function onScroll(){
     if(tick)return;tick=true;
     requestAnimationFrame(function(){
@@ -2019,12 +2021,14 @@ if ('serviceWorker' in navigator) {
       var r=wrap.getBoundingClientRect(),vh=window.innerHeight||document.documentElement.clientHeight;
       var vis=Math.min(r.bottom,vh)-Math.max(r.top,0);
       if(vis<Math.min(r.height,vh)*0.25)return;               // az iframe alig látszik: nincs jelzés
-      hint.classList.add('on');
+      hint.classList.add('on');wrap.classList.add('ps');
       clearTimeout(timer);timer=setTimeout(function(){hint.classList.remove('on')},650);
+      clearTimeout(lockT);lockT=setTimeout(function(){wrap.classList.remove('ps')},220);
     });
   }
   window.addEventListener('scroll',onScroll,{passive:true});
 })();
 </script>
+<script src="site-common.js" defer></script>
 </body>
 </html>

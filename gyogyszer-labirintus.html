@@ -301,7 +301,7 @@
 
   /* ===== Gyógyszer-labirintus - jatek stilusok ===== */
   .rules-fab {
-    position:absolute; top:34px; right:12px; z-index:60000;
+    position:absolute; top:34px; right:12px; z-index:9000;
     background:#1a1a1a; color:#fff; border:1px solid rgba(255,255,255,0.25);
     border-radius:50%; width:44px; height:44px; padding:0;
     font-weight:700; font-size:0.85rem; cursor:pointer;
@@ -314,7 +314,7 @@
   .rules-fab:hover { background:#333; }
   @media (max-width:480px){ .rules-fab { top:36px; width:40px; height:40px; } }
   /* A gomb a fejléc (hero) ALATT indul, görgetéskor a menüsáv alatt lebeg tovább */
-  .rules-fab-holder { position:sticky; top:calc(38px + env(safe-area-inset-top, 0px)); height:0; z-index:60000; }
+  .rules-fab-holder { position:sticky; top:calc(38px + env(safe-area-inset-top, 0px)); height:0; z-index:9000; }
   .rules-fab-holder + .back-btn-row { padding-right:64px !important; }
   html.chat-open .rules-fab-holder, html.pseudo-fs-lock .rules-fab-holder { display:none; }
 
@@ -428,7 +428,8 @@
 
   /* Információs szövegdobozok: legfeljebb 2 sor, utána vastag "Továbbiak..." */
   .clamp2 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden; }
-  .clamp2.expanded { display:block; -webkit-line-clamp:unset; line-clamp:unset; overflow:visible; }
+  .clamp2.clamp1 { -webkit-line-clamp:1; line-clamp:1; font-size:0.8rem; line-height:1.4; }
+.clamp2.expanded { display:block; -webkit-line-clamp:unset; line-clamp:unset; overflow:visible; }
   .more-btn { display:inline-block; background:none; border:0; padding:4px 0 0; margin:0; font:inherit; font-weight:800; text-decoration:underline; cursor:pointer; color:inherit; -webkit-tap-highlight-color:transparent; }
   .game-overlay.hidden { display:none; }
   .game-overlay h2 { font-size:1.3rem; margin-bottom:10px; }
@@ -456,6 +457,21 @@
 .ico { width:1em; height:1em; display:inline-block; vertical-align:-0.125em; flex-shrink:0; fill:currentColor; overflow:visible; }
 .ico-apple{width:0.75em}.ico-bag-shopping{width:0.875em}.ico-band-aid{width:1.125em}.ico-bars{width:0.875em}.ico-battery-quarter{width:1.25em}.ico-bolt{width:0.875em}.ico-bone{width:1.25em}.ico-border-all{width:0.875em}.ico-calendar-days{width:0.875em}.ico-check{width:0.875em}.ico-chevron-down{width:0.875em}.ico-chevron-left{width:0.625em}.ico-chevron-right{width:0.625em}.ico-chevron-up{width:0.875em}.ico-child-reaching{width:0.75em}.ico-comment-slash{width:1.125em}.ico-compress{width:0.875em}.ico-download{width:0.875em}.ico-droplet{width:0.75em}.ico-dumbbell{width:1.25em}.ico-expand{width:0.875em}.ico-eye{width:1.125em}.ico-facebook-f{width:0.625em}.ico-fire{width:0.875em}.ico-folder-open{width:1.125em}.ico-gamepad{width:1.25em}.ico-google-play{width:0.875em}.ico-hand-holding-heart{width:1.125em}.ico-hand-holding-medical{width:1.125em}.ico-hand-sparkles{width:1.25em}.ico-id-card{width:1.125em}.ico-instagram{width:0.875em}.ico-laptop-medical{width:1.25em}.ico-lightbulb{width:0.75em}.ico-link{width:1.125em}.ico-location-dot{width:0.75em}.ico-lungs{width:1.125em}.ico-map-location-dot{width:1.25em}.ico-map-marker-alt{width:0.75em}.ico-mobile-screen-button{width:0.75em}.ico-mosquito{width:1.125em}.ico-mug-hot{width:1.125em}.ico-person-walking{width:0.75em}.ico-plane{width:1.125em}.ico-shoe-prints{width:1.125em}.ico-spray-can{width:1.125em}.ico-staff-snake{width:0.875em}.ico-star{width:1.125em}.ico-stethoscope{width:1.125em}.ico-sun{width:1.125em}.ico-tags{width:1.125em}.ico-temperature-three-quarters{width:0.625em}.ico-tint{width:0.75em}.ico-toilet{width:0.875em}.ico-tooth{width:0.875em}.ico-user{width:0.875em}.ico-user-doctor{width:0.875em}.ico-user-shield{width:1.125em}
 h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
+
+/* Azonnali telefonhívás gomb */
+.quick-phone { position: fixed; right: 22px; bottom: 22px; z-index: 15000; }
+.quick-phone__button { width: 56px; height: 56px; border: 0; border-radius: 50%; background: #2E7D32; color: white; font-size: 1.35rem; cursor: pointer; box-shadow: 0 8px 22px rgba(46,125,50,.38); animation: phonePulse 2s infinite; }
+.quick-phone__panel { position: absolute; right: 0; bottom: 68px; width: 235px; padding: 16px; border-radius: 14px; background: white; box-shadow: 0 12px 35px rgba(0,0,0,.2); text-align: center; display: none; }
+.quick-phone__panel.is-open { display: block; }
+.quick-phone__panel p { margin: 0 0 7px; color: #334155; font-weight: 700; }
+.quick-phone__panel a { color: #1b5e20; text-decoration: none; font-weight: 800; font-size: 1.05rem; }
+@keyframes phonePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.52), 0 8px 22px rgba(46,125,50,.38); } 70% { box-shadow: 0 0 0 13px rgba(76,175,80,0), 0 8px 22px rgba(46,125,50,.38); } }
+@media screen and (max-width: 768px) { .quick-phone { right: 16px; bottom: 16px; } }
+@media (display-mode: standalone) { .quick-phone { bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important; } }
+html.chat-open .quick-phone, html.pseudo-fs-lock .quick-phone { display: none; }
+html.ios-pwa-glass .quick-phone__button { background: rgba(46,125,50,0.72) !important; -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%); border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 8px 24px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.5); }
+html.ios-pwa-glass .quick-phone__panel { background: rgba(255,255,255,0.68) !important; -webkit-backdrop-filter: blur(28px) saturate(190%); backdrop-filter: blur(28px) saturate(190%); border: 1px solid rgba(255,255,255,0.55); }
+html.ios-pwa-glass .quick-phone { bottom: calc(22px + env(safe-area-inset-bottom, 0px)); }
 </style>
 <style>.pwa-menu-li{display:none}@media (max-width:768px) and (display-mode: browser){.pwa-menu-li{display:block}.nav-links{height:calc(100vh - 60px)!important;height:calc(100dvh - 60px)!important;padding-top:14px!important}.nav-links li{margin:5px 0!important}.nav-links li:not(.pwa-menu-li) a{padding:8px 0!important}.nav-links .pwa-menu-li{margin:14px 0 4px!important}.nav-links .pwa-menu-li a{display:flex;align-items:center;justify-content:center;gap:8px;width:auto;height:48px;margin:0 18px;padding:0;border-radius:999px;background:linear-gradient(135deg,#2E7D32,#43a047);color:#fff;font-weight:800;box-shadow:0 8px 22px rgba(46,125,50,.45),0 0 0 3px rgba(255,255,255,.9)}}</style>
 <style id="menu-label-css">@media (max-width:768px){label.menu-toggle{box-sizing:border-box;width:44px;height:30px;margin-right:6px!important;display:flex!important;align-items:center;justify-content:center;background:linear-gradient(#fff,#fff) top/100% 3px no-repeat,linear-gradient(#fff,#fff) bottom/100% 3px no-repeat}label.menu-toggle .ico{display:none!important}label.menu-toggle::before{content:"MENÜ";color:#fff;font-weight:800;font-size:.62rem;line-height:1;letter-spacing:.08em;padding-left:.08em}}</style>
@@ -497,7 +513,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
   <div class="promo-card" style="margin-bottom:18px;">
     <svg class="ico ico-circle-info"><use href="#ico-circle-info"></use></svg>
-    <p class="clamp2"><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p>
+    <p class="clamp2 clamp1"><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p>
   </div>
 
   <div class="game-layout">
@@ -2046,6 +2062,20 @@ if ('serviceWorker' in navigator) {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(check);
 })();
 </script>
+<div class="quick-phone" aria-label="Telefonos érdeklődés">
+    <div class="quick-phone__panel" id="quick-phone-panel">
+        <p>Érdeklődjön telefonon</p>
+        <a href="tel:+3676591020">+36 76 591 020</a>
+    </div>
+    <button class="quick-phone__button" id="quick-phone-button" type="button" aria-label="Telefonos elérhetőség megnyitása" aria-expanded="false"><svg class="ico ico-phone"><use href="#ico-phone"></use></svg></button>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('quick-phone-button'),p=document.getElementById('quick-phone-panel');
+  if(b&&p){b.addEventListener('click',function(){var o=p.classList.toggle('is-open');b.setAttribute('aria-expanded',String(o));});}
+})();
+</script>
 <script src="pwa-extras.js" defer></script>
+<script src="site-common.js" defer></script>
 </body>
 </html>
