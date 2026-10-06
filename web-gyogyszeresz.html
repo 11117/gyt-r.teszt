@@ -317,7 +317,8 @@
 h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
   /* Információs szövegdobozok: legfeljebb 2 sor, utána vastag "Továbbiak..." */
   .clamp2 { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2; overflow:hidden; }
-  .clamp2.expanded { display:block; -webkit-line-clamp:unset; line-clamp:unset; overflow:visible; }
+  .clamp2.clamp1 { -webkit-line-clamp:1; line-clamp:1; }
+.clamp2.expanded { display:block; -webkit-line-clamp:unset; line-clamp:unset; overflow:visible; }
   .more-btn { display:inline-block; background:none; border:0; padding:4px 0 0; margin:0; font:inherit; font-weight:800; text-decoration:underline; cursor:pointer; color:inherit; -webkit-tap-highlight-color:transparent; }
   header.hero .more-btn{color:#fff}
 </style>
@@ -354,7 +355,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 <header class="hero">
   <h1><svg class="ico ico-laptop-medical"><use href="#ico-laptop-medical"></use></svg> Web gyógyszerész – egészségügyi tájékoztató</h1>
   <p>Otthonról is elérhető egészségügyi tájékoztatók.</p>
-  <p class="disclaimer clamp2">Ez nem online gyógyszerészi konzultáció és nem sürgősségi szolgáltatás: a felület automatikus, előre elkészített tájékoztató tartalmakat gyűjt össze, amelyeket nem tényleges gyógyszerész válaszol meg valós időben, és nem minősül diagnózisnak vagy személyre szabott tanácsadásnak. Egyedi kérdésével kérjük, keresse fel személyesen vagy telefonon gyógyszertárunkat.</p>
+  <p class="disclaimer clamp2 clamp1">Ez nem online gyógyszerészi konzultáció és nem sürgősségi szolgáltatás: a felület automatikus, előre elkészített tájékoztató tartalmakat gyűjt össze, amelyeket nem tényleges gyógyszerész válaszol meg valós időben, és nem minősül diagnózisnak vagy személyre szabott tanácsadásnak. Egyedi kérdésével kérjük, keresse fel személyesen vagy telefonon gyógyszertárunkat.</p>
 </header>
 
 <main class="wrap">

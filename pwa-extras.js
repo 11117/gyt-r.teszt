@@ -131,6 +131,14 @@ addMenuItem();
 D.querySelectorAll('.nav-links a').forEach(function(a){if(a.id!=='pwa-settings-btn')a.addEventListener('click',closeSettings)});
 D.querySelectorAll('.pwa-pill-item').forEach(function(a){a.addEventListener('click',closeSettings)});
 
+/* ---------- Süti-panel szövege: a lábléc helyett a Beállítások ---------- */
+D.querySelectorAll('#gyszt-settings-panel p').forEach(function(p){
+ if(p.textContent.indexOf('lábléc')>-1)p.textContent=p.textContent.replace(/a lábléc[\s\S]*?pontjára kattintva\./,'a Beállításokban a „Sütibeállítások” pontra kattintva.');
+});
+/* ---------- Fejléc logó: visszaugrás a főoldal tetejére ---------- */
+var logo=D.querySelector('a.logo');
+if(logo&&isIndex)logo.addEventListener('click',function(){setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'})},60)});
+
 /* ---------- Rövid útmutató: Mit hol talál? ---------- */
 var tour=null;
 function steps(){

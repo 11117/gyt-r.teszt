@@ -151,10 +151,10 @@
 
         .services-info {
             max-width: 850px; margin: 0 auto; padding: 35px; background: white; 
-            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; font-size: 1.05rem;
+            border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; font-size: 0.97rem;
         }
-        @media (max-width: 480px) { .services-info { padding: 28px 22px; } }
-        .services-info p { font-size: 1.05rem; color: #333; line-height: 1.8; font-weight: 500; }
+        @media (max-width: 480px) { .services-info { padding: 26px 12px; } }
+        .services-info p { font-size: 0.97rem; color: #333; line-height: 1.8; font-weight: 500; }
 
         .reviews-wrap { max-width: 500px; margin: 45px auto 0; }
         .reviews-caption { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 18px; color: #444; font-weight: 700; }
@@ -679,7 +679,16 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 /* Szimpatika akciók: ha az anyaoldalt görgetik, az iframe elszürkül és jelzi, hol kell görgetni */
         .szimpatika-frame-wrap { position: relative; }
         .szimp-hint { position: absolute; left: 0; right: 0; top: 0; bottom: 0; z-index: 6; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 20px; box-sizing: border-box; text-align: center; color: #fff; font-weight: 700; font-size: 1.05rem; line-height: 1.35; background: rgba(34,40,34,0.55); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+        /* Vissza gombok: ugyanaz a stílus, mint a Web gyógyszerésznél */
+        .back-btn { display:inline-flex; align-items:center; gap:8px; background:#fff; color:var(--navy); font-weight:700; text-decoration:none; padding:10px 18px; border-radius:30px; box-shadow:0 6px 16px rgba(32,48,64,0.12); border:1px solid #e5eaee; font-size:0.9rem; }
+        .back-btn:hover { background:var(--navy); color:#fff; }
+        .back-btn-row { display:flex; justify-content:flex-start; margin: 14px 0 4px; }
+        .back-btn-row.bottom { justify-content:center; margin: 30px 0 6px; }
+        .hero { transform-origin: 50% 0; will-change: transform; overflow: hidden; }
         .szimp-hint.on { opacity: 1; }
+        .next { scroll-margin-bottom: 120px; }
+        @keyframes nextPulse { 0% { transform: scale(1); } 35% { transform: scale(1.12); box-shadow: 0 10px 26px rgba(46,125,50,.45); } 100% { transform: scale(1); } }
+        .next.pulse { animation: nextPulse .9s ease-in-out 1; }
         .szimpatika-frame-wrap.ps iframe { pointer-events: none; }
         .szimp-hint svg { width: 52px; height: 52px; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
         .szimp-hint b { background: #2E7D32; border-radius: 6px; padding: 1px 8px; margin: 0 2px; letter-spacing: .04em; }
@@ -756,23 +765,9 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         <section id="szolgaltatasok">
             <h2 class="section-title">Szolgáltatások</h2>
             <div class="services-info">
-                <div style="display:flex; justify-content:center; align-items:flex-start; gap:8px; text-align:left;"><svg class="ico ico-staff-snake" style="color:#2E7D32; flex-shrink:0; margin-top:3px;"><use href="#ico-staff-snake"></use></svg><div><ul style="margin:0; padding-left:18px; list-style:disc;"><li><strong>Gyógyszer</strong></li><li><strong>Gyógyhatású készítmény</strong></li><li><strong>Gyógyászati segédeszköz</strong></li></ul><div style="padding-left:18px;">ellátás</div></div></div><br><br>
-                <p><svg class="ico ico-hand-holding-heart" style="color:#2E7D32;"><use href="#ico-hand-holding-heart"></use></svg> Gyógyszertárunk dolgozóinak legfőbb hivatása a gyógyítás, illetve az egészség megőrzése.</p><br>
-                <div style="text-align:left; max-width:420px; margin:0 auto;">
-                    <strong style="display:block; margin-bottom:14px; text-align:center;">Fizetési lehetőségek:</strong>
-                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
-                        <span style="width:38px; height:38px; flex-shrink:0; border-radius:10px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem;"><svg class="ico ico-money-bill-wave"><use href="#ico-money-bill-wave"></use></svg></span>
-                        <span>Készpénz</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:14px; margin-bottom:12px;">
-                        <span style="width:38px; height:38px; flex-shrink:0; border-radius:10px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem;"><svg class="ico ico-credit-card"><use href="#ico-credit-card"></use></svg></span>
-                        <span>Bankkártya</span>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:14px;">
-                        <span style="width:38px; height:38px; flex-shrink:0; border-radius:10px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:1.05rem;"><svg class="ico ico-hand-holding-medical"><use href="#ico-hand-holding-medical"></use></svg></span>
-                        <span>Egészségpénztári kártya</span>
-                    </div>
-                </div><br>
+                <div class="svc-two" style="overflow-wrap:break-word; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:12px; max-width:640px; margin:0 auto; text-align:left; align-items:start;"><div style="display:flex; align-items:flex-start; gap:6px;"><svg class="ico ico-staff-snake" style="color:#2E7D32; flex-shrink:0; margin-top:3px; width:20px;"><use href="#ico-staff-snake"></use></svg><div><ul style="margin:0; padding-left:16px; list-style:disc;"><li><strong>Gyógyszer</strong></li><li><strong>Gyógyhatású készítmény</strong></li><li><strong>Gyógyászati segédeszköz</strong></li></ul><div style="padding-left:16px;">ellátás</div></div></div><div><strong style="display:block; margin-bottom:12px;">Fizetési lehetőségek:</strong><div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><span style="width:30px; height:30px; flex-shrink:0; border-radius:9px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:.95rem;"><svg class="ico ico-money-bill-wave"><use href="#ico-money-bill-wave"></use></svg></span><span style="min-width:0;">Készpénz</span></div><div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;"><span style="width:30px; height:30px; flex-shrink:0; border-radius:9px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:.95rem;"><svg class="ico ico-credit-card"><use href="#ico-credit-card"></use></svg></span><span style="min-width:0;">Bankkártya</span></div><div style="display:flex; align-items:center; gap:8px; margin-bottom:0;"><span style="width:30px; height:30px; flex-shrink:0; border-radius:9px; background:#E8F5E9; color:#2E7D32; display:inline-flex; align-items:center; justify-content:center; font-size:.95rem;"><svg class="ico ico-hand-holding-medical"><use href="#ico-hand-holding-medical"></use></svg></span><span style="min-width:0;">Egészségpénztári kártya</span></div></div></div>
+                <p style="margin-top:24px;"><svg class="ico ico-hand-holding-heart" style="color:#2E7D32;"><use href="#ico-hand-holding-heart"></use></svg> Gyógyszertárunk dolgozóinak legfőbb hivatása a gyógyítás, illetve az egészség megőrzése.</p><br>
+                
                 <p><svg class="ico ico-tags" style="color:#2E7D32;"><use href="#ico-tags"></use></svg> Havonta megújuló <strong>AKCIÓ</strong>kkal is várjuk Kedves Betegeinket!<br><i><small>(Gyógyszertárunk a Szimpatika hálózat tagja)</small></i></p>
 
                 <div style="margin-top:26px;">
@@ -799,7 +794,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     </div>
                     <div class="testimonial-slide">
                         <div class="testimonial-stars"><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg><svg class="ico ico-star"><use href="#ico-star"></use></svg></div>
-                        <p class="testimonial-text">„Segítőkész szakemberek”</p>
+                        <p class="testimonial-text">„Segítőkész szakemberek!”</p>
                         <span class="testimonial-source"><svg class="ico ico-google"><use href="#ico-google"></use></svg> Google-értékelés</span>
                     </div>
                 </div>
@@ -937,10 +932,10 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <!-- NÉZET 2: JÁTÉKOK KÍNÁLATA (JATEKOK.HTML) -->
     <div id="view-jatekok" class="page-view">
         <header>
-            <h1>Ismeretterjesztő játékok</h1>
+            <h1><svg class="ico ico-puzzle-piece"><use href="#ico-puzzle-piece"></use></svg> Ismeretterjesztő játékok</h1>
             <p>Könnyed, rövid feladatok az egészségtudatos mindennapokhoz — minden korosztálynak.</p>
         </header>
-        <main class="wrap">
+        <main class="wrap"><div class="back-btn-row"><a class="back-btn" href="#index"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a főoldalra</a></div>
             <div class="game-filters" id="game-filters">
                 <button type="button" class="game-filter active" data-cat="all"><svg class="ico ico-border-all"><use href="#ico-border-all"></use></svg> Összes</button>
                 <button type="button" class="game-filter" data-cat="kviz"><svg class="ico ico-brain"><use href="#ico-brain"></use></svg> Kvíz játékok</button>
@@ -989,7 +984,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 </a>
             </div>
             <aside class="note"><strong>Fontos:</strong> A játékok ismeretterjesztő célt szolgálnak, nem helyettesítik az egyéni gyógyszerészi vagy orvosi tanácsadást. Panasz esetén kérje gyógyszerésze tanácsát.</aside>
-            <a class="back" href="#index"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a főoldalra</a>
+            <div class="back-btn-row bottom"><a class="back-btn" href="#index"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a főoldalra</a></div>
         </main>
         <footer style="background-color: #1a1a1a; color: rgba(255,255,255,0.6); padding: 40px 20px; text-align: center; font-size: 0.9rem; border-top: 1px solid #333;">
             <div style="max-width: 1200px; margin: 0 auto;">
@@ -1039,7 +1034,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <h1><svg class="ico ico-heart-pulse"><use href="#ico-heart-pulse"></use></svg> Egészségügyi kvíz</h1>
                 <div>90 másodperc alatt minél több helyes válasz</div>
             </header>
-            <main class="wrap">
+            <main class="wrap"><div class="back-btn-row"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
                 <div class="stats">
                     <span class="pill">Idő: <span id="time">1:30</span></span>
                     <span class="pill">Pont: <span id="points">0</span></span>
@@ -1059,7 +1054,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     <button class="again" id="again">Újrapróbálom</button>
                 </section>
                 <p class="notice">A kvíz ismeretterjesztő célú, nem helyettesít orvosi vagy gyógyszerészi tanácsadást.</p>
-                <a class="back" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a>
+                <div class="back-btn-row bottom"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
             </main>
             <footer style="background-color: #1a1a1a; color: rgba(255,255,255,0.6); padding: 40px 20px; text-align: center; font-size: 0.9rem; border-top: 1px solid #333; margin-top: 40px; border-radius: 12px;">
                     <div style="max-width: 1200px; margin: 0 auto;">
@@ -1089,7 +1084,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <h1><svg class="ico ico-arrows-spin"><use href="#ico-arrows-spin"></use></svg> Napi kihívás</h1>
                 <div>Egy apró lépés az egészségtudatosabb napért</div>
             </header>
-            <main class="wrap">
+            <main class="wrap"><div class="back-btn-row"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
                 <div class="wheelbox">
                     <div class="pointer"></div>
                     <div class="wheel" id="wheel"></div>
@@ -1100,7 +1095,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     <p id="result-kihivas">Pörgesd meg a tárcsát!</p>
                 </section>
                 <p class="note">Válassz a saját állapotodhoz illő, biztonságosan teljesíthető feladatot. Ha bármilyen panaszod vagy korlátozásod van, kérj tanácsot szakembertől.</p>
-                <a class="back" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a>
+                <div class="back-btn-row bottom"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
             </main>
             <footer style="background-color: #1a1a1a; color: rgba(255,255,255,0.6); padding: 40px 20px; text-align: center; font-size: 0.9rem; border-top: 1px solid #333; margin-top: 40px; border-radius: 12px;">
                     <div style="max-width: 1200px; margin: 0 auto;">
@@ -1130,7 +1125,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <h1><svg class="ico ico-leaf"><use href="#ico-leaf"></use></svg> Gyógynövény-párosító</h1>
                 <div>Hat véletlen feladat minden körben</div>
             </header>
-            <main class="wrap">
+            <main class="wrap"><div class="back-btn-row"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
                 <section class="card" id="game-gyogynoveny">
                     <div class="count" id="count-gyogynoveny"></div>
                     <div class="task" id="task-gyogynoveny"></div>
@@ -1145,7 +1140,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     <button class="again" id="again-gyogynoveny">Új teszt</button>
                 </section>
                 <p class="note">A felsoroltak hagyományos felhasználási területek. Egyéni panasz, várandósság, gyógyszerszedés vagy tartós tünet esetén kérjen gyógyszerészi tanácsot.</p>
-                <a class="back" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a>
+                <div class="back-btn-row bottom"><a class="back-btn" href="#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza a játékokhoz</a></div>
             </main>
             <footer style="background-color: #1a1a1a; color: rgba(255,255,255,0.6); padding: 40px 20px; text-align: center; font-size: 0.9rem; border-top: 1px solid #333; margin-top: 40px; border-radius: 12px;">
                     <div style="max-width: 1200px; margin: 0 auto;">
@@ -1635,6 +1630,13 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     ];
     let pool=[],i_kviz=0,points=0,wrong=0,answered=false,timer;
     const $=(x)=>document.getElementById(x);
+    function bumpNext(btn){ // a Következő gomb aljára ugrunk, és egyet pulzál
+        if(!btn)return;
+        setTimeout(()=>{
+            btn.scrollIntoView({behavior:'smooth',block:'end'});
+            setTimeout(()=>{btn.classList.remove('pulse');void btn.offsetWidth;btn.classList.add('pulse');btn.addEventListener('animationend',()=>btn.classList.remove('pulse'),{once:true})},450);
+        },60);
+    }
     function shuffleArr(a){return [...a].sort(()=>Math.random()-.5)}
 
     function startKviz(){
@@ -1686,13 +1688,15 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             $('feedback').textContent='Ez most nem sikerült.'
         }
         $('points').textContent=points;
-        $('next').classList.remove('hidden')
+        $('next').classList.remove('hidden');
+        bumpNext($('next'))
     }
 
     function finishKviz(){
         clearInterval(timer);
         $('game-kviz').classList.add('hidden');
         $('result-kviz').classList.remove('hidden');
+        const tg=$('result-kviz').querySelector('.tag');if(tg)tg.textContent='LEJÁRT AZ IDŐ!';
         let total=points+wrong,best=Math.max(getQuizBest(),points);
         setQuizBest(best);
         $('final').textContent=`${points} pont`;
@@ -1787,7 +1791,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             [...document.querySelectorAll('#view-gyogynoveny .opt')].find(z=>z.textContent===q[0]).classList.add('ok');
             $('feedback-gyogynoveny').textContent=`A helyes válasz: ${q[0]}.`
         }
-        $('next-gyogynoveny').classList.remove('hidden')
+        $('next-gyogynoveny').classList.remove('hidden');bumpNext($('next-gyogynoveny'))
     }
 
     $('next-gyogynoveny').onclick=()=>{
@@ -2017,7 +2021,9 @@ if ('serviceWorker' in navigator) {
     if(tick)return;tick=true;
     requestAnimationFrame(function(){
       tick=false;
-      if(!wrap.querySelector('iframe'))return;               // csak akkor, ha az akciós tartalom látszik
+      var fr=wrap.querySelector('iframe'),ck=null;
+      try{ck=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'))}catch(e){}
+      if(!fr||!fr.getAttribute('src')||fr.getAttribute('src')==='about:blank'||!ck||!ck.external){hint.classList.remove('on');wrap.classList.remove('ps');return}   // csak betöltött, engedélyezett akciós tartalomnál
       var r=wrap.getBoundingClientRect(),vh=window.innerHeight||document.documentElement.clientHeight;
       var vis=Math.min(r.bottom,vh)-Math.max(r.top,0);
       if(vis<Math.min(r.height,vh)*0.25)return;               // az iframe alig látszik: nincs jelzés
@@ -2030,5 +2036,25 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script src="site-common.js" defer></script>
+<script>
+/* Kezdőkép zsugorítása görgetéskor a webes nézetben is (a telepített alkalmazásban a másik szkript végzi) */
+(function(){
+  if((window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true)return;
+  var hero=document.querySelector('.hero');
+  if(!hero||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches))return;
+  var ticking=false;
+  function upd(){
+    ticking=false;
+    var h=hero.offsetHeight;
+    if(!h){hero.style.transform='';hero.style.borderRadius='';return}
+    var y=Math.max(window.scrollY||window.pageYOffset||0,0),p=Math.min(y/(h*0.7),1);
+    if(p<=0){hero.style.transform='';hero.style.borderRadius='';return}
+    hero.style.transform='scale('+(1-0.1*p).toFixed(4)+')';
+    hero.style.borderRadius=(30*p).toFixed(1)+'px';
+  }
+  window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(upd)}},{passive:true});
+  window.addEventListener('resize',upd);upd();
+})();
+</script>
 </body>
 </html>
