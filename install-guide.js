@@ -17,7 +17,7 @@ var st=D.createElement('style');st.textContent='.ig-pop,.ig-card{position:fixed;
 '.ig-h{font-size:.66rem;font-weight:700;color:#555;padding:0 8px 2px}.ig-foot{display:flex;align-items:center;justify-content:space-between;padding:3px 8px 0}.ig-alt{min-width:104px;font-size:.62rem;color:#777}.ig-dots{display:flex;gap:4px}.ig-dots i{font-style:normal;width:18px;height:18px;border-radius:50%;background:#dde2e7;color:#555;font-size:.62rem;line-height:18px;text-align:center}.ig-dots i.on{background:'+BL+';color:#fff}'+
 '.ig-x{background:#222;color:#fff;border:0;border-radius:999px;font-size:.74rem;font-weight:700;padding:7px 13px;white-space:nowrap}.ig-pop .ig-x{background:none;color:#888;font-size:22px;font-weight:400;padding:0 2px}'+
 '.ig-arr{position:fixed;z-index:99001;font-size:46px;line-height:1;color:#e53935;display:none;animation:igb .85s ease-in-out infinite;text-shadow:0 0 6px #fff,0 0 16px rgba(255,255,255,.9);filter:drop-shadow(0 0 8px rgba(229,57,53,.95));pointer-events:none}.ig-arr.on{display:block}@keyframes igb{0%,100%{transform:translateY(0) scale(1);opacity:1}50%{transform:translateY(var(--d,12px)) scale(1.3);opacity:.55}}.ig-ring{animation:igp 1.2s infinite}@keyframes igp{50%{opacity:.25}}@media(prefers-reduced-motion:reduce){.ig-arr,.ig-ring,.ig-mk{animation:none}}'+
-'.ig-bg{display:none;position:fixed;left:0;right:0;top:var(--ig-top,0);bottom:0;z-index:98900;background:#3b3f45;flex-direction:column;align-items:center;box-sizing:border-box;font:13px/1.3 -apple-system,system-ui,sans-serif}.ig-bg.on{display:flex}.ig-or{margin:2px 0 6px;font-size:.7rem;color:#c9ced6;letter-spacing:.08em}.ig-lbl{margin:0 0 6px;font-size:.78rem;font-weight:700;color:#fff;text-align:center}.ig-steps{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2}.ig-steps i{box-sizing:border-box;width:30px;height:30px;border:2px solid rgba(255,255,255,.9);border-radius:50%;color:#fff;font:700 .8rem/26px -apple-system,system-ui,sans-serif;font-style:normal;text-align:center;background:transparent;transition:background .2s,color .2s}.ig-steps i.on{background:#fff;color:#3b3f45}.ig-intro{position:fixed;inset:0;z-index:99500;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.62)}.ig-intro.on{display:flex}.ig-intro div{max-width:340px;background:#fff;color:#1a1a1a;border-radius:20px;padding:22px 20px 18px;text-align:center;font:15px/1.5 -apple-system,system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.4)}.ig-intro p{margin:0 0 16px}.ig-intro button{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;background:#007AFF;color:#fff;font-weight:700;font-size:.9rem;padding:11px 20px}.ig-cap{color:#fff;font:700 .85rem/1.35 -apple-system,system-ui,sans-serif;text-align:center;margin-top:8px;min-height:2.7em;max-width:340px}.ig-bg.rev .ig-lbl{order:1}.ig-bg.rev .ig-vw{order:2}.ig-bg.rev .ig-cap{order:3}.ig-bg.rev .ig-or{order:4;margin:6px 0 2px}.ig-vw{position:relative;flex:1;min-height:0;aspect-ratio:360/736;max-width:100%;border:6px solid #1c1c1e;border-radius:24px;box-sizing:border-box;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.25)}.ig-vw video{width:100%;height:100%;display:block;object-fit:cover}.ig-mk{position:absolute;border:3px solid #e53935;box-sizing:border-box;transform:translate(-50%,-50%);display:none;animation:igp 1.2s infinite;pointer-events:none}';
+'.ig-bg{display:none;position:fixed;left:0;right:0;top:var(--ig-top,0);bottom:0;z-index:98900;background:#3b3f45;flex-direction:column;align-items:center;box-sizing:border-box;font:13px/1.3 -apple-system,system-ui,sans-serif}.ig-bg.on{display:flex}.ig-or{margin:2px 0 6px;font-size:.7rem;color:#c9ced6;letter-spacing:.08em}.ig-lbl{margin:0 0 6px;font-size:.78rem;font-weight:700;color:#fff;text-align:center}.ig-steps{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2}.ig-steps i{box-sizing:border-box;width:30px;height:30px;border:2px solid rgba(255,255,255,.9);border-radius:50%;color:#fff;font:700 .8rem/26px -apple-system,system-ui,sans-serif;font-style:normal;text-align:center;background:transparent;transition:background .2s,color .2s}.ig-steps i.on{background:#fff;color:#3b3f45}.ig-intro{position:fixed;inset:0;z-index:99500;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.62)}.ig-intro.on{display:flex}.ig-intro div{max-width:340px;background:#fff;color:#1a1a1a;border-radius:20px;padding:22px 20px 18px;text-align:center;font:15px/1.5 -apple-system,system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.4)}.ig-intro p{margin:0 0 16px}.ig-intro button{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;background:#007AFF;color:#fff;font-weight:700;font-size:.9rem;padding:11px 20px}.ig-cap{color:#fff;font:700 .85rem/1.35 -apple-system,system-ui,sans-serif;text-align:center;margin-top:8px;min-height:2.7em;max-width:340px}.ig-toast{position:fixed;left:12px;right:12px;bottom:calc(86px + env(safe-area-inset-bottom,0px));max-width:380px;margin:auto;z-index:99600;display:none;align-items:center;gap:10px;background:#222;color:#fff;border-radius:14px;padding:11px 14px;font:13px/1.4 -apple-system,"Segoe UI",system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.4)}.ig-toast.on{display:flex}.ig-toast span{flex:1}.ig-toast button{border:0;background:none;color:#8ab4f8;font-weight:700;font-size:13px;padding:2px 4px}.ig-bg.rev .ig-lbl{order:1}.ig-bg.rev .ig-vw{order:2}.ig-bg.rev .ig-cap{order:3}.ig-bg.rev .ig-or{order:4;margin:6px 0 2px}.ig-vw{position:relative;flex:1;min-height:0;aspect-ratio:360/736;max-width:100%;border:6px solid #1c1c1e;border-radius:24px;box-sizing:border-box;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.25)}.ig-vw video{width:100%;height:100%;display:block;object-fit:cover}.ig-mk{position:absolute;border:3px solid #e53935;box-sizing:border-box;transform:translate(-50%,-50%);display:none;animation:igp 1.2s infinite;pointer-events:none}';
 D.head.appendChild(st);
 // ---- SVG kellékek ----
 function R(x,y,w,h,r,f,s){return'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+r+'" fill="'+(f||'none')+'"'+(s?' stroke="'+s+'" stroke-width="1.2"':'')+'/>'}
@@ -105,11 +105,36 @@ function open(){
  card.onpointerdown=stop;var x0;card.ontouchstart=function(e){x0=e.touches[0].clientX};card.ontouchend=function(e){var dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>40){stop();go(idx+(dx<0?1:-1))}};
 }
 pop.querySelector('.ig-x').onclick=function(){pop.classList.remove('on');LS('igPopX',String(Date.now()))}; // kiikszelés után 12 óráig nem jelenik meg újra
-function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépéses útmutató csak tartalék
- if(defer){var p=defer;defer=null;window.__bip=null;pop.classList.remove('on');p.prompt()}else if(iOS&&br!=='g'){pop.classList.remove('on');intro.classList.add('on')}else open()}
+var toastEl=D.createElement('div');toastEl.className='ig-toast';D.body.appendChild(toastEl);
+var waiting=false,waitT=null,toastT=null;
+function toast(html,ms,onGuide){
+ toastEl.innerHTML='<span>'+html+'</span>'+(onGuide?'<button type="button">Útmutató</button>':'');
+ toastEl.classList.add('on');clearTimeout(toastT);toastT=setTimeout(function(){toastEl.classList.remove('on')},ms||4000);
+ if(onGuide)toastEl.querySelector('button').onclick=function(){toastEl.classList.remove('on');onGuide()};
+}
+function nativePrompt(){
+ var p=defer;defer=null;window.__bip=null;pop.classList.remove('on');toastEl.classList.remove('on');
+ try{p.prompt();if(p.userChoice)p.userChoice.then(function(c){if(c&&c.outcome==='accepted')LS('gyInstalled','1')})}catch(e){open()}
+}
+function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépéses útmutató csak végső tartalék
+ if(defer){nativePrompt();return}
+ if(iOS&&br!=='g'){pop.classList.remove('on');intro.classList.add('on');return}
+ if(AND&&br!=='g'){
+  pop.classList.remove('on');
+  if(waiting)return;
+  waiting=true;toast('Telepítési ablak megnyitása…',3600);
+  waitT=setTimeout(function(){ // a böngésző nem jelezte, hogy telepíthető
+   waiting=false;toastEl.classList.remove('on');
+   if(LS('gyInstalled'))toast('Az alkalmazás már telepítve van – keresse a főképernyőn: Gyógyszertáram.',5000,open);
+   else open();
+  },3500);
+  return;
+ }
+ open();
+}
 pop.querySelector('.ig-btn').onclick=start;
-addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e});
-addEventListener('appinstalled',function(){pop.classList.remove('on');close()});
+addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e;if(waiting){waiting=false;clearTimeout(waitT);nativePrompt()}});
+addEventListener('appinstalled',function(){LS('gyInstalled','1');pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
 function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});

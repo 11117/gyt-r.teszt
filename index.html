@@ -153,12 +153,13 @@
             max-width: 850px; margin: 0 auto; padding: 35px; background: white; 
             border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid #f0f0f0; font-size: 0.97rem;
         }
-        .svc-two { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 16px 10px; max-width: 640px; margin: 0 auto; text-align: left; word-break: normal; overflow-wrap: normal; hyphens: manual; -webkit-hyphens: manual; }
-        .svc-two .svc-col { flex: 1 1 130px; }
-        .svc-list { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-        .svc-chip { display: inline-flex; align-items: center; gap: 5px; background: #E8F5E9; color: #1b5e20; border-radius: 14px; padding: 4px 9px; line-height: 1.3; font-weight: 500; text-align: left; }
-        .svc-chip strong { font-weight: 700; }
-        .svc-chip .ico { flex-shrink: 0; color: #2E7D32; }
+        .svc-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 172px), 1fr)); grid-auto-rows: 1fr; gap: 10px; max-width: 640px; margin: 0 auto; text-align: left; word-break: normal; overflow-wrap: normal; hyphens: manual; -webkit-hyphens: manual; }
+        .svc-box { background: linear-gradient(150deg, #F2FAF3 0%, #E2F2E4 100%); border: 1px solid #CDE6D0; border-radius: 20px; padding: 13px 12px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 5px 14px rgba(46,125,50,0.09); color: #1c2e1f; }
+        .svc-box ul li::marker { color: #2E7D32; }
+        .svc-head { display: block; font-weight: 700; padding-bottom: 7px; margin-bottom: 2px; border-bottom: 1px dashed rgba(46,125,50,0.28); }
+        .svc-row { display: flex; align-items: center; gap: 7px; margin-top: 9px; }
+        .svc-ic { width: 24px; height: 24px; flex-shrink: 0; border-radius: 8px; background: #fff; color: #2E7D32; display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; box-shadow: 0 1px 3px rgba(46,125,50,0.15); }
+        .svc-badge { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; background: #fff; color: #2E7D32; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 1px 3px rgba(46,125,50,0.15); }
         @media (max-width: 480px) { .services-info { padding: 26px 10px; margin-left: -8px; margin-right: -8px; } }
         .services-info p { font-size: 0.97rem; color: #333; line-height: 1.8; font-weight: 500; }
 
@@ -779,7 +780,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         <section id="szolgaltatasok">
             <h2 class="section-title">Szolgáltatások</h2>
             <div class="services-info">
-                <div class="svc-two"><div class="svc-col" style="display:flex; align-items:flex-start; gap:5px;"><svg class="ico ico-staff-snake" style="color:#2E7D32; flex-shrink:0; margin-top:3px; width:18px;"><use href="#ico-staff-snake"></use></svg><div><div class="svc-list"><span class="svc-chip"><strong>Gyógyszer</strong></span><span class="svc-chip"><strong>Gyógyhatású készítmény</strong></span><span class="svc-chip"><strong>Gyógyászati segédeszköz</strong></span></div><div style="margin-top:8px; padding-left:4px;">ellátás</div></div></div><div class="svc-col"><strong style="display:block; margin-bottom:12px;">Fizetési lehetőségek:</strong><div class="svc-list"><span class="svc-chip"><svg class="ico ico-money-bill-wave"><use href="#ico-money-bill-wave"></use></svg> Készpénz</span><span class="svc-chip"><svg class="ico ico-credit-card"><use href="#ico-credit-card"></use></svg> Bankkártya</span><span class="svc-chip"><svg class="ico ico-hand-holding-medical"><use href="#ico-hand-holding-medical"></use></svg> Egészségpénztári kártya</span></div></div></div>
+                <div class="svc-two"><div class="svc-box" style="display:flex; align-items:center; gap:8px;"><span class="svc-badge"><svg class="ico ico-staff-snake"><use href="#ico-staff-snake"></use></svg></span><div><ul style="margin:3px 0 0; padding-left:18px; list-style:disc;"><li><strong>Gyógyszer</strong></li><li><strong>Gyógyhatású készítmény</strong></li><li><strong>Gyógyászati segédeszköz</strong></li></ul><div style="padding-left:18px; margin-top:2px;">ellátás</div></div></div><div class="svc-box"><strong class="svc-head">Fizetési lehetőségek:</strong><div class="svc-row"><span class="svc-ic"><svg class="ico ico-money-bill-wave"><use href="#ico-money-bill-wave"></use></svg></span><span>Készpénz</span></div><div class="svc-row"><span class="svc-ic"><svg class="ico ico-credit-card"><use href="#ico-credit-card"></use></svg></span><span>Bankkártya</span></div><div class="svc-row"><span class="svc-ic"><svg class="ico ico-hand-holding-medical"><use href="#ico-hand-holding-medical"></use></svg></span><span>Egészségpénztári kártya</span></div></div></div>
                 <p style="margin-top:24px;"><svg class="ico ico-hand-holding-heart" style="color:#2E7D32;"><use href="#ico-hand-holding-heart"></use></svg> Gyógyszertárunk dolgozóinak legfőbb hivatása a gyógyítás, illetve az egészség megőrzése.</p><br>
                 
                 <p><svg class="ico ico-tags" style="color:#2E7D32;"><use href="#ico-tags"></use></svg> Havonta megújuló <strong>AKCIÓ</strong>kkal is várjuk Kedves Betegeinket!<br><i><small>(Gyógyszertárunk a Szimpatika hálózat tagja)</small></i></p>
