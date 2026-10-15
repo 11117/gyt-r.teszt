@@ -1,0 +1,343 @@
+/* =====================================================================
+   design.css – Gondviselés Gyógyszertár · „2.0” dizájnréteg, 1. változat
+   - Minden oldal közösen használja (web + PWA), a meglévő stílusokra épül,
+     azok UTÁN töltődik be. Nem módosít funkciót és tartalmat.
+   - Teljesen helyi: nincs külső betűtípus, nincs CDN, nincs online hívás.
+   ===================================================================== */
+
+/* ---------- 1. Tokenek (egységes színek, formák, mozgás) ---------- */
+:root {
+  /* Márkazöld család */
+  --brand-950: #0b1f14;
+  --brand-900: #10301d;
+  --brand-800: #17452a;
+  --brand-700: #1d5a34;
+  --brand-600: #2E7D32;   /* fő márkaszín */
+  --brand-500: #3f9a44;
+  --brand-400: #4CAF50;   /* csak sötét háttéren / díszként */
+  --brand-200: #bfe3c2;
+  --brand-100: #e3f2e5;
+  --brand-50:  #f2f9f3;
+
+  /* Semleges + másodlagos „tintakék” */
+  --ink:    #16222d;
+  --ink-2:  #4a5b69;
+  --ink-3:  #7b8996;
+  --navy:   #2c4a66;
+  --paper:  #f6f7f8;
+  --paper-2:#eff1f3;
+  --line:   rgba(20, 32, 43, .08);
+  --surface-dark: 20, 22, 24;   /* semleges grafit az üveg- és sötét felületekhez (RGB) */
+  /* Egységes szövegárnyék: sötét/képes háttéren, színes gombokon, világos felületen */
+  --ts-strong: 0 1px 2px rgba(0,0,0,.32), 0 3px 14px rgba(0,0,0,.24);
+  --ts-btn: 0 1px 1px rgba(0,0,0,.22);
+  --ts-light: 0 1px 1px rgba(20,32,43,.07);
+  --danger: #c62828;
+
+  /* Formák, árnyékok, mozgás */
+  --r-sm: 12px; --r-md: 18px; --r-lg: 24px;
+  --sh-1: 0 1px 2px rgba(20,32,43,.05), 0 6px 18px -6px rgba(20,32,43,.12);
+  --sh-2: 0 2px 4px rgba(20,32,43,.05), 0 18px 40px -14px rgba(20,32,43,.24);
+  --ease:   cubic-bezier(.2, .8, .2, 1);
+  --spring: cubic-bezier(.22, .9, .3, 1.12);
+
+  /* Rendszerbetű: iPhone-on SF Pro, Androidon Roboto – külső kérés nélkül */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui, sans-serif;
+
+  /* A régi változónevek ugyanerre mutatnak (főoldal + aloldalak) */
+  --green: var(--brand-600);
+  --primary-color: var(--brand-600);
+  --primary-light: var(--brand-400);
+  --accent-color: var(--brand-100);
+  --text-dark: var(--ink);
+  --text-light: var(--ink-2);
+  --radius: var(--r-lg);
+  --shadow-soft: var(--sh-1);
+}
+
+/* ---------- 2. Tipográfia ---------- */
+body, body * { font-family: var(--font) !important; }
+body code, body pre, body kbd, body samp { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace !important; }
+html { -webkit-text-size-adjust: 100%; }
+html, body { background-color: var(--paper); }
+body { color: var(--ink); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+h1, h2, h3 { letter-spacing: -.022em; }
+::selection { background: rgba(76,175,80,.28); }
+:focus-visible { outline: 3px solid rgba(76,175,80,.6); outline-offset: 2px; }
+
+/* ---------- 3. Fejléc: sötétzöld „üveg” + görgetésjelző ---------- */
+nav {
+  background-color: rgba(var(--surface-dark), .8);
+  -webkit-backdrop-filter: saturate(170%) blur(18px);
+  backdrop-filter: saturate(170%) blur(18px);
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.07), 0 8px 28px -14px rgba(0,0,0,.5);
+  transition: background-color .35s var(--ease), box-shadow .35s var(--ease);
+}
+nav.dg-scrolled { background-color: rgba(var(--surface-dark), .93); }
+nav::after {            /* vékony haladás-sáv a fejléc alján */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  transform-origin: 0 50%; transform: scaleX(var(--sp, 0));
+  background: linear-gradient(90deg, var(--brand-400), #c4ecc7);
+  pointer-events: none;
+}
+.nav-links a { color: rgba(255,255,255,.84); }
+.nav-links a:hover { color: #b4e8b8; }
+.logo .logo-badge { box-shadow: 0 2px 10px rgba(0,0,0,.4), 0 0 0 2px rgba(255,255,255,.18); }
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  nav { background-color: rgba(20,22,24,.97); }
+}
+
+/* Mobil menü: üvegpanel, a menüpontok sorban érkeznek */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    background-color: rgba(14, 16, 18, .95);
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    backdrop-filter: blur(26px) saturate(170%);
+  }
+  .nav-links li { opacity: 0; transform: translate3d(0, 14px, 0); }
+  #check:checked ~ .nav-links li {
+    opacity: 1; transform: none;
+    transition: opacity .5s var(--ease), transform .55s var(--ease);
+    transition-delay: .32s;
+  }
+  #check:checked ~ .nav-links li:nth-child(1)  { transition-delay: .08s; }
+  #check:checked ~ .nav-links li:nth-child(2)  { transition-delay: .12s; }
+  #check:checked ~ .nav-links li:nth-child(3)  { transition-delay: .16s; }
+  #check:checked ~ .nav-links li:nth-child(4)  { transition-delay: .20s; }
+  #check:checked ~ .nav-links li:nth-child(5)  { transition-delay: .24s; }
+  #check:checked ~ .nav-links li:nth-child(6)  { transition-delay: .28s; }
+  #check:checked ~ .nav-links li:nth-child(7)  { transition-delay: .32s; }
+  #check:checked ~ .nav-links li:nth-child(8)  { transition-delay: .36s; }
+  #check:checked ~ .nav-links li:nth-child(9)  { transition-delay: .40s; }
+  #check:checked ~ .nav-links li:nth-child(10) { transition-delay: .44s; }
+  .nav-links a { border-radius: 14px; padding: 10px 0; font-weight: 600; transition: background-color .25s var(--ease), color .25s; }
+  .nav-links a:active { background-color: rgba(255,255,255,.07); }
+}
+
+/* ---------- 4. Hero: finom mélység, belépő animáció, görgetésre zsugorodás ---------- */
+.hero { position: relative; isolation: isolate; }
+div.hero {
+  overflow: hidden;
+  transform-origin: 50% 0;
+  transform: scale(calc(1 - var(--hp, 0) * .08));
+  border-radius: calc(var(--hp, 0) * 34px);
+  will-change: transform;
+}
+div.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.42) 100%);
+}
+div.hero h1 { font-size: clamp(2.4rem, 7.5vw, 4.2rem); letter-spacing: -.035em; line-height: 1.04; }
+div.hero p  { letter-spacing: .14em; font-size: clamp(.82rem, 2.4vw, 1rem); }
+div.hero > h1, div.hero > p {
+  transform: translate3d(0, calc(var(--hp, 0) * -34px), 0);
+  opacity: calc(1 - var(--hp, 0) * 1.15);
+  animation: dgRise .95s var(--ease) backwards;
+}
+div.hero > p { animation-delay: .14s; }
+div.hero .scroll-down { opacity: calc(1 - var(--hp, 0) * 3); animation: dgRise 1s .5s var(--ease) backwards; }
+@keyframes dgRise { from { opacity: 0; transform: translate3d(0, 24px, 0); } }
+
+/* Aloldalak fejléce */
+header.hero {
+  background:
+    radial-gradient(90% 130% at 88% 0%, rgba(255,255,255,.13), transparent 56%),
+    linear-gradient(135deg, #1d5534, #365a7d);   /* az eredeti arculati átmenet */
+  overflow: hidden;
+}
+header.hero::after {
+  content: ""; position: absolute; width: 340px; height: 340px; right: -110px; bottom: -190px;
+  border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.12), transparent 70%); pointer-events: none;
+}
+header.hero > * { position: relative; z-index: 1;
+  transform: translate3d(0, calc(var(--hp, 0) * 22px), 0);
+  opacity: calc(1 - var(--hp, 0) * .8); }
+header.hero h1 { letter-spacing: -.025em; }
+
+/* ---------- 5. Szekciók (főoldal): váltakozó háttér, teljes szélességű sávok ---------- */
+#akciok-szekcio, #szolgaltatasok, #nyitvatartas, #kapcsolat {
+  max-width: none;
+  padding-left: max(5%, calc((100% - 1200px) / 2));
+  padding-right: max(5%, calc((100% - 1200px) / 2));
+}
+#akciok-szekcio { background: #fff !important; border-bottom: 0 !important; }
+#szolgaltatasok { background: var(--paper); }
+#nyitvatartas   { background: #fff !important; }
+#terkep-szekcio { background: var(--paper) !important; }
+#kapcsolat      { background: #fff; }
+
+.section-title {
+  font-size: clamp(1.7rem, 5.2vw, 2.5rem);
+  letter-spacing: -.028em; line-height: 1.12; color: var(--ink);
+}
+.section-title::after {
+  content: ""; display: block; width: 44px; height: 3px; border-radius: 3px; margin: 11px auto 0;
+  background: linear-gradient(90deg, var(--brand-600), var(--brand-400));
+}
+
+/* ---------- 6. Kártyák: egységes forma, finom mélység ---------- */
+.services-info, .reviews-card, .opening-hours, .status-card, .testimonial-slide, .card,
+.recipe-card, .result-card, .topic-tile, .doc-item, .doctor-item, .text-card, .thumb-card,
+.promo-card, .history-teaser, .blog-post, .eeszt-card, .news-card {
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-1);
+}
+.services-info, .reviews-card, .opening-hours, .card, .history-teaser, .blog-post,
+.promo-card, .text-card, .eeszt-card { border-radius: var(--r-lg); }
+.svc-box { background: linear-gradient(150deg, #fbfcfb, #f3f6f3); border-color: var(--line); }
+.today { background: #f5fbf6 !important; border-left-color: var(--brand-500) !important; }
+.map-frame-fixed, .szimpatika-frame-wrap { box-shadow: var(--sh-2); border-color: var(--line); }
+
+.recipe-card, .result-card, .topic-tile, .thumb-card, .doc-item, .svc-box {
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), background-color .25s;
+}
+@media (hover: hover) {
+  .recipe-card:hover, .result-card:hover, .topic-tile:hover, .thumb-card:hover, .doc-item:hover, .svc-box:hover {
+    transform: translateY(-3px); box-shadow: var(--sh-2);
+  }
+}
+@media (hover: none) {
+  .recipe-card:active, .result-card:active, .topic-tile:active, .thumb-card:active, .svc-box:active { transform: scale(.985); }
+}
+/* Dinamikusan létrejövő elemek (keresési találatok, receptek) belépő animációja */
+.recipe-card, .result-card, .topic-tile { animation: dgCardIn .5s var(--ease) backwards; }
+@keyframes dgCardIn { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+
+/* ---------- 7. Gombok és panelek ---------- */
+.back-btn {
+  border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.82);
+  -webkit-backdrop-filter: blur(14px) saturate(170%); backdrop-filter: blur(14px) saturate(170%);
+  box-shadow: var(--sh-1); color: var(--navy);
+  transition: background-color .3s var(--ease), color .3s, transform .25s var(--ease);
+}
+.back-btn:hover { background: #1d2024; color: #fff; }
+.back-btn:active { transform: scale(.97); }
+
+.btn-accept {
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-500));
+  border-radius: 12px; box-shadow: 0 8px 18px -8px rgba(46,125,50,.8);
+}
+.btn-info, .btn-reject { border-radius: 12px; }
+.btn-info { border-color: rgba(255,255,255,.28); color: #d5e6da; }
+
+#gyszt-overlay { background: rgba(6, 8, 10, .55); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+#gyszt-notice {
+  background: rgba(var(--surface-dark), .86);
+  -webkit-backdrop-filter: blur(26px) saturate(170%); backdrop-filter: blur(26px) saturate(170%);
+  border: 1px solid rgba(255,255,255,.12); border-radius: 24px;
+  box-shadow: 0 30px 70px -20px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.12);
+  animation: dgPop .55s var(--ease) backwards;
+}
+@keyframes dgPop { from { opacity: 0; transform: translate(-50%, -46%) scale(.96); } }
+
+#pwa-install-banner {
+  background: rgba(255,255,255,.84);
+  -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.7); border-radius: 20px;
+}
+#pwa-install-banner .pib-install-btn { background: linear-gradient(135deg, var(--brand-600), var(--brand-500)); border-radius: 10px; }
+
+.quick-phone__button {
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-500));
+  box-shadow: 0 12px 26px -10px rgba(46,125,50,.85), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.quick-phone__panel { border-radius: 18px; }
+
+footer { background: linear-gradient(180deg, #1c1e20, #121416) !important; border-top: 0 !important; }
+
+/* ---------- 8. „Következő” jelzés: kevés tartalomnál is továbbgörgetésre hív ---------- */
+.dg-next-wrap { display: flex; justify-content: center; width: 100%; margin-top: 22px; }
+.dg-next {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px;
+  border: 1px solid var(--line); background: rgba(255,255,255,.78);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  color: var(--brand-700); font-weight: 700; font-size: .88rem; text-decoration: none; cursor: pointer;
+  box-shadow: var(--sh-1); transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.dg-next:active { transform: scale(.97); }
+.dg-next svg { width: 16px; height: 16px; flex: none; animation: dgNudge 1.9s var(--ease) infinite; }
+.dg-next.dg-top svg { transform: rotate(180deg); animation-name: dgNudgeUp; }
+@keyframes dgNudge   { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@keyframes dgNudgeUp { 0%, 100% { transform: rotate(180deg) translateY(0); } 50% { transform: rotate(180deg) translateY(3px); } }
+
+/* ---------- 9. Megjelenés görgetésre (a design.js adja hozzá az osztályokat) ---------- */
+.rv {
+  opacity: 0; transform: translate3d(0, 22px, 0) scale(.985);
+  transition: opacity .7s var(--ease), transform .85s var(--ease);
+  transition-delay: var(--rv-d, 0ms);
+  will-change: opacity, transform;
+}
+.rv.rv-in { opacity: 1; transform: none; }
+
+/* ---------- 10. PWA: alsó üvegsáv és „lencse” ---------- */
+.pwa-pill-nav {
+  background-color: rgba(var(--surface-dark), .8);
+  -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 14px 32px -12px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.16);
+}
+.pwa-pill-lens {
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-400));
+  box-shadow: 0 4px 14px -4px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.38);
+}
+.pwa-pill-item { transition: color .25s, transform .25s var(--ease); }
+.pwa-pill-item:active { transform: scale(.94); }
+
+/* iOS „Liquid Glass” (csak telepített iOS PWA): zöldes árnyalatú üveg, fényes élvonallal */
+html.ios-pwa-glass nav {
+  background-color: rgba(28, 30, 32, .5) !important;
+  box-shadow: inset 0 -1px 0 rgba(255,255,255,.14), inset 0 1px 0 rgba(255,255,255,.1), 0 6px 28px rgba(0,0,0,.2);
+}
+html.ios-pwa-glass .nav-links { background-color: rgba(14, 16, 18, .88) !important; }
+html.ios-pwa-glass .pwa-pill-nav {
+  background-color: rgba(28, 30, 32, .46) !important;
+  box-shadow: 0 14px 34px -10px rgba(0,0,0,.5), inset 0 1px 1px rgba(255,255,255,.45), inset 0 -1px 1px rgba(0,0,0,.18);
+}
+html.ios-pwa-glass .pwa-pill-lens {
+  background: rgba(255,255,255,.26) !important;
+  box-shadow: 0 3px 14px rgba(0,0,0,.3), inset 0 1px 1px rgba(255,255,255,.65), inset 0 -1px 1px rgba(0,0,0,.14);
+}
+html.ios-pwa-glass #gyszt-notice { background: rgba(28, 30, 32, .66) !important; }
+html.ios-pwa-glass #pwa-install-banner { background: rgba(255,255,255,.7) !important; }
+
+/* ---------- 10b. Egységes hover/nyomás-mozgás minden gombon ---------- */
+:is(a[style*="border-radius:50px"], a[style*="border-radius: 50px"], a[style*="border-radius:999px"], .reviews-btn, .back-btn, .btn-accept, .btn-info, .btn-reject, .eeszt-btn, .arrow-link, .recipe-filter, .game-filter, .tab-btn, .hud-btn, .dg-next, .pib-install-btn, #view-kihivas .spin, .chat-modal__back, .more-btn) {
+  transition: transform .28s var(--ease), box-shadow .28s var(--ease), background-color .25s, color .25s, border-color .25s;
+}
+@media (hover: hover) {
+  :is(a[style*="border-radius:50px"], a[style*="border-radius: 50px"], a[style*="border-radius:999px"], .reviews-btn, .back-btn, .btn-accept, .btn-info, .btn-reject, .eeszt-btn, .arrow-link, .recipe-filter, .game-filter, .tab-btn, .hud-btn, .dg-next, .pib-install-btn, #view-kihivas .spin, .chat-modal__back, .more-btn):hover { transform: translateY(-2px); box-shadow: 0 10px 20px -10px rgba(20,32,43,.45); }
+  :is(a[style*="border-radius:50px"], a[style*="border-radius: 50px"], a[style*="border-radius:999px"], .reviews-btn, .back-btn, .btn-accept, .btn-info, .btn-reject, .eeszt-btn, .arrow-link, .recipe-filter, .game-filter, .tab-btn, .hud-btn, .dg-next, .pib-install-btn, #view-kihivas .spin, .chat-modal__back, .more-btn):active { transform: translateY(0) scale(.98); box-shadow: 0 3px 8px -4px rgba(20,32,43,.35); }
+}
+@media (hover: none) {
+  :is(a[style*="border-radius:50px"], a[style*="border-radius: 50px"], a[style*="border-radius:999px"], .reviews-btn, .back-btn, .btn-accept, .btn-info, .btn-reject, .eeszt-btn, .arrow-link, .recipe-filter, .game-filter, .tab-btn, .hud-btn, .dg-next, .pib-install-btn, #view-kihivas .spin, .chat-modal__back, .more-btn):active { transform: scale(.97); }
+}
+
+/* ---------- 10c. Egységes szövegárnyék ---------- */
+/* képes / sötét háttéren álló világos szöveg */
+div.hero h1, div.hero p, div.hero .scroll-down span, header.hero h1, header.hero p,
+.logo, .nav-links a, nav .menu-toggle, .pwa-pill-item, footer, footer * { text-shadow: var(--ts-strong); }
+.nav-links a, .pwa-pill-item { text-shadow: var(--ts-btn); }
+/* színes (kék/zöld/piros) gombokon álló fehér szöveg */
+a[style*="background:#365a7d"], a[style*="background:#2E7D32"], a[style*="background: #365a7d"], a[style*="background: #2E7D32"],
+.reviews-btn.primary, .btn-accept, .pib-install-btn, .pwa-dl-btn, .chat-modal__back { text-shadow: var(--ts-btn); }
+/* világos felületen álló címek: nagyon finom árnyék */
+.section-title, h1, h2, h3, .status-card, .contact-label { text-shadow: var(--ts-light); }
+div.hero h1, header.hero h1 { text-shadow: var(--ts-strong); }
+
+/* Széles táblázatok mobilon: a táblázat görgethető, az oldal nem csúszik oldalra */
+@media screen and (max-width: 700px) {
+  .wrap table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* ---------- 11. Csökkentett mozgás: minden statikus marad ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important; animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
+  }
+  .rv { opacity: 1 !important; transform: none !important; }
+  div.hero { transform: none !important; border-radius: 0 !important; }
+  div.hero > h1, div.hero > p, header.hero > * { transform: none !important; opacity: 1 !important; }
+  .nav-links li { opacity: 1 !important; transform: none !important; }
+}
