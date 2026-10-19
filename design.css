@@ -186,7 +186,17 @@ header.hero h1 { letter-spacing: -.025em; }
 .services-info, .reviews-card, .opening-hours, .card, .history-teaser, .blog-post,
 .promo-card, .text-card, .eeszt-card { border-radius: var(--r-lg); }
 .svc-box { background: linear-gradient(150deg, #fbfcfb, #f3f6f3); border-color: var(--line); }
-.today { background: #f5fbf6 !important; border-left-color: var(--brand-500) !important; }
+.today { background: #f5fbf6 !important; border-left: 0 !important; box-shadow: inset 5px 0 0 var(--brand-500); }
+
+/* Nyitvatartás: a mai (kiemelt) nap sem törhet két sorba – a sáv szélessége nem változik */
+.day-row { white-space: nowrap; gap: 12px; font-variant-numeric: tabular-nums; }
+.day-row.today { font-weight: 700; }
+@media screen and (max-width: 480px) {
+  .day-row { padding-left: 18px; padding-right: 18px; font-size: clamp(.82rem, 4.1vw, 1rem); }
+}
+@media screen and (max-width: 350px) {
+  .day-row { padding-left: 12px; padding-right: 12px; gap: 8px; }
+}
 .map-frame-fixed, .szimpatika-frame-wrap { box-shadow: var(--sh-2); border-color: var(--line); }
 
 .recipe-card, .result-card, .topic-tile, .thumb-card, .doc-item, .svc-box {
@@ -328,6 +338,32 @@ div.hero h1, header.hero h1 { text-shadow: var(--ts-strong); }
 /* Széles táblázatok mobilon: a táblázat görgethető, az oldal nem csúszik oldalra */
 @media screen and (max-width: 700px) {
   .wrap table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* ---------- Nyomtatás: az animációs állapotok soha ne rejtsenek el tartalmat ---------- */
+@media print {
+  .rv, .rv.rv-in { opacity: 1 !important; transform: none !important; transition: none !important; }
+  div.hero, div.hero > h1, div.hero > p, header.hero > * { transform: none !important; opacity: 1 !important; }
+  *, *::before, *::after { animation: none !important; text-shadow: none !important; }
+  nav::after { display: none !important; }
+}
+
+/* ---------- Szimpatika-akciók asztali gépen és táblagépen ----------
+   A külső oldalt szélesebb (kb. 1,4x), kicsinyített elrendezéssel töltjük be: így több termék fér egy sorba,
+   a csempék kisebbek, a tetején lévő „Kérjük válasszon patikát” üzenet, a morzsamenü, a cím és a találatszám pedig
+   teljesen levágódik (az oldal a termékeknél indul, mint telefonon).
+   Finomhangolás: --szimp-scale (kicsinyítés) és --szimp-offset (hány képpontnyi tetejét vágjuk le, az eredeti méretben). */
+@media screen and (min-width: 701px) {
+  :root { --szimp-scale: .7; --szimp-offset: 455px; --szimp-h: clamp(520px, 72vh, 720px); }
+  .szimp-stage, .szimpatika-frame-wrap { max-width: 1100px; }
+  .szimpatika-frame-wrap { position: relative; height: var(--szimp-h); }
+  .szimpatika-frame-wrap iframe {
+    width: calc(100% / var(--szimp-scale));
+    height: calc(var(--szimp-h) / var(--szimp-scale) + var(--szimp-offset));
+    margin-top: calc(-1 * var(--szimp-scale) * var(--szimp-offset));
+    transform: scale(var(--szimp-scale)); transform-origin: 0 0;
+  }
+  .szimpatika-frame-wrap .ext-placeholder { height: var(--szimp-h); }
 }
 
 /* ---------- 11. Csökkentett mozgás: minden statikus marad ---------- */
