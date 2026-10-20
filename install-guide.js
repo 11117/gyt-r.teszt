@@ -107,6 +107,16 @@ function placeLabel(){ // „1. Koppints erre:” az ikon előtt; ha nincs hely,
 function startHints(){stopHints();if(!hintsOn)return;placeHints();
  ht=setTimeout(function(){hn.classList.add('on');placeHints();hs[0].classList.add('on');
   ht=setTimeout(function(){hs[1].classList.add('on')},3000)},4500)}
+// ---- KÍSÉRLET (könnyen eltávolítható: SHARE_TEST=false): a piros keretes megosztás-ikonra koppintva megnyílik a rendszer megosztási panelje ----
+var SHARE_TEST=true;
+if(SHARE_TEST){var sst=D.createElement('style');sst.textContent='.ig-arr.sh .ig-ic{pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}';D.head.appendChild(sst)}
+function bindShare(){
+ var el=arr.querySelector('.ig-ic');arr.classList.remove('sh');
+ if(!SHARE_TEST||!iOS||!el||!navigator.share)return;
+ arr.classList.add('sh');
+ el.onclick=function(){try{var r=navigator.share({title:D.title,url:location.href.split('#')[0]});if(r&&r.catch)r.catch(function(){})}catch(e){}};
+}
+// ---- /KÍSÉRLET ----
 var opened=false;
 function hide(){clearInterval(tm);clearTimeout(jt);stopHints();bg.classList.remove('on');vid.pause();cancelAnimationFrame(raf);card.classList.remove('on');arr.classList.remove('on')}
 function close(){hide();if(opened){opened=false;try{if(history.state&&history.state.ig)history.back()}catch(e){}}}
@@ -125,7 +135,7 @@ function open(){
  var up=bar==='t';var chv='<span class="ig-ch">'+(up?'\u25B2':'\u25BC')+'</span>',icn=iOS?'<span class="ig-ic">'+(hintsOn?'<span class="ig-l1">1. Koppints erre:</span>':'')+'<svg viewBox="-10 -10 20 20" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+SH+'</svg></span>':'';arr.innerHTML=up?chv+icn:icn+chv;arr.style.setProperty('--d',up?'-12px':'12px');
  arr.style.cssText=(up?'--d:-12px;top:2px;right:'+(iOS?'20px':'8px'):'--d:12px;bottom:calc(2px + '+SAFE+');'+(AND?'right:8px':'left:'+(br==='b'?'27%':'47%')));
  render();fit();if(!opened){opened=true;try{history.pushState({ig:1},'')}catch(e){}}
- placeLabel();startHints();
+ placeLabel();bindShare();startHints();
  tm=setInterval(function(){if(auto)go(idx+1)},4300);
  // alsó sávos böngészőnél a panel pár mp múlva a fejléc alá ugrik (a megosztási panel ne takarja)
  if(tp&&arrowOn&&!bgOn)jt=setTimeout(function(){card.className='ig-card on ig-top'},3500);
