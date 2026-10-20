@@ -377,3 +377,9 @@ div.hero h1, header.hero h1 { text-shadow: var(--ts-strong); }
   div.hero > h1, div.hero > p, header.hero > * { transform: none !important; opacity: 1 !important; }
   .nav-links li { opacity: 1 !important; transform: none !important; }
 }
+
+/* Sütibeállítások panel: a „Kiválasztottak elfogadása” gomb jól olvasható legyen a fehér háttéren */
+#gyszt-settings-panel #gyszt-settings-save {
+  color: #1b5e20; font-weight: 700;
+  border: 1.5px solid #2e7d32; background: rgba(46,125,50,.08);
+}
