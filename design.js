@@ -4,6 +4,20 @@
 (function () {
   'use strict';
   var D = document, W = window;
+  /* Csak az iOS-es Google app (GSA) beépített böngészőjében: egyszerűsített sütipanel-megjelenés.
+     Ott a blur/animáció elrontja a megjelenítést; máshol semmi nem változik. */
+  var GSA = false;
+  try { GSA = /GSA\//.test(navigator.userAgent) && /iPhone|iPad|iPod/.test(navigator.userAgent); } catch (e) {}
+  if (GSA) {
+    D.documentElement.classList.add('gsa');
+    // amíg a sütipanelre nem válaszolt a látogató, az oldal nem görgethető a panelen kívül
+    D.addEventListener('touchmove', function (e) {
+      if (!D.documentElement.classList.contains('gyszt-lock')) return;
+      var t = e.target;
+      if (t && t.closest && t.closest('#gyszt-notice, #gyszt-settings-panel')) return;
+      e.preventDefault();
+    }, { passive: false });
+  }
   var reduce = false;
   try { reduce = W.matchMedia && W.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 

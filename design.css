@@ -383,3 +383,17 @@ div.hero h1, header.hero h1 { text-shadow: var(--ts-strong); }
   color: #1b5e20; font-weight: 700;
   border: 1.5px solid #2e7d32; background: rgba(46,125,50,.08);
 }
+
+/* Csak az iOS-es Google appban (design.js adja a html-re a „gsa” osztályt): egyszerűsített sütipanel.
+   Nincs blur, nincs animáció, nincs transform-os középre igazítás; az oldal továbbra is zárolt a válaszig. */
+html.gsa *, html.gsa *::before, html.gsa *::after {
+  -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+}
+html.gsa #gyszt-overlay { background: rgba(8, 8, 10, .88); touch-action: none; }
+html.gsa #gyszt-notice {
+  animation: none !important; transform: none !important;
+  top: 0; bottom: 0; left: 0; right: 0; margin: auto;
+  height: -webkit-fit-content; height: fit-content;
+  background: #1a1a1a; border: 1px solid #333;
+}
+html.gsa .gyszt-modal-style { background: rgba(0, 0, 0, .92); }
