@@ -67,7 +67,15 @@ var card=D.createElement('div');card.className='ig-card';card.setAttribute('role
 var arr=D.createElement('div');arr.className='ig-arr';
 var intro=D.createElement('div');intro.className='ig-intro';intro.innerHTML='<div><h2 class="ig-it">KÖVESSE A MEGJELENŐ UTASÍTÁSOKAT A LETÖLTÉSHEZ!</h2><p class="ig-info"><svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r="1.1" fill="#007AFF" stroke="none"/></svg><span>Az Apple Inc. webalkalmazásokra vonatkozó korlátozásai miatt 4 lépésben végezhető el a telepítés.</span></p><button type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><span>A LETÖLTÉS lépéseinek megtekintése</span></button></div>';
 D.body.appendChild(intro);
-intro.addEventListener('click',function(){intro.classList.remove('on');open()}); // a képernyő bármely pontjára koppintva
+var introGo=false;
+function toTop(){ // az oldal tetejére ugrik, hogy a böngésző címsora a teljes (nem összecsukott) méretben jelenjen meg
+ try{window.scrollTo({top:0,left:0,behavior:'instant'})}catch(e){try{window.scrollTo(0,0)}catch(e2){}}
+ D.documentElement.scrollTop=0;if(D.body)D.body.scrollTop=0;
+}
+intro.addEventListener('click',function(){ // a képernyő bármely pontjára koppintva
+ if(introGo)return;introGo=true;intro.classList.remove('on');toTop();
+ setTimeout(function(){introGo=false;open()},180); // a címsor kibomlása után számoljuk ki az elrendezést
+});
 var bgOn=iOS&&br!=='g',bg=D.createElement('div');bg.className='ig-bg';
 bg.innerHTML='<div class="ig-or">— vagy —</div><div class="ig-lbl">▶ Videós bemutató az alkalmazás telepítéséhez</div><div class="ig-vw"><video muted loop playsinline preload="none" poster="install-guide.jpg" data-src="install-guide.mp4"></video><div class="ig-mk"></div></div><div class="ig-cap"></div><div class="ig-steps"><i>1</i><i>2</i><i>3</i><i>4</i><i>5</i></div><button type="button" class="ig-vbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M10 7.8l6.2 4.2-6.2 4.2z" fill="#007AFF"/></svg><span>Megnézem a videós útmutatót!</span></button>';
 var vid=bg.querySelector('video'),mk=bg.querySelector('.ig-mk'),raf,stepEls=bg.querySelectorAll('.ig-steps i'),capEl=bg.querySelector('.ig-cap'),curStep=-1,STX=['1. Koppintson a Megosztás ikonra','2. Koppintson a „Továbbiak megtekintése” gombra','3. Válassza a „Főképernyőhöz adás” sort','4. Koppintson a „Hozzáadás” gombra','5. Kész! Az ikon a főképernyőn található'];vid.muted=true;
