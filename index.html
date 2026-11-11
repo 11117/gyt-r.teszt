@@ -429,6 +429,16 @@
         .quick-phone__panel.is-open { display: block; }
         .quick-phone__panel p { margin: 0 0 7px; color: #334155; font-weight: 700; }
         .quick-phone__panel a { color: #1b5e20; text-decoration: none; font-weight: 800; font-size: 1.05rem; }
+        .quick-phone__panel .qp-status { font-size: 1.02rem; line-height: 1.3; }
+        .quick-phone__panel .qp-status .qp-open { color: #2E7D32; font-weight: 800; }
+        .quick-phone__panel .qp-status.is-closed { color: #d32f2f; }
+        .quick-phone__panel .qp-status .qp-closed { color: #8e1b1b; font-weight: 800; }
+        .quick-phone__panel .qp-sub { display: none; margin: 0 0 9px; color: #d32f2f; font-size: 0.84rem; font-weight: 700; line-height: 1.35; }
+        .quick-phone__panel .qp-sub.is-shown { display: block; }
+        .quick-phone__panel .qp-call { display: flex; flex-direction: column; align-items: center; gap: 1px; margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: #2E7D32; color: #fff; box-shadow: 0 6px 16px rgba(46,125,50,.35); font-weight: 800; font-size: 1.05rem; line-height: 1.25; }
+        .quick-phone__panel .qp-call small { font-size: 0.74rem; font-weight: 700; letter-spacing: .04em; opacity: .92; }
+        .quick-phone__panel .qp-call:active { background: #1b5e20; }
+        .quick-phone__panel .qp-call.is-disabled { background: #e3e6ea; color: #9aa1a9; box-shadow: none; pointer-events: none; cursor: default; }
         @keyframes phonePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.52), 0 8px 22px rgba(46,125,50,.38); } 70% { box-shadow: 0 0 0 13px rgba(76,175,80,0), 0 8px 22px rgba(46,125,50,.38); } }
         @media screen and (max-width: 768px) { .quick-phone { right: 16px; bottom: 16px; } }
         @keyframes blinker { 50% { opacity: 0.3; } }
@@ -1261,8 +1271,9 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
     <div class="quick-phone" aria-label="Telefonos érdeklődés">
         <div class="quick-phone__panel" id="quick-phone-panel">
-            <p>Érdeklődjön telefonon nyitvatartási időben:</p>
-            <a href="tel:+3676591020">+36 76 591 020</a>
+            <p class="qp-status" id="qp-status">Érdeklődjön telefonon nyitvatartási időben:</p>
+            <p class="qp-sub" id="qp-sub"></p>
+            <a href="tel:+3676591020" class="qp-call" id="qp-call"><small>Hívás most</small><span>+36 76 591 020</span></a>
         </div>
         <button class="quick-phone__button" id="quick-phone-button" type="button" aria-label="Telefonos elérhetőség megnyitása" aria-expanded="false"><svg class="ico ico-phone"><use href="#ico-phone"></use></svg></button>
     </div>
@@ -1617,6 +1628,48 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 
         updateStatus();
         setInterval(updateStatus, 30000);
+
+        // Telefonpanel: a nyitvatartáshoz igazodik (ugyanazok az időpontok, mint a nyitvatartás-kártyán)
+        function updateQuickPhone() {
+            const st = document.getElementById('qp-status');
+            const sub = document.getElementById('qp-sub');
+            const call = document.getElementById('qp-call');
+            if (!st || !sub || !call) return;
+            const now = new Date();
+            const day = now.getDay();
+            const mins = now.getHours() * 60 + now.getMinutes();
+            const napok = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
+            const open = (day >= 1 && day <= 5) && ((mins >= 480 && mins < 780) || (mins >= 810 && mins < 990));
+            if (open) {
+                st.className = 'qp-status';
+                st.innerHTML = 'Jelenleg <span class="qp-open">NYITVA!</span>';
+                sub.className = 'qp-sub';
+                sub.textContent = '';
+                call.classList.remove('is-disabled');
+                call.setAttribute('href', 'tel:+3676591020');
+                call.removeAttribute('aria-disabled');
+                call.removeAttribute('tabindex');
+            } else {
+                let nextText;
+                if (day >= 1 && day <= 5 && mins < 480) nextText = 'ma 08:00';
+                else if (day >= 1 && day <= 5 && mins >= 780 && mins < 810) nextText = 'ma 13:30';
+                else {
+                    let nd = (day + 1) % 7;
+                    while (nd === 0 || nd === 6) nd = (nd + 1) % 7;
+                    nextText = napok[nd] + ' 08:00';
+                }
+                st.className = 'qp-status is-closed';
+                st.innerHTML = 'Jelenleg <span class="qp-closed">ZÁRVA!</span>';
+                sub.className = 'qp-sub is-shown';
+                sub.textContent = 'Kérjük nyitvatartási időben telefonáljon, legközelebbi nyitás: ' + nextText;
+                call.classList.add('is-disabled');
+                call.removeAttribute('href');
+                call.setAttribute('aria-disabled', 'true');
+                call.setAttribute('tabindex', '-1');
+            }
+        }
+        updateQuickPhone();
+        setInterval(updateQuickPhone, 30000);
     });
 
 
@@ -1988,7 +2041,7 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
-<script src="install-guide.js?v=20261111b" defer></script>
+<script src="install-guide.js?v=20261111c" defer></script>
 <script src="pwa-extras.js" defer></script>
 <script>
 (function(){
