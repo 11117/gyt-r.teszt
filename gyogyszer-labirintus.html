@@ -108,6 +108,10 @@
   .promo-card { background:#fff; border-radius:20px; box-shadow:0 12px 30px rgba(32,48,64,0.09); border:1px solid #edf1f4; padding:26px 28px; margin-bottom:26px; text-align:center; }
   .promo-card .ico { color:#7b3fa0; font-size:1.3rem; }
   .promo-card p { color:#4a5966; margin-top:8px; }
+  .promo-card--inline { display:flex; align-items:flex-start; gap:10px; text-align:left; padding:11px 16px; border-radius:16px; box-shadow:0 8px 22px rgba(32,48,64,0.08); }
+  .promo-card--inline .ico { flex:0 0 auto; font-size:1.2rem; margin-top:0.12em; }
+  .promo-card--inline .promo-text { flex:1 1 auto; min-width:0; }
+  .promo-card--inline p { margin-top:0; }
   .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:16px; }
   .thumb-card { background:#fff; border-radius:14px; border:1px solid #edf1f4; box-shadow:0 6px 16px rgba(32,48,64,0.06); padding:8px; cursor:pointer; transition:0.2s; text-align:center; }
   .thumb-card:hover { transform:translateY(-4px); box-shadow:0 12px 24px rgba(32,48,64,0.12); }
@@ -434,6 +438,9 @@
   .game-overlay button.big { background:var(--green); color:#fff; border:0; padding:12px 26px; border-radius:30px; font-weight:800; font-size:0.95rem; cursor:pointer; }
   .game-overlay button.big:hover { background:#256428; }
 
+  /* A játék vezérlői és a játéktér nem jelölhető ki, nem nyílik hosszú nyomásra helyi menü / nagyító */
+  .game-column, .game-column *, .dpad, .dpad * { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent; }
+  .dpad button, .hud-btn, .rules-fab { touch-action:manipulation; }
   .dpad { max-width:560px; margin:16px auto 6px; display:grid; grid-template-columns:repeat(3,64px); grid-template-rows:repeat(3,64px); gap:6px; justify-content:center; user-select:none; }
   .dpad button { background:#fff; border:1px solid #e5eaee; border-radius:14px; font-size:1.4rem; color:var(--navy); box-shadow:0 4px 10px rgba(32,48,64,0.08); cursor:pointer; }
   .dpad button:active { background:var(--navy); color:#fff; }
@@ -502,7 +509,7 @@ html.ios-pwa-glass .quick-phone { bottom: calc(22px + env(safe-area-inset-bottom
             <li><a href="index.html#akciok-szekcio">Akcióink</a></li>
             <li><a href="index.html#szolgaltatasok">Szolgáltatások</a></li>
             <li>
-                <a href="index.html" style="color: #4CAF50; font-weight: 800;">
+                <a href="index.html#hirek" style="color: #4CAF50; font-weight: 800;">
                     Híreink
                     <span id="menu-emergency-icon" style="display: none; color: #ff4d4d; margin-left: 5px;">
                         <svg class="ico ico-exclamation-circle fas"><use href="#ico-exclamation-circle"></use></svg>
@@ -526,9 +533,9 @@ html.ios-pwa-glass .quick-phone { bottom: calc(22px + env(safe-area-inset-bottom
   <div class="rules-fab-holder"><button type="button" class="rules-fab" id="open-rules" aria-label="Szabály"><span class="q">?</span><span class="rules-fab-label"> Szabály</span></button></div>
   <div class="back-btn-row top"><a class="back-btn" href="index.html#jatekok"><svg class="ico ico-arrow-left"><use href="#ico-arrow-left"></use></svg> Vissza az Ismeretterjesztő játékokhoz</a></div>
 
-  <div class="promo-card" style="margin-bottom:18px;">
+  <div class="promo-card promo-card--inline" style="margin-bottom:18px;">
     <svg class="ico ico-circle-info"><use href="#ico-circle-info"></use></svg>
-    <p class="clamp2 clamp1"><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p>
+    <div class="promo-text"><p class="clamp2 clamp1"><strong>A cél:</strong> gyűjtsd össze az összes ⚪ tablettát és 💊 kapszulát a pályán – ha mindet begyűjtötted, megnyílik a következő, nagyobb pálya! Kerüld a 🦠 vírusokat és 🧫 baktériumokat, és keresd meg a nehezen elérhető ❤️ szívet egy plusz életért.</p></div>
   </div>
 
   <div class="game-layout">
@@ -560,7 +567,7 @@ html.ios-pwa-glass .quick-phone { bottom: calc(22px + env(safe-area-inset-bottom
       </div>
       <h2 id="overlay-title">Szünet</h2>
       <p id="overlay-text"></p>
-      <button class="big" id="overlay-btn">Indítás</button>
+      <button class="big" id="overlay-btn">Játék indítása</button>
     </div>
   </div>
 
@@ -870,6 +877,7 @@ function placeItems(baseGrid, W, H) {
 var state = null;
 var running = false;
 var paused = false;
+var gameStarted = false;   // a játék csak a "Játék indítása" gombra indul
 var rafId = null;
 var lastTs = 0;
 var levelCycle = 0;
@@ -1480,6 +1488,10 @@ window.addEventListener('keydown', function (e) {
   dpadEl.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 })();
 
+['selectstart', 'dragstart', 'contextmenu'].forEach(function (evt) {
+  var gc = document.querySelector('.game-column');
+  if (gc) gc.addEventListener(evt, function (e) { e.preventDefault(); });
+});
 document.getElementById('dpad').addEventListener('click', function (e) {
   var btn = e.target.closest('button[data-dir]');
   if (!btn || !state) return;
@@ -1545,6 +1557,7 @@ function closeRules() {
   rulesOpen = false;
   rulesModal.classList.remove('open');
   try { localStorage.setItem(RULES_SEEN_KEY, '1'); } catch (e) {}
+  if (!gameStarted) return;   // indítás előtt a szabály bezárása nem indítja el a játékot
   paused = false; lastTs = 0;
   hideOverlay();
 }
@@ -1657,17 +1670,26 @@ document.getElementById('rules-x').addEventListener('click', closeRules);
 })();
 
 /* ===================== Indítás ===================== */
+function startGameFromOverlay() {
+  gameStarted = true;
+  hideOverlay();
+  if (window.__setFs) window.__setFs(true);   // egyből teljes képernyős nézetben indul
+  paused = false; lastTs = 0;
+}
 function init() {
   newGame();
   resizeCanvas();
   render();
   var seenRules = false;
   try { seenRules = localStorage.getItem(RULES_SEEN_KEY) === '1'; } catch (e) {}
+  paused = true;                       // a pálya látszik, de a játék nem indul magától
   startLoop();
-  if (!seenRules) {
-    paused = true;
-    showRules();
-  }
+  overlayTitle.textContent = 'Gyógyszer-labirintus 💊';
+  overlayText.textContent = 'Készen állsz? Gyűjtsd össze a pirulákat, és kerüld a kórokozókat! A játék teljes képernyős nézetben indul.';
+  overlayBtn.textContent = 'Játék indítása';
+  overlayBtn.onclick = startGameFromOverlay;
+  overlay.classList.remove('hidden');
+  if (!seenRules) showRules();
 }
 init();
 
