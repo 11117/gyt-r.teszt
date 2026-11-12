@@ -944,6 +944,51 @@ function drawMaze() {
       else if (p === 'H') drawHeart(cx, cy);
     }
   }
+  drawStartBadge();
+}
+
+/* START tábla: a felső fal sorába épített, smaragdzöld, lekerekített téglalap a kezdőmező (bal felső sarok) felett.
+   Mind a 3 pályán ugyanúgy, folyamatosan (minden képkockán) kirajzolva. */
+function drawStartBadge() {
+  var bx = CELL, by = 1, bw = CELL * 4, bh = CELL - 2, r = 6;
+  ctx.save();
+  // smaragd fény / kör-glow
+  ctx.shadowColor = 'rgba(46,204,113,0.75)';
+  ctx.shadowBlur = 9;
+  var g = ctx.createLinearGradient(0, by, 0, by + bh);
+  g.addColorStop(0, '#4caf70');
+  g.addColorStop(0.5, '#2E7D32');
+  g.addColorStop(1, '#1b5e20');
+  ctx.fillStyle = g;
+  ctx.beginPath(); roundRect(ctx, bx, by, bw, bh, r); ctx.fill();
+  ctx.shadowBlur = 0; ctx.shadowColor = 'transparent';
+  // világos smaragd keret
+  ctx.lineWidth = 1.2;
+  ctx.strokeStyle = '#8be0a8';
+  ctx.beginPath(); roundRect(ctx, bx + 0.6, by + 0.6, bw - 1.2, bh - 1.2, r - 0.6); ctx.stroke();
+  // csillogás a felső részen
+  ctx.save();
+  ctx.beginPath(); roundRect(ctx, bx + 1, by + 1, bw - 2, bh - 2, r - 1); ctx.clip();
+  ctx.fillStyle = 'rgba(255,255,255,0.20)';
+  ctx.fillRect(bx, by, bw, bh * 0.42);
+  ctx.restore();
+  // nagy fehér "START" felirat (betűnként, hogy a betűköz minden böngészőben egyforma legyen)
+  var text = 'START', size = 14, gap = 1.6;
+  ctx.font = '800 ' + size + 'px Montserrat, "Segoe UI", Arial, sans-serif';
+  var total = 0, i;
+  for (i = 0; i < text.length; i++) total += ctx.measureText(text.charAt(i)).width + (i < text.length - 1 ? gap : 0);
+  var maxW = bw - 14;
+  if (total > maxW) { size = Math.floor(size * maxW / total); ctx.font = '800 ' + size + 'px Montserrat, "Segoe UI", Arial, sans-serif'; total = 0; for (i = 0; i < text.length; i++) total += ctx.measureText(text.charAt(i)).width + (i < text.length - 1 ? gap : 0); }
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,40,10,0.55)'; ctx.shadowBlur = 2; ctx.shadowOffsetY = 1;
+  ctx.fillStyle = '#ffffff';
+  var tx = bx + (bw - total) / 2, ty = by + bh / 2 + 0.5;
+  for (i = 0; i < text.length; i++) {
+    var ch = text.charAt(i);
+    ctx.fillText(ch, tx, ty);
+    tx += ctx.measureText(ch).width + gap;
+  }
+  ctx.restore();
 }
 
 function drawTablet(cx, cy) {
