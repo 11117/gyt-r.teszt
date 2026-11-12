@@ -435,6 +435,17 @@
   .dpad .playpause-btn { grid-column:2; grid-row:2; font-size:1.1rem; }
   .dpad .right { grid-column:3; grid-row:2; }
   .dpad .down { grid-column:2; grid-row:3; }
+  /* Figyelmeztető buborék a hosszan nyomva tartott irányító gombokhoz */
+  .hold-warn-slot { position:relative; height:0; width:100%; z-index:6; pointer-events:none; }
+  .hold-warn { position:absolute; left:50%; bottom:-12px; transform:translateX(-50%) translateY(6px);
+    display:flex; align-items:center; gap:9px; box-sizing:border-box; width:max-content; max-width:94%;
+    background:#e9edf0; color:#26394b; border:1px solid #d3dae0; border-radius:14px; padding:8px 14px 8px 10px;
+    font-size:0.82rem; font-weight:600; line-height:1.4; text-align:left; box-shadow:0 4px 12px rgba(20,30,45,0.22);
+    opacity:0; visibility:hidden; transition:opacity .25s ease, transform .25s ease, visibility 0s linear .25s; }
+  .hold-warn.show { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); transition-delay:0s; }
+  .hold-warn__icon { flex:0 0 auto; width:20px; height:20px; display:block; }
+  .game-layout.pseudo-fullscreen .hold-warn-slot { margin-top:-6px; }
+  .game-layout.pseudo-fullscreen .hold-warn { bottom:-2px; font-size:0.74rem; padding:6px 11px 6px 8px; }
   @media (max-width:380px){ .dpad { grid-template-columns:repeat(3,56px); grid-template-rows:repeat(3,56px); } }
 
   .rules-box { text-align:left; }
@@ -537,6 +548,13 @@ html.ios-pwa-glass .quick-phone { bottom: calc(22px + env(safe-area-inset-bottom
       <h2 id="overlay-title">Szünet</h2>
       <p id="overlay-text"></p>
       <button class="big" id="overlay-btn">Indítás</button>
+    </div>
+  </div>
+
+  <div class="hold-warn-slot">
+    <div class="hold-warn" id="hold-warn" role="status" aria-live="polite">
+      <svg class="hold-warn__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#e53935"/><rect x="10.6" y="5.2" width="2.8" height="8.2" rx="1.4" fill="#fff"/><circle cx="12" cy="17.3" r="1.7" fill="#fff"/></svg>
+      <span>Ne tartsa nyomva a gombot! Irányváltoztatáshoz elég röviden rányomni.</span>
     </div>
   </div>
 
@@ -950,7 +968,7 @@ function drawMaze() {
 /* START tábla: a felső fal sorába épített, smaragdzöld, lekerekített téglalap a kezdőmező (bal felső sarok) felett.
    Mind a 3 pályán ugyanúgy, folyamatosan (minden képkockán) kirajzolva. */
 function drawStartBadge() {
-  var bx = CELL, by = 1, bw = CELL * 4, bh = CELL - 2, r = 6;
+  var bx = 0, by = 1, bw = CELL * 4, bh = CELL - 2, r = 8;
   ctx.save();
   // smaragd fény / kör-glow
   ctx.shadowColor = 'rgba(46,204,113,0.75)';
@@ -1402,6 +1420,44 @@ window.addEventListener('keydown', function (e) {
   var d = KEY_DIRS[e.code];
   if (d && state) { state.player.nextDir = d; e.preventDefault(); }
 });
+
+/* Hosszan nyomva tartott irányító gomb: 2,5 mp után figyelmeztető buborék, felengedés után még 4 mp-ig látszik */
+(function () {
+  var dpadEl = document.getElementById('dpad');
+  var warnEl = document.getElementById('hold-warn');
+  if (!dpadEl || !warnEl) return;
+  var HOLD_MS = 2500, LINGER_MS = 4000;
+  var holdTimer = null, hideTimer = null, held = {}, heldCount = 0;
+
+  function show() { warnEl.classList.add('show'); }
+  function hide() { warnEl.classList.remove('show'); }
+
+  function onDown(e) {
+    var btn = e.target.closest ? e.target.closest('button[data-dir]') : null;
+    if (!btn) return;
+    if (held[e.pointerId]) return;
+    held[e.pointerId] = true; heldCount++;
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }   // újra lenyomták: ne tűnjön el a nyomva tartás alatt
+    if (!holdTimer && !warnEl.classList.contains('show')) {
+      holdTimer = setTimeout(function () { holdTimer = null; show(); }, HOLD_MS);
+    }
+  }
+  function onUp(e) {
+    if (!held[e.pointerId]) return;
+    delete held[e.pointerId]; heldCount = Math.max(0, heldCount - 1);
+    if (heldCount > 0) return;
+    if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }   // rövid nyomás: nincs figyelmeztetés
+    if (warnEl.classList.contains('show')) {
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(function () { hideTimer = null; hide(); }, LINGER_MS);
+    }
+  }
+  dpadEl.addEventListener('pointerdown', onDown);
+  dpadEl.addEventListener('pointerup', onUp);
+  dpadEl.addEventListener('pointercancel', onUp);
+  dpadEl.addEventListener('pointerleave', onUp);
+  dpadEl.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+})();
 
 document.getElementById('dpad').addEventListener('click', function (e) {
   var btn = e.target.closest('button[data-dir]');
