@@ -5,7 +5,12 @@ if(!(iOS||AND)||matchMedia('(display-mode: standalone)').matches||navigator.stan
 var LS=function(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
 var br=/GSA\//.test(ua)?'g':/CriOS|EdgiOS|FxiOS/.test(ua)?'c':/OPT\/|OPiOS|OPR\//.test(ua)?'o':navigator.brave?'b':AND?'c':'s';
 var GS=iOS&&br==='g';if(GS)br='c';
-var bar=LS('igBar')||(iOS?(br==='c'?'t':'b'):(br==='o'?'b':'t'));
+// Android böngésző felismerése (a telepítési útmutató és a sáv helye böngészőnként más)
+var AB=!AND?'':/SamsungBrowser/i.test(ua)?'sam':/EdgA\//.test(ua)?'edge':/OPR\/|OPT\/|Opera/.test(ua)?'opera':/Firefox\//.test(ua)?'ff':/Vivaldi/i.test(ua)?'viv':/DuckDuckGo/i.test(ua)?'ddg':/UCBrowser|UCWEB/i.test(ua)?'uc':/HuaweiBrowser/i.test(ua)?'hw':/MiuiBrowser|XiaoMi/i.test(ua)?'mi':navigator.brave?'brave':'chrome';
+// alkalmazáson belüli böngésző (Messenger, Facebook, Instagram, Google app stb.): itt nem telepíthető, külső böngészőben kell megnyitni
+var INAPP=/FBAN|FBAV|FB_IAB|FBIOS|Messenger|Instagram|MicroMessenger|Snapchat|TikTok|musical_ly|Bytedance|LinkedInApp|Pinterest|Twitter|Viber|KAKAOTALK|WhatsApp|GSA\//i.test(ua)||(iOS&&!/Safari\//.test(ua))||(AND&&/;\s*wv\)|\bwv\b/.test(ua));
+var noBIP=AB==='ff'||AB==='ddg'; // ezek nem küldenek beforeinstallprompt eseményt
+var bar=LS('igBar')||(iOS?(br==='c'?'t':'b'):(br==='o'||AB==='sam'||AB==='edge'||AB==='opera'?'b':'t'));
 var old=D.getElementById('pwa-install-banner'),ICON=(old&&old.querySelector('img')||{}).src||'icon-192.png',NAME='Gyógyszertáram';
 if(old)old.remove();
 var BL=iOS?'#007AFF':'#1a73e8',SAFE='env(safe-area-inset-bottom,0px)';
@@ -44,11 +49,17 @@ function steps(){
  var top=bar==='t';
  var HM='<path d="M-7 1L0-6 7 1M-5 0v7h4v-4h2v4h4V0"/>',TN='<path d="M-6-2h7M4-2h2M-6 3h2M0 3h6"/><circle cx="3" cy="-2" r="1.6"/><circle cx="-2" cy="3" r="1.6"/>',DVW='<circle cy="-5" r="1.6" fill="#fff"/><circle r="1.6" fill="#fff"/><circle cy="5" r="1.6" fill="#fff"/>',MENUBG='#f6f4fb';
  if(br==='g')return[{t:iOS?'Nyisd meg Safariban':'Nyisd meg Chrome-ban',d:iOS?'A Google appból nem telepíthető. Koppints a '+ic('<circle r="7"/><path d="M-2.5-2.5l5-2-2 5-5 2z"/>')+' <b>Megnyitás Safariban</b> gombra, és ott folytasd.':'Koppints a <b>⋮</b> menüre, majd a <b>Megnyitás a(z) Chrome böngészőben</b> pontra.',s:iOS?S(R(30,20,180,40,10,'#fff')+T(120,45,'Megnyitás böngészőben',11,'#222','middle')+box(34,24,172,32)):S(R(20,2,200,76,10,MENUBG,'#ccc')+T(30,18,'Link másolása',8.5)+T(30,33,'Mentett oldalak megtekintése',8.5)+T(30,52,'Megnyitás a(z) Chrome böngészőben',8.5,'#111',0,1)+g(206,49,'<path d="M-5-5h6M5-5v7M-5-5v10h10M0 0l7-7M2-7h5v5"/>','#222',.8)+T(30,68,'Chrome-előzmények',8.5)+box(24,40,192,16))}];
+ var AL={t:'Menüpont kiválasztása',l:'Telepítés és parancsikon',d:'Görgess lefelé, és koppints a <b>Telepítés és parancsikon</b> pontra (régebbi Chrome: <b>Alkalmazás telepítése</b>).',m:'Koppints a <b>⋮</b> gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
+ if(AB==='sam')AL={t:'Hozzáadás a kezdőképernyőhöz',l:'Hozzáadás ehhez',d:'Koppints a <b>Hozzáadás ehhez</b> (vagy <b>Oldal hozzáadása</b>) pontra, majd válaszd a <b>Kezdőképernyő</b> lehetőséget. Ha a címsor mellett megjelenik a <b>Telepítés</b> ikon, arra is koppinthatsz.',m:'Koppints a <b>≡</b> menügombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
+ else if(AB==='edge')AL={t:'Hozzáadás a telefonhoz',l:'Hozzáadás a telefonhoz',d:'Koppints a <b>Hozzáadás a telefonhoz</b> (vagy <b>Telepítés</b>) pontra.',m:'Koppints a <b>⋯</b> gombra az alsó sávban.'};
+ else if(AB==='opera')AL={t:'Hozzáadás a kezdőképernyőhöz',l:'Kezdőképernyő',d:'Koppints a <b>Hozzáadás a kezdőképernyőhöz</b> pontra.',m:'Koppints a <b>⋮</b> gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
+ else if(AB==='ff')AL={t:'Telepítés',l:'Telepítés',d:'Koppints a <b>Telepítés</b> pontra (régebbi Firefoxban: <b>Hozzáadás a kezdőképernyőhöz</b>).',m:'Koppints a <b>⋮</b> gombra a jobb felső sarokban.'};
+ if(AND&&AB==='ddg')return[{t:'Nyisd meg másik böngészőben',d:'A DuckDuckGo nem tud webalkalmazást telepíteni. Nyisd meg az oldalt <b>Chrome</b>-ban vagy <b>Samsung Internet</b>-ben, és ott folytasd.',s:S(R(30,20,180,40,10,'#fff')+T(120,45,'Megnyitás másik böngészőben',9.5,'#222','middle')+box(34,24,172,32))}];
  if(AND){return[
- {t:'Menü megnyitása',d:'Koppints a <b>⋮</b> gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.',s:S(top?R(0,0,240,34,0,'#1b1b1d')+g(16,17,HM,'#fff',1)+R(30,6,120,22,11,'#3b3b3e')+g(42,17,TN,'#fff',.9)+T(54,20,'gyogyszertarorgovany.hu',7,'#fff')+g(166,17,'<path d="M0-6v12M-6 0h12"/>','#fff',1)+R(181,10,14,14,4,'none','#fff')+T(188,20,'43',7,'#fff','middle')+g(222,17,DVW,'#fff',1)+ring(222,17,14)+R(0,34,240,46,0,'#d5dae0'):R(6,6,228,22,11,'#dfe3e8')+T(120,21,'gyogyszertarorgovany.hu',10,'#555','middle')+R(6,54,228,22,11,'#dfe3e8')+g(222,65,DV,'#333',1)+ring(222,65,13))},
- {t:'Menüpont kiválasztása',d:'Görgess lefelé, és koppints a <b>Telepítés és parancsikon</b> pontra (régebbi Chrome: Alkalmazás telepítése).',s:S(R(66,2,170,76,10,MENUBG,'#ccc')+T(76,16,'Fordítás…',8.5)+T(76,30,'Olvasási mód megjelenítése…',8.5)+T(76,45,'Telepítés és parancsikon',8.5,'#111',0,1)+T(76,61,'Asztali webhely',8.5)+R(214,52,12,12,2,'none','#222')+box(70,34,162,16))},
- {t:'Telepítés',d:'Az „Alkalmazás telepítése” ablakban koppints a <b>Telepítés</b> gombra.',s:S(R(14,4,212,72,14,'#f9f9fe','#ddd')+T(24,20,'Alkalmazás telepítése',10,'#111')+'<image href="'+ICON+'" x="24" y="27" width="22" height="22"/>'+T(54,37,NAME+' –',8,'#111')+T(54,46,'Gondviselés Gyógyszertár',8,'#111')+T(54,56,'gyogyszertarorgovany.hu',6.5,'#555')+T(130,69,'Mégse',8.5,'#1a73e8')+T(180,69,'Telepítés',8.5,'#1a73e8','start',1)+box(172,58,50,15))},
- {t:'Hozzáadás',d:'Samsungon a „Felveszi a kezdőképernyőre?” kérdésnél koppints a <b>Hozzáadás</b> gombra.',s:S(R(14,4,212,74,14,'#f2f2f0','#ddd')+T(24,19,'Felveszi a kezdőképernyőre?',9,'#111',0,1)+R(22,25,196,30,8,'#e4e4e4')+'<image href="'+ICON+'" x="108" y="27" width="16" height="16"/>'+T(120,51,NAME,6.5,'#555','middle')+T(66,70,'Mégse',9,'#111','middle',1)+T(170,70,'Hozzáadás',9,'#111','middle',1)+box(124,58,92,16))},
+ {t:'Menü megnyitása',d:AL.m,s:S(top?R(0,0,240,34,0,'#1b1b1d')+g(16,17,HM,'#fff',1)+R(30,6,120,22,11,'#3b3b3e')+g(42,17,TN,'#fff',.9)+T(54,20,'gyogyszertarorgovany.hu',7,'#fff')+g(166,17,'<path d="M0-6v12M-6 0h12"/>','#fff',1)+R(181,10,14,14,4,'none','#fff')+T(188,20,'43',7,'#fff','middle')+g(222,17,DVW,'#fff',1)+ring(222,17,14)+R(0,34,240,46,0,'#d5dae0'):R(6,6,228,22,11,'#dfe3e8')+T(120,21,'gyogyszertarorgovany.hu',10,'#555','middle')+R(6,54,228,22,11,'#dfe3e8')+g(222,65,DV,'#333',1)+ring(222,65,13))},
+ {t:AL.t,d:AL.d,s:S(R(66,2,170,76,10,MENUBG,'#ccc')+T(76,16,'Fordítás…',8.5)+T(76,30,'Olvasási mód megjelenítése…',8.5)+T(76,45,AL.l,8.5,'#111',0,1)+T(76,61,'Asztali webhely',8.5)+R(214,52,12,12,2,'none','#222')+box(70,34,162,16))},
+ {t:'Megerősítés',d:'A megjelenő ablakban koppints a <b>Telepítés</b> (vagy <b>Hozzáadás</b>) gombra.',s:S(R(14,4,212,72,14,'#f9f9fe','#ddd')+T(24,20,'Alkalmazás telepítése',10,'#111')+'<image href="'+ICON+'" x="24" y="27" width="22" height="22"/>'+T(54,37,NAME+' –',8,'#111')+T(54,46,'Gondviselés Gyógyszertár',8,'#111')+T(54,56,'gyogyszertarorgovany.hu',6.5,'#555')+T(130,69,'Mégse',8.5,'#1a73e8')+T(180,69,'Telepítés',8.5,'#1a73e8','start',1)+box(172,58,50,15))},
+ {t:'Hozzáadás',d:'Ha a rendszer megkérdezi: „Felveszi a kezdőképernyőre?”, koppints a <b>Hozzáadás</b> gombra.',s:S(R(14,4,212,74,14,'#f2f2f0','#ddd')+T(24,19,'Felveszi a kezdőképernyőre?',9,'#111',0,1)+R(22,25,196,30,8,'#e4e4e4')+'<image href="'+ICON+'" x="108" y="27" width="16" height="16"/>'+T(120,51,NAME,6.5,'#555','middle')+T(66,70,'Mégse',9,'#111','middle',1)+T(170,70,'Hozzáadás',9,'#111','middle',1)+box(124,58,92,16))},
  {t:'Kész!',d:'Az ikont a főképernyőn találod.',s:HOME()}]}
  var s1=top?S(R(6,6,228,26,13,'#d1d1d6')+T(120,23,'gyogyszertarorgovany.hu',11,'#333','middle')+g(214,19,SH,'#333',1)+ring(214,19,15)+R(6,40,228,34,8,'#dfe3e8')):
   br==='b'?S(R(6,6,228,26,13,'#1c1c1e')+T(120,23,'gyogyszertarorgovany.hu',11,'#fff','middle')+R(0,40,240,40,0,'#2c2c2e')+g(24,60,BK,'#fff')+g(71,60,SH,'#fff',1)+ring(71,60,15)+g(118,60,'<path d="M0-7v14M-7 0h14"/>','#fff',1)+R(158,53,14,14,3,'none','#fff')+g(211,60,DH,'#fff'),'#555'):
@@ -64,6 +75,28 @@ function steps(){
  {t:'Kész!',d:'Az ikon a főképernyőn van, onnan nyisd meg.',s:HOME()}]}
 // ---- Felület ----
 var pop=D.createElement('div');pop.className='ig-pop';pop.setAttribute('role','dialog');pop.innerHTML='<img src="'+ICON+'" alt=""><div><b>Töltse le alkalmazásunkat!</b><span>Gyorsabb elérés a főképernyőről</span></div><button class="ig-btn" type="button">Letöltés</button><button class="ig-x" type="button" aria-label="Bezárás">&times;</button>';
+var GLOBE='<svg class="gl" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+EXTI='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>';
+var st2=D.createElement('style');st2.textContent='.ig-ext{display:none;position:fixed;z-index:99000;left:8px;right:8px;max-width:440px;margin:auto;top:var(--ig-top,0);background:#fff;color:#1a1a1a;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.3);padding:12px 38px 12px 12px;font:13px/1.35 -apple-system,"Segoe UI",system-ui,sans-serif}.ig-ext.on{display:block}.ig-ext .r{display:flex;gap:10px;align-items:center}.ig-ext .gl{flex:none;width:28px;height:28px}.ig-ext .r b{font-size:.9rem;line-height:1.3}.ig-ext .xb{position:absolute;top:4px;right:6px;width:30px;height:30px;border:0;background:none;font-size:22px;line-height:1;color:#666}.ig-ext .go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;border:0;border-radius:999px;background:'+BL+';color:#fff;font-weight:700;font-size:.85rem;padding:11px 14px}.ig-ext .go svg{flex:none;width:18px;height:18px}.ig-ext .hint{display:none;margin:8px 2px 0;font-size:.72rem;color:#555}.ig-ext .hint.on{display:block}';D.head.appendChild(st2);
+var ext=D.createElement('div');ext.className='ig-ext';ext.setAttribute('role','dialog');ext.setAttribute('aria-label','Megnyitás böngészőben');
+ext.innerHTML='<button class="xb" type="button" aria-label="Bezárás">&times;</button><div class="r">'+GLOBE+'<b>Az alkalmazáshoz nyissa meg az oldalt egy böngészőben</b></div><button class="go" type="button">'+EXTI+'<span>Megnyitás az alapértelmezett böngészőben</span></button><p class="hint"></p>';
+D.body.appendChild(ext);
+var extLeft=false;D.addEventListener('visibilitychange',function(){if(D.hidden)extLeft=true});addEventListener('pagehide',function(){extLeft=true});
+function openExt(){ // az oldal megnyitása a telefon alapértelmezett böngészőjében
+ var u=location.href,h=ext.querySelector('.hint');extLeft=false;h.classList.remove('on');
+ try{
+  if(AND){var m=u.match(/^(https?):\/\/([^\/]+)([^#]*)/);if(m)location.href='intent://'+m[2]+m[3]+'#Intent;scheme='+m[1]+';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url='+encodeURIComponent(u)+';end'}
+  else location.href='x-safari-'+u;
+ }catch(e){}
+ setTimeout(function(){
+  if(extLeft)return;
+  try{window.open(u,'_blank')}catch(e){}
+  h.textContent=AND?'Ha nem nyílt meg: koppintson a ⋮ menüre, majd válassza a „Megnyitás böngészőben” pontot.':'Ha nem nyílt meg: koppintson a ⋯ vagy a Megosztás ikonra, majd válassza a „Megnyitás Safariban” (böngészőben) pontot.';
+  h.classList.add('on');
+ },1400);
+}
+ext.querySelector('.go').onclick=openExt;
+ext.querySelector('.xb').onclick=function(){ext.classList.remove('on');LS('igPopX',String(Date.now()))};
 var card=D.createElement('div');card.className='ig-card';card.setAttribute('role','dialog');card.setAttribute('aria-label','Telepítési útmutató');
 var arr=D.createElement('div');arr.className='ig-arr';
 var intro=D.createElement('div');intro.className='ig-intro';intro.innerHTML='<div><h2 class="ig-it">KÖVESSE A MEGJELENŐ UTASÍTÁSOKAT A LETÖLTÉSHEZ!</h2><p class="ig-info"><svg viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r="1.1" fill="#007AFF" stroke="none"/></svg><span>Az Apple Inc. webalkalmazásokra vonatkozó korlátozásai miatt 4 lépésben végezhető el a telepítés.</span></p><button type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg><span>A LETÖLTÉS lépéseinek megtekintése</span></button></div>';
@@ -90,6 +123,7 @@ bg.querySelector('.ig-vbtn').onclick=function(){playVideo()};
 function preloadVid(){if(!bgOn||vid.getAttribute('src'))return;vid.preload='auto';vid.setAttribute('src',vid.getAttribute('data-src'));try{vid.load()}catch(e){}}
 
 // ---- Lebegő (Picture-in-Picture) lejátszó: a videó a telepítés lépései közben is látszik ----
+var fr=D.createElement('div');fr.className='ig-pf';fr.setAttribute('aria-hidden','true');fr.innerHTML='<b>Finoman húzza IDE a videó lebegő ablakát!</b><i>Az ablakon gyors dupla koppintással kinagyíthatja a videót.</i>';
 var pipB=bg.querySelector('.ig-pipb');
 function inPip(){return vid.webkitPresentationMode==='picture-in-picture'||D.pictureInPictureElement===vid}
 function enterPip(){try{if(inPip())return true;if(vid.webkitSetPresentationMode&&(!vid.webkitSupportsPresentationMode||vid.webkitSupportsPresentationMode('picture-in-picture'))){vid.webkitSetPresentationMode('picture-in-picture');return true}if(vid.requestPictureInPicture){var p=vid.requestPictureInPicture();if(p&&p.catch)p.catch(function(){});return true}}catch(e){}return false}
@@ -113,7 +147,6 @@ function showRed(on,fx){ // a fejléc (Bezárás), a nyíl és az animációk mi
  redB.textContent=on?'Lépések elrejtése':'Lépések megjelenítése';
  bg.querySelector('.ig-bt-alt').textContent=bar==='t'?'Alul van a címsor?':'Felül van a címsor?';
 }
-var fr=D.createElement('div');fr.className='ig-pf';fr.setAttribute('aria-hidden','true');fr.innerHTML='<b>Finoman húzza IDE a videó lebegő ablakát!</b><i>Az ablakon gyors dupla koppintással kinagyíthatja a videót.</i>';
 D.body.appendChild(pop);D.body.appendChild(bg);D.body.appendChild(fr);D.body.appendChild(card);D.body.appendChild(arr);
 // ---- iOS: piros lépésről-lépésre panel (a lapozós útmutató helyett) ----
 var hintsOn=bgOn,hn=D.createElement('div'),ht=null,hto=[],hs=[];
@@ -200,9 +233,10 @@ function nativePrompt(){
  try{p.prompt();if(p.userChoice)p.userChoice.then(function(c){if(c&&c.outcome==='accepted')LS('gyInstalled','1')})}catch(e){open()}
 }
 function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépéses útmutató csak végső tartalék
+ if(INAPP){pop.classList.remove('on');setTop();ext.classList.add('on');return}
  if(defer){nativePrompt();return}
  if(iOS&&br!=='g'){pop.classList.remove('on');preloadVid();intro.classList.add('on');return}
- if(AND&&br!=='g'){
+ if(AND&&br!=='g'&&!noBIP){
   pop.classList.remove('on');
   if(waiting)return;
   waiting=true;toast('Telepítési ablak megnyitása…',3600);
@@ -219,9 +253,10 @@ pop.querySelector('.ig-btn').onclick=start;
 addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e;if(waiting){waiting=false;clearTimeout(waitT);nativePrompt()}});
 addEventListener('appinstalled',function(){LS('gyInstalled','1');pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
+function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();if(INAPP){ext.classList.add('on')}else pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
 var ck=D.getElementById('check'),popWas=false,popOff=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on')||hn.classList.contains('on'))close()}else if(popWas&&!popOff){popWas=false;pop.classList.add('on')}});
+var extWas=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){extWas=ext.classList.contains('on');ext.classList.remove('on')}else if(extWas&&!popOff){extWas=false;ext.classList.add('on')}});
 if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;popOff=true;popWas=false;pop.classList.remove('on');start()});
 if(/[?&]app=1/.test(location.search))setTimeout(start,600);
 })();
