@@ -2,7 +2,7 @@
 // v2: network-first stratégia a HTML oldalakhoz, hogy a telepített PWA-k
 // mindig a legfrissebb verziót kapják amint van internetkapcsolat, és csak
 // offline esetén essenek vissza a gyorsítótárazott változatra.
-const CACHE_NAME = 'gondviseles-gyogyszertar-v25';
+const CACHE_NAME = 'gondviseles-gyogyszertar-v26';
 // Azok a külső (más eredetű) domainek, amelyekről betöltött, ikonokhoz/betűtípusokhoz
 // szükséges erőforrásokat (CSS, woff2 fájlok) a PWA offline használatához is
 // gyorsítótárazzuk, hogy internet nélkül is helyesen jelenjenek meg az ikonok és
@@ -27,13 +27,18 @@ const APP_SHELL = [
   'tortenelmunk-galeria.html',
   'impresszum.html',
   'adatkezeles.html',
-  'manifest.json'
+  'manifest.json',
+  'icon-192.png',
+  'icon-512.png',
+  'icon-512-maskable.png'
 ];
 
 self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.addAll(APP_SHELL).catch(function () {});
+      return Promise.all(APP_SHELL.map(function (url) {
+        return cache.add(url).catch(function () {});
+      }));
     })
   );
   self.skipWaiting();
@@ -59,6 +64,8 @@ function isHTMLRequest(req) {
 self.addEventListener('fetch', function (event) {
   const req = event.request;
   if (req.method !== 'GET') return;
+
+  if (req.headers.has('range')) return;
 
   const reqUrl = new URL(req.url);
 
