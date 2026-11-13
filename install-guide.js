@@ -45,12 +45,12 @@ RM='<rect x="-6" y="-7" width="12" height="14" rx="2.5"/><path d="M-3-3h6M-3 0h6
 DH='<circle cx="-5" r="1.6" fill="#fff"/><circle r="1.6" fill="#fff"/><circle cx="5" r="1.6" fill="#fff"/>',DV='<circle cy="-5" r="1.6" fill="#333"/><circle r="1.6" fill="#333"/><circle cy="5" r="1.6" fill="#333"/>',
 BK='<path d="M2-6l-6 6 6 6"/>',FW='<path d="M-2-6l6 6-6 6"/>',BOOK='<path d="M0-4v11M0-4C-2-6-6-6-9-5v11c3-1 7-1 9 1 2-2 6-2 9-1V-5C6-6 2-6 0-4z"/>',TABS='<rect x="-7" y="-4" width="11" height="11" rx="2.5"/><path d="M-4-7h8a3 3 0 0 1 3 3v8"/>',LINES='<path d="M-6-3h12M-6 0h8M-6 3h5"/>',RELOAD='<path d="M5-2a5 5 0 1 0 1 4M5-6v4h-4"/>';
 function HOME(){return S([20,78,136].map(function(x){return R(x,10,36,36,9,'#fff')}).join('')+'<image href="'+ICON+'" x="188" y="10" width="36" height="36"/>'+ring(206,28,27)+T(206,62,NAME,9,'#222','middle'),'#cfe0f0')}
-function steps(){
+function steps(){var L=steps0();if(AND&&AB==='sam')L.push({t:'Ha hibát jelez',d:'Ha a végén „Nem sikerült letölteni” üzenetet kap: frissítse a Samsung Internetet és a Google Play Áruházat, majd próbálja újra – vagy nyissa meg az oldalt Chrome-ban.',s:S(R(30,16,180,48,10,'#fff')+T(120,36,'Nem sikerült letölteni',10,'#c62828','middle',1)+T(120,53,'Frissítés, majd újra',8.5,'#444','middle'))});return L}
+function steps0(){
  var top=bar==='t';
  var HM='<path d="M-7 1L0-6 7 1M-5 0v7h4v-4h2v4h4V0"/>',TN='<path d="M-6-2h7M4-2h2M-6 3h2M0 3h6"/><circle cx="3" cy="-2" r="1.6"/><circle cx="-2" cy="3" r="1.6"/>',DVW='<circle cy="-5" r="1.6" fill="#fff"/><circle r="1.6" fill="#fff"/><circle cy="5" r="1.6" fill="#fff"/>',MENUBG='#f6f4fb';
- if(br==='g')return[{t:iOS?'Nyisd meg Safariban':'Nyisd meg Chrome-ban',d:iOS?'A Google appból nem telepíthető. Koppints a '+ic('<circle r="7"/><path d="M-2.5-2.5l5-2-2 5-5 2z"/>')+' <b>Megnyitás Safariban</b> gombra, és ott folytasd.':'Koppints a <b>⋮</b> menüre, majd a <b>Megnyitás a(z) Chrome böngészőben</b> pontra.',s:iOS?S(R(30,20,180,40,10,'#fff')+T(120,45,'Megnyitás böngészőben',11,'#222','middle')+box(34,24,172,32)):S(R(20,2,200,76,10,MENUBG,'#ccc')+T(30,18,'Link másolása',8.5)+T(30,33,'Mentett oldalak megtekintése',8.5)+T(30,52,'Megnyitás a(z) Chrome böngészőben',8.5,'#111',0,1)+g(206,49,'<path d="M-5-5h6M5-5v7M-5-5v10h10M0 0l7-7M2-7h5v5"/>','#222',.8)+T(30,68,'Chrome-előzmények',8.5)+box(24,40,192,16))}];
  var AL={t:'Menüpont kiválasztása',l:'Telepítés és parancsikon',d:'Görgess lefelé, és koppints a <b>Telepítés és parancsikon</b> pontra (régebbi Chrome: <b>Alkalmazás telepítése</b>).',m:'Koppints a <b>⋮</b> gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
- if(AB==='sam')AL={t:'Hozzáadás a kezdőképernyőhöz',l:'Hozzáadás ehhez',d:'Koppints a <b>Hozzáadás ehhez</b> (vagy <b>Oldal hozzáadása</b>) pontra, majd válaszd a <b>Kezdőképernyő</b> lehetőséget. Ha a címsor mellett megjelenik a <b>Telepítés</b> ikon, arra is koppinthatsz.',m:'Koppints a <b>≡</b> menügombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
+ if(AB==='sam')AL={t:'Hozzáadás a kezdőképernyőhöz',l:'Hozzáadás ehhez',d:'Koppints a <b>Hozzáadás ehhez</b> (vagy <b>Oldal hozzáadása</b>) pontra, majd válaszd a <b>Kezdőképernyő</b> lehetőséget. Ha a menü lapozható (régebbi verzió), húzd oldalra, amíg meglátod. Ha a címsor mellett megjelenik a <b>Telepítés</b> ikon, arra is koppinthatsz.',m:'Koppints a <b>≡</b> menügombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
  else if(AB==='edge')AL={t:'Hozzáadás a telefonhoz',l:'Hozzáadás a telefonhoz',d:'Koppints a <b>Hozzáadás a telefonhoz</b> (vagy <b>Telepítés</b>) pontra.',m:'Koppints a <b>⋯</b> gombra az alsó sávban.'};
  else if(AB==='opera')AL={t:'Hozzáadás a kezdőképernyőhöz',l:'Kezdőképernyő',d:'Koppints a <b>Hozzáadás a kezdőképernyőhöz</b> pontra.',m:'Koppints a <b>⋮</b> gombra a '+(top?'jobb felső':'jobb alsó')+' sarokban.'};
  else if(AB==='ff')AL={t:'Telepítés',l:'Telepítés',d:'Koppints a <b>Telepítés</b> pontra (régebbi Firefoxban: <b>Hozzáadás a kezdőképernyőhöz</b>).',m:'Koppints a <b>⋮</b> gombra a jobb felső sarokban.'};
@@ -77,12 +77,17 @@ function steps(){
 var pop=D.createElement('div');pop.className='ig-pop';pop.setAttribute('role','dialog');pop.innerHTML='<img src="'+ICON+'" alt=""><div><b>Töltse le alkalmazásunkat!</b><span>Gyorsabb elérés a főképernyőről</span></div><button class="ig-btn" type="button">Letöltés</button><button class="ig-x" type="button" aria-label="Bezárás">&times;</button>';
 var GLOBE='<svg class="gl" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
 EXTI='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14L21 3"/></svg>';
-var st2=D.createElement('style');st2.textContent='.ig-ext{display:none;position:fixed;z-index:99000;left:8px;right:8px;max-width:440px;margin:auto;top:var(--ig-top,0);background:#fff;color:#1a1a1a;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.3);padding:12px 38px 12px 12px;font:13px/1.35 -apple-system,"Segoe UI",system-ui,sans-serif}.ig-ext.on{display:block}.ig-ext .r{display:flex;gap:10px;align-items:center}.ig-ext .gl{flex:none;width:28px;height:28px}.ig-ext .r b{font-size:.9rem;line-height:1.3}.ig-ext .xb{position:absolute;top:4px;right:6px;width:30px;height:30px;border:0;background:none;font-size:22px;line-height:1;color:#666}.ig-ext .go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;border:0;border-radius:999px;background:'+BL+';color:#fff;font-weight:700;font-size:.85rem;padding:11px 14px}.ig-ext .go svg{flex:none;width:18px;height:18px}.ig-ext .hint{display:none;margin:8px 2px 0;font-size:.72rem;color:#555}.ig-ext .hint.on{display:block}';D.head.appendChild(st2);
+var st2=D.createElement('style');st2.textContent='.ig-ext{display:none;position:fixed;z-index:99000;left:8px;right:8px;max-width:440px;margin:auto;top:var(--ig-top,0);background:#fff;color:#1a1a1a;border-radius:14px;box-shadow:0 6px 22px rgba(0,0,0,.3);padding:12px 38px 12px 12px;font:13px/1.35 -apple-system,"Segoe UI",system-ui,sans-serif}.ig-ext.on{display:block}.ig-ext .r{display:flex;gap:10px;align-items:center}.ig-ext .gl{flex:none;width:28px;height:28px}.ig-ext .r b{font-size:.9rem;line-height:1.3}.ig-ext .xb{position:absolute;top:4px;right:6px;width:30px;height:30px;border:0;background:none;font-size:22px;line-height:1;color:#666}.ig-ext .go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;border:0;border-radius:999px;background:'+BL+';color:#fff;font-weight:700;font-size:.85rem;padding:11px 14px}.ig-ext .go svg{flex:none;width:18px;height:18px}.ig-ext .hint{display:none;margin:9px 2px 0;font-size:.75rem;line-height:1.45;color:#444}.ig-ext .hint.on{display:block}.ig-ext .cp{display:block;width:100%;margin:9px 0 0;border:1.5px solid '+BL+';background:#fff;color:'+BL+';border-radius:999px;padding:9px 12px;font-weight:700;font-size:.78rem}';D.head.appendChild(st2);
 var ext=D.createElement('div');ext.className='ig-ext';ext.setAttribute('role','dialog');ext.setAttribute('aria-label','Megnyitás böngészőben');
-ext.innerHTML='<button class="xb" type="button" aria-label="Bezárás">&times;</button><div class="r">'+GLOBE+'<b>Az alkalmazáshoz nyissa meg az oldalt egy böngészőben</b></div><button class="go" type="button">'+EXTI+'<span>Megnyitás az alapértelmezett böngészőben</span></button><p class="hint"></p>';
+ext.innerHTML='<button class="xb" type="button" aria-label="Bezárás">&times;</button><div class="r">'+GLOBE+'<b>Az alkalmazáshoz nyissa meg az oldalt egy böngészőben</b></div><button class="go" type="button">'+EXTI+'<span>Megnyitás az alapértelmezett böngészőben</span></button><div class="hint"></div>';
 D.body.appendChild(ext);
 var extLeft=false;D.addEventListener('visibilitychange',function(){if(D.hidden)extLeft=true});addEventListener('pagehide',function(){extLeft=true});
-function openExt(){ // az oldal megnyitása a telefon alapértelmezett böngészőjében
+function copyLink(btn){ // tartalék: a hivatkozás vágólapra másolása, hogy bármelyik böngészőbe beilleszthető legyen
+ var u=location.href,done=function(){btn.textContent='Hivatkozás másolva – illessze be a böngészőbe'};
+ function fb(){try{var t=D.createElement('textarea');t.value=u;t.setAttribute('readonly','');t.style.cssText='position:fixed;top:0;left:0;opacity:0';D.body.appendChild(t);t.select();t.setSelectionRange(0,u.length);D.execCommand('copy');D.body.removeChild(t);done()}catch(e){btn.textContent='Másolja ki a hivatkozást a címsorból'}}
+ try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(done,fb);else fb()}catch(e){fb()}
+}
+function openExt(){ // az oldal megnyitása a telefon alapértelmezett böngészőjében (iOS-en az alkalmazások ezt gyakran blokkolják: ilyenkor útmutató + másolás)
  var u=location.href,h=ext.querySelector('.hint');extLeft=false;h.classList.remove('on');
  try{
   if(AND){var m=u.match(/^(https?):\/\/([^\/]+)([^#]*)/);if(m)location.href='intent://'+m[2]+m[3]+'#Intent;scheme='+m[1]+';action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;S.browser_fallback_url='+encodeURIComponent(u)+';end'}
@@ -90,10 +95,10 @@ function openExt(){ // az oldal megnyitása a telefon alapértelmezett böngész
  }catch(e){}
  setTimeout(function(){
   if(extLeft)return;
-  try{window.open(u,'_blank')}catch(e){}
-  h.textContent=AND?'Ha nem nyílt meg: koppintson a ⋮ menüre, majd válassza a „Megnyitás böngészőben” pontot.':'Ha nem nyílt meg: koppintson a ⋯ vagy a Megosztás ikonra, majd válassza a „Megnyitás Safariban” (böngészőben) pontot.';
+  h.innerHTML='<b>Ha nem nyílt meg automatikusan:</b><br>1. Koppintson a '+(AND?'<b>⋮</b> menüre':'<b>⋯</b> (vagy a Megosztás) ikonra')+' az alkalmazás sarkában.<br>2. Válassza a <b>„Megnyitás böngészőben”</b>'+(AND?'':' (Safariban)')+' pontot.<br>Vagy másolja ki a hivatkozást, és illessze be a böngésző címsorába.<button type="button" class="cp">Hivatkozás másolása</button>';
+  var cp=h.querySelector('.cp');cp.onclick=function(){copyLink(cp)};
   h.classList.add('on');
- },1400);
+ },1200);
 }
 ext.querySelector('.go').onclick=openExt;
 ext.querySelector('.xb').onclick=function(){ext.classList.remove('on');LS('igPopX',String(Date.now()))};
@@ -244,19 +249,30 @@ function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépé
    waiting=false;toastEl.classList.remove('on');
    if(LS('gyInstalled'))toast('Az alkalmazás már telepítve van – keresse a főképernyőn: Gyógyszertáram.',5000,open);
    else open();
-  },3500);
+  },AB==='sam'?6500:3500);
   return;
  }
  open();
 }
 pop.querySelector('.ig-btn').onclick=start;
-addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e;if(waiting){waiting=false;clearTimeout(waitT);nativePrompt()}});
+addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e;if(waiting){waiting=false;clearTimeout(waitT);nativePrompt()}else if(AND&&card.classList.contains('on')){toast('Most már telepíthető – koppintson ide a telepítéshez.',12000,function(){close();nativePrompt()})}});
 addEventListener('appinstalled',function(){LS('gyInstalled','1');pop.classList.remove('on');close()});
 function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
-function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();if(INAPP){ext.classList.add('on')}else pop.className='ig-pop on ig-top'},1200)}
+function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
 var ck=D.getElementById('check'),popWas=false,popOff=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on')||hn.classList.contains('on'))close()}else if(popWas&&!popOff){popWas=false;pop.classList.add('on')}});
 var extWas=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){extWas=ext.classList.contains('on');ext.classList.remove('on')}else if(extWas&&!popOff){extWas=false;ext.classList.add('on')}});
 if(mb)mb.addEventListener('click',function(e){e.preventDefault();var c=D.getElementById('check');if(c)c.checked=false;popOff=true;popWas=false;pop.classList.remove('on');start()});
 if(/[?&]app=1/.test(location.search))setTimeout(start,600);
+if(/[?&]igdebug/.test(location.search))(function(){ // diagnosztika: az oldal címéhez fűzd hozzá: ?igdebug=1
+ var o=D.createElement('pre');o.style.cssText='position:fixed;z-index:2147483000;left:6px;right:6px;bottom:6px;max-height:70vh;overflow:auto;margin:0;padding:10px;background:#111;color:#9f9;font:11px/1.35 monospace;border-radius:10px;white-space:pre-wrap';D.body.appendChild(o);
+ function p(t){o.textContent+=t+'\n'}
+ p('UA: '+ua);p('Böngésző: '+(AND?AB:iOS?br:'?')+' | alkalmazásbeli böngésző: '+INAPP+' | HTTPS: '+(location.protocol==='https:'));
+ p('telepített módban fut: '+(matchMedia('(display-mode: standalone)').matches));
+ p('Service Worker támogatás: '+('serviceWorker' in navigator));
+ if(navigator.serviceWorker)navigator.serviceWorker.getRegistration().then(function(r){p('SW regisztráció: '+(r?('igen, aktív='+!!r.active+', scope='+r.scope):'NINCS'));p('SW irányítja az oldalt: '+!!navigator.serviceWorker.controller)});
+ p('beforeinstallprompt eddig: '+(defer?'megjött':'még nem'));addEventListener('beforeinstallprompt',function(){p('beforeinstallprompt MEGJÖTT')});
+ var ml=D.querySelector('link[rel="manifest"]');p('manifest link: '+(ml?ml.href:'NINCS'));
+ if(ml)fetch(ml.href,{cache:'no-store'}).then(function(r){p('manifest HTTP: '+r.status+' '+(r.headers.get('content-type')||''));return r.json()}).then(function(m){p('name: '+m.name+' | start_url: '+m.start_url+' | display: '+m.display);(m.icons||[]).forEach(function(ic){var u=new URL(ic.src,ml.href).href,im=new Image();im.onload=function(){p('ikon OK '+im.naturalWidth+'x'+im.naturalHeight+' ('+ic.purpose+') '+u)};im.onerror=function(){p('ikon HIBA: '+u)};im.src=u})}).catch(function(e){p('manifest HIBA: '+e)});
+})();
 })();
