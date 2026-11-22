@@ -242,6 +242,11 @@
         }
         #gyszt-notice p { margin-bottom: 18px; font-size: 0.98rem; line-height:1.55; }
         .gyszt-notice-btns { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        /* Egyenlő hangsúlyú gombok a sütisávban és a beállítások ablakban (az elutasítás ugyanolyan könnyű, mint az elfogadás) */
+        #gyszt-notice .btn-eq { background:#fff; color:#1b2a3a; border:1px solid #fff; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.88rem; }
+        .btn-eq2 { background:#fff; color:#1b5e20; border:1.5px solid #1b5e20; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.86rem; }
+        #gyszt-notice .btn-eq:focus-visible, .btn-eq2:focus-visible { outline:2px solid #1a73e8; outline-offset:2px; }
+        .gyszt-group-label { text-align:left; margin:16px 2px 8px; font-size:0.74rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#667; }
         .btn-accept { background: #4CAF50; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size:0.88rem; }
         .btn-reject { background: #3a3a3a; color: #eee; border: 1px solid #555; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size:0.88rem; }
         .btn-info { background: transparent; color: #aaa; border: 1px solid #444; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size:0.88rem; }
@@ -366,7 +371,9 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <h2 id="sutik" style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">3. Sütik (cookie-k) és helyi tárolás (localStorage)</h2>
     <p><strong>Feltétlenül szükséges helyi tárolás</strong> – <em>cél:</em> a weboldal alapvető működése. <em>Jogalap:</em> GDPR 6. cikk (1) bek. f) pont, jogos érdek (a weboldal működőképessége), illetve az elektronikus hírközlésről szóló 2003. évi C. törvény 155. § (4) bekezdése. Ide tartozik:</p>
     <ul style="margin:8px 0 8px 22px;">
-      <li><code>gyogyszertar76_cookie_v2</code> jellegű kulcs – az Ön süti-/hozzájárulási döntésének megjegyzése.</li>
+      <li><code>gyogyszertar_cookie_v3</code> jellegű kulcs – az Ön süti-/hozzájárulási döntésének megjegyzése (külső tartalmak, statisztika);</li>
+      <li>a főoldali bevezető animáció lejátszásának ténye – munkamenet-tároló (<code>sessionStorage</code>), a böngészőablak bezárásáig;</li>
+      <li>a telepítési útmutató megjelenítési beállításai (pl. a böngészősáv helye, a javaslat bezárt állapota).</li>
     </ul>
     <p><strong>Opcionális, kényelmi célú helyi tárolás</strong> – ezek nem szükségesek a weboldal alapműködéséhez, kizárólag az Ön kényelmét szolgálják, és <em>kizárólag az Ön saját eszközén/böngészőjében</em> tárolódnak; hozzánk nem jutnak el, és nem alkalmasak az Ön személyének azonosítására. <em>Jogalap:</em> GDPR 6. cikk (1) bek. f) pont, jogos érdek (a funkció felkínálása); Ön a böngészője beállításaiban bármikor törölheti ezeket. Ide tartozik:</p>
     <ul style="margin:8px 0 8px 22px;">
@@ -375,7 +382,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
       <li>a Gyógyszer-labirintus játék legjobb eredménye és a szabályok megtekintésének ténye;</li>
       <li>a Gyógyszer-labirintus játék „Kórokozó-riasztás” nevű, kizárólag ismeretterjesztő szövegeket megjelenítő funkciójának naplója – ez nem az Ön adatait, hanem a játék által megjelenített, előre elkészített edukációs szövegeket tárolja; a napló a játékban bármikor, egy kattintással (”Törlés” gomb) törölhető.</li>
     </ul>
-    <p><strong>Cookie-hozzájárulás (Elfogadom / Elutasítom / kategóriánkénti beállítás) és a külső tartalmak engedélyezése</strong> – <em>cél:</em> az Ön döntésének megjegyzése, hogy legközelebb ne kelljen újra megadnia. <em>Jogalap:</em> GDPR 6. cikk (1) bek. a) pont, hozzájárulás. <strong>Megőrzési idő: a döntés megváltoztatásáig, de legfeljebb 12 hónapig</strong> (ez nem jogszabályi előírás, hanem a szolgáltató által választott, ésszerűnek tartott időtartam, amely biztosítja, hogy a tájékoztatást időről időre újra megismerhesse). 12 hónap elteltével a rendszer újra kéri az Ön döntését. A döntését bármikor, azonnali hatállyal módosíthatja a lábléc <a href="javascript:void(0)" onclick="if(typeof openCookieSettings==='function')openCookieSettings();" style="color:#00824b; font-weight:700;">"Sütibeállítások"</a> pontjára kattintva – ez minden aloldalon elérhető és helyben működik. Elutasítás vagy visszavonás esetén az opcionális külső tartalmak (Google Térkép, Szimpatika) nem töltődnek be; a weboldal többi funkciója ettől függetlenül teljeskörűen használható.</p>
+    <p><strong>Cookie-hozzájárulás (Összes elfogadása / További lehetőségek, azon belül Csak a szükségesek) – külső tartalmak és statisztika</strong> – <em>cél:</em> az Ön döntésének megjegyzése, hogy legközelebb ne kelljen újra megadnia. <em>Jogalap:</em> GDPR 6. cikk (1) bek. a) pont, hozzájárulás. <strong>Megőrzési idő: a döntés megváltoztatásáig, de legfeljebb 12 hónapig</strong> (ez nem jogszabályi előírás, hanem a szolgáltató által választott, ésszerűnek tartott időtartam, amely biztosítja, hogy a tájékoztatást időről időre újra megismerhesse). 12 hónap elteltével a rendszer újra kéri az Ön döntését. A döntését bármikor, azonnali hatállyal módosíthatja a lábléc <a href="javascript:void(0)" onclick="if(typeof openCookieSettings==='function')openCookieSettings();" style="color:#00824b; font-weight:700;">"Sütibeállítások"</a> pontjára kattintva – ez minden aloldalon elérhető és helyben működik. Az opcionális célok (<em>Külső tartalmak</em> és <em>Statisztika</em>) külön-külön kapcsolhatók, és <strong>alapértelmezetten ki vannak kapcsolva</strong>. Elutasítás vagy visszavonás esetén az opcionális külső tartalmak (Google Térkép, Szimpatika) nem töltődnek be, a statisztikai mérés pedig nem indul el, illetve azonnal leáll; a weboldal többi funkciója ettől függetlenül teljeskörűen használható. A statisztikai kategória bevezetése előtt adott korábbi döntését a külső tartalmakra vonatkozóan megtartjuk, a statisztikára vonatkozó döntését azonban egyszer külön kérjük.</p>
+    <p><strong>Statisztika (opcionális, hozzájáruláson alapuló)</strong> – névtelen látogatottságmérés; részletes tájékoztatás a <a href="#statisztika" style="color:#00824b; font-weight:700;">7. pontban</a>.</p>
 
     <h2 style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">4. Külső tartalmak és szolgáltatók</h2>
     <p>Az alábbi külső szolgáltatásokat használja ténylegesen a weboldal:</p>
@@ -395,8 +403,18 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <h2 style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">6. Közösségi oldalak</h2>
     <p>A weboldal linkeket tartalmaz a gyógyszertár Facebook- és Instagram-oldalára. Ezekre kattintva Ön elhagyja weboldalunkat, és a Meta Platforms, Inc. saját adatkezelési tájékoztatója válik irányadóvá. A linkre kattintás előtt személyes adatot nem továbbítunk a Meta felé.</p>
 
-    <h2 style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">7. Statisztika, analitika, marketingkövetés</h2>
-    <p>A weboldal jelenleg <strong>nem használ</strong> látogatottságmérő (pl. Google Analytics) vagy marketingkövető szolgáltatást, ezért ehhez kapcsolódó adatkezelés nem történik. Amennyiben ez a jövőben változna, ezt a tájékoztatót frissítjük, és a méréshez külön, kikapcsolható hozzájárulást kérünk.</p>
+    <h2 id="statisztika" style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">7. Statisztika (névtelen látogatottságmérés)</h2>
+    <!-- JOGI ELLENŐRZÉS: a 7. pont egésze (jogalap, hivatkozások, adattovábbítás, adatfeldolgozói jogviszony) jogász általi felülvizsgálatot igényel a közzététel előtt. -->
+    <p><strong>Cél:</strong> a weboldal fejlesztéséhez annak megismerése, hogy mely oldalakat és funkciókat használják, mikor, és milyen típusú eszközről. A mérés <strong>oldalmegtekintéseket és eseményeket számol, nem egyedi látogatókat</strong>; egyéni látogató nem követhető.</p>
+    <p><strong>Jogalap:</strong> az Ön hozzájárulása – GDPR 6. cikk (1) bekezdés a) pont, valamint az elektronikus hírközlésről szóló 2003. évi C. törvény 155. § (4) bekezdése (a végberendezésen tárolt vagy onnan olvasott információhoz való hozzáférés). <!-- JOGI ELLENŐRZÉS: a hazai és uniós (2002/58/EK irányelv 5. cikk (3) bekezdés) hivatkozások pontossága. -->A mérés <strong>csak akkor indul el</strong>, ha Ön a sütibeállításokban a „Statisztika” kapcsolót bekapcsolja vagy az „Összes elfogadása” gombot választja; a kapcsoló alapértelmezetten ki van kapcsolva. Hozzájárulás vagy döntés hiányában semmilyen adat nem kerül elküldésre.</p>
+    <p><strong>Kezelt adatok:</strong></p>
+    <table style="width:100%; border-collapse:collapse; font-size:0.9rem; margin:8px 0 12px;"><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Idő</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Az oldalmegtekintés időpontja, <strong>órára kerekítve</strong> (Europe/Budapest)</td></tr><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Oldal</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Az oldal vagy nézet előre meghatározott neve (pl. főoldal, receptek, tünetkereső) – az URL nem kerül rögzítésre</td></tr><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Esemény</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Oldalmegtekintés, valamint néhány előre meghatározott esemény: játék indítása/vége, kvíz indítása, telefonpanel megnyitása, hírek megnyitása, telepítési javaslatra kattintás (<strong>tartalom, eredmény, válasz nélkül</strong>)</td></tr><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Forrás</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Honnan érkezett: közvetlen, keresőből, közösségi oldalról vagy egyéb (csak típus), valamint a hivatkozó oldal <strong>domainje</strong>; teljes hivatkozás soha</td></tr><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Kampányjelölés</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Az <code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code> értéke (pl. QR-kódos mérés), ha a hivatkozás tartalmazza; legfeljebb 40 karakter, csak betű, szám, kötőjel, aláhúzás</td></tr><tr><td style="padding:8px; border:1px solid #e5eaee;"><strong>Eszköz</strong></td><td style="padding:8px; border:1px solid #e5eaee;">Eszköz típusa (mobil, tablet, asztali), operációs rendszer családja (iOS, Android, Windows, macOS, egyéb), megjelenítés módja (böngésző vagy telepített alkalmazás), a böngésző nyelve (2 karakteres kód)</td></tr></table>
+    <p><strong>Amit nem rögzítünk:</strong> IP-cím, város vagy ország, időzóna, képernyőméret, egyéni azonosító, teljes hivatkozás (URL) lekérdezési paraméterekkel, valamint semmit, amit Ön beír vagy kiválaszt (pl. kvízválasz, keresés, űrlapadat), és semmilyen egészségre utaló egyéni adat. A mérés nem használ sütit, és nem ír a böngészőjébe (sem <code>localStorage</code>, sem <code>sessionStorage</code> azonosítót), nem készít ujjlenyomatot, és nem használ külső analitikai szolgáltatást (pl. Google Analytics).</p>
+    <p><strong>Működés, adatfeldolgozó:</strong> az adatküldés titkosított (HTTPS) kapcsolaton keresztül a Google Apps Script szolgáltatásába történik, és a Google Táblázatokba kerül. A Google ebben <strong>adatfeldolgozóként</strong> vesz részt (Google Ireland Limited / Google LLC). <!-- JOGI ELLENŐRZÉS: a szerződő Google-entitás, valamint az adatfeldolgozási kiegészítés (GDPR 28. cikk) fennállása a használt Google-fiók típusa szerint (Workspace vagy személyes fiók). -->A Google technikailag látja a kapcsolat IP-címét; <strong>mi ezt nem kapjuk meg, nem tároljuk és nem naplózzuk.</strong></p>
+    <p><strong>Adattovábbítás az Európai Unión kívülre:</strong> a Google az adatokat az Egyesült Államokban is feldolgozhatja. A továbbítás jogalapja az Európai Bizottság EU–USA adatvédelmi keretrendszerről szóló megfelelőségi határozata (2023. július 10.), amennyiben az érintett Google-entitás a keretrendszer résztvevője, ennek hiányában a Google által alkalmazott általános szerződési feltételek (GDPR V. fejezet). <!-- JOGI ELLENŐRZÉS: a megfelelőségi határozat hivatkozása és hatálya, a Google aktuális tanúsítványa, szükség esetén átviteli hatásvizsgálat. -->Az érintett adatok köre mindössze az itt felsorolt, névtelen mutatókra korlátozódik.</p>
+    <p><strong>Megőrzési idő:</strong> a nyers mérési napló legfeljebb <strong>90 napig</strong> őrződik, ezt követően automatikusan törlődik. Az ebből készített óránkénti összesítések (darabszámok) tovább megmaradnak; ezek összesített, névtelen adatok, amelyek természetes személyhez nem köthetők.</p>
+    <p><strong>A hozzájárulás visszavonása:</strong> bármikor, azonnali hatállyal, ugyanolyan egyszerűen, mint a megadása: a lábléc <a href="javascript:void(0)" onclick="if(typeof openCookieSettings==='function')openCookieSettings();" style="color:#00824b; font-weight:700;">"Sütibeállítások"</a> pontján a „Statisztika” kapcsoló kikapcsolásával. A visszavonás után a mérés azonnal leáll. A visszavonás nem érinti a visszavonás előtt végzett adatkezelés jogszerűségét (GDPR 7. cikk (3) bekezdés).</p>
+    <p><strong>Az Ön jogai:</strong> mivel a mérés nem rögzít olyan azonosítót, amelynek alapján egy adott látogató adatai kikereshetők lennének, a hozzáférési, helyesbítési és törlési jogok ezekre az adatokra gyakorlatilag nem értelmezhetők; a hozzájárulás visszavonásának és a panasztételnek a joga ettől függetlenül megillet (lásd a Panaszkezelés pontot). <!-- JOGI ELLENŐRZÉS: GDPR 11. cikk (azonosítást nem igénylő adatkezelés) alkalmazhatósága. -->Marketingkövetést vagy hirdetési célú profilozást a weboldal nem végez.</p>
 
     <h2 style="margin:28px 0 12px; border-bottom:2px solid #edf1f4; padding-bottom:8px;">8. Adatfeldolgozók / szolgáltatók összefoglalása</h2>
     <p style="font-size:0.88rem; color:#667;">A táblázat „Jogi szerep” oszlopa csak ott állít konkrét minősítést (pl. adatfeldolgozó), ahol ez a szolgáltató nyilvános dokumentációja alapján megállapítható; egyéb esetben a szolgáltatót technikai/tartalomszolgáltatóként azonosítjuk, jogi minősítés kikötése nélkül.</p>
@@ -405,6 +423,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
       <tr><td style="padding:8px; border:1px solid #e5eaee;">GitHub, Inc.</td><td style="padding:8px; border:1px solid #e5eaee;">Tárhelyszolgáltató</td><td style="padding:8px; border:1px solid #e5eaee;">Technikai szolgáltató (tárhely)</td><td style="padding:8px; border:1px solid #e5eaee;">Szervernaplók (technikai)</td></tr>
       <tr><td style="padding:8px; border:1px solid #e5eaee;">Google LLC / Google Ireland Limited</td><td style="padding:8px; border:1px solid #e5eaee;">Google Térkép, Google Fonts</td><td style="padding:8px; border:1px solid #e5eaee;">Külső tartalomszolgáltató / technikai szolgáltató</td><td style="padding:8px; border:1px solid #e5eaee;">Térkép: csak elfogadás után; Fonts: technikai, a süti-döntésig elhalasztva</td></tr>
       <tr><td style="padding:8px; border:1px solid #e5eaee;">Google Ireland Limited (e-mail infrastruktúra, ha a levelezés Gmail-en keresztül zajlik)</td><td style="padding:8px; border:1px solid #e5eaee;">Az e-mailes megkeresések fogadásához használt levelezési infrastruktúra</td><td style="padding:8px; border:1px solid #e5eaee;">Külső szolgáltató / szolgáltatási infrastruktúra – pontos jogi szerepe (adatfeldolgozó vagy önálló adatkezelő) a rendelkezésre álló információk alapján nem állapítható meg egyértelműen, ezért itt nem állítunk konkrét jogi minősítést</td><td style="padding:8px; border:1px solid #e5eaee;">Technikailag hozzáférhet az elküldött e-mailek tartalmához</td></tr>
+      <tr><td style="padding:8px; border:1px solid #e5eaee;">Google Ireland Limited / Google LLC (Apps Script, Google Táblázatok)</td><td style="padding:8px; border:1px solid #e5eaee;">Névtelen látogatottságmérés (csak „Statisztika” hozzájárulással)</td><td style="padding:8px; border:1px solid #e5eaee;">Adatfeldolgozó</td><td style="padding:8px; border:1px solid #e5eaee;">Névtelen mutatók (oldal, esemény, eszköztípus stb., a 7. pont szerint); a nyers napló 90 nap után törlődik</td></tr>
       <tr><td style="padding:8px; border:1px solid #e5eaee;">Szimpatika (szimpatika.hu)</td><td style="padding:8px; border:1px solid #e5eaee;">Akciós tartalom</td><td style="padding:8px; border:1px solid #e5eaee;">Külső tartalomszolgáltató</td><td style="padding:8px; border:1px solid #e5eaee;">Csak hozzájárulás után</td></tr>
       <tr><td style="padding:8px; border:1px solid #e5eaee;">Cloudflare, Inc. (cdnjs)</td><td style="padding:8px; border:1px solid #e5eaee;">Font Awesome ikonkészlet</td><td style="padding:8px; border:1px solid #e5eaee;">Technikai szolgáltató (tartalomkiszolgáló hálózat)</td><td style="padding:8px; border:1px solid #e5eaee;">Technikai (megjelenítés), a süti-döntésig elhalasztva</td></tr>
     </table>
@@ -474,11 +493,11 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <div id="gyszt-overlay" aria-hidden="true"></div>
     <div id="gyszt-notice" role="dialog" aria-modal="true" aria-labelledby="gyszt-notice-title">
         <p id="gyszt-notice-title">
-            Weboldalunk a működéshez szükséges technikai sütiket (cookie-kat) és egyéb technikai elemeket használ, emellett bizonyos külső tartalmakat (pl. Google Térkép, Szimpatika akciók) is megjeleníthet. Az opcionális külső tartalmak csak az Ön hozzájárulása után töltődnek be.
+            Az oldal a működéshez szükséges technikai elemeket használ. Ha engedélyezi, külső tartalmakat (pl. Google Térkép, Szimpatika) és névtelen látogatottságmérést is használunk. A mérés süti és azonosító nélkül működik, és nem köthető az Ön személyéhez. Döntését bármikor módosíthatja.
         </p>
         <div class="gyszt-notice-btns">
-            <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
-            <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
+            <button id="gyszt-settings-btn" class="btn-info" type="button">További lehetőségek</button>
+            <button id="gyszt-accept-btn" class="btn-accept" type="button">Összes elfogadása</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -489,7 +508,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         <div class="modal-inner">
             <span id="gyszt-settings-close-x" class="close-x" role="button" tabindex="0" aria-label="Bezárás">&times;</span>
             <h2 id="gyszt-settings-title" style="margin-bottom: 6px;">Sütibeállítások</h2>
-            <p style="font-size:0.85rem; color:#667; margin-bottom:18px;">Válassza ki, mely tartalmakat engedélyezi. Döntését legfeljebb 12 hónapig őrizzük meg, és bármikor módosíthatja a lábléc "Sütibeállítások" pontjára kattintva.</p>
+            <p style="font-size:0.85rem; color:#667; margin-bottom:18px;">Az opcionális célok alapértelmezetten ki vannak kapcsolva: csak azt engedélyezzük, amit Ön maga bekapcsol. Döntését legfeljebb 12 hónapig őrizzük meg, és bármikor módosíthatja vagy visszavonhatja a lábléc "Sütibeállítások" pontjára kattintva.</p>
 
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
@@ -499,20 +518,31 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <p>A weboldal alapvető működéséhez szükséges technikai elemek: a menü, a sütibeállítás megjegyzése, valamint a helyben, az Ön böngészőjében futó funkciók (pl. játékok legjobb eredménye) tárolása.</p>
             </div>
 
+            <p class="gyszt-group-label">Opcionális</p>
+
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
                     <strong>Külső tartalmak</strong>
-                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" checked><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" aria-label="Külső tartalmak engedélyezése"><span class="slider"></span></label>
                 </div>
                 <p>Google Térkép, Szimpatika akciók és egyéb harmadik féltől származó beágyazott tartalmak megjelenítése. Betöltésükkor adatok (pl. IP-cím) juthatnak el az adott külső szolgáltatóhoz.</p>
             </div>
 
+            <div class="gyszt-category">
+                <div class="gyszt-cat-header">
+                    <strong>Statisztika</strong>
+                    <label class="switch"><input type="checkbox" id="gyszt-stats-toggle" aria-label="Statisztika engedélyezése"><span class="slider"></span></label>
+                </div>
+                <p>Névtelen látogatottságmérés. Csak azt számoljuk, mely oldalakat és funkciókat használják, mikor, és milyen típusú eszközről. Nem tárolunk sütit vagy azonosítót, és nem rögzítjük az IP-címét. Az adatküldés a Google szolgáltatásán keresztül történik, amely technikailag látja a kapcsolat IP-címét; mi ezt nem kapjuk meg és nem tároljuk.</p>
+            </div>
+
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Kiválasztottak elfogadása</button>
-                <button id="gyszt-settings-acceptall" class="btn-accept" style="flex:1;">Összes elfogadása</button>
+                <button id="gyszt-settings-onlynec" class="btn-info" type="button" style="flex:1;">Csak a szükségesek</button>
+                <button id="gyszt-settings-save" class="btn-info" type="button" style="flex:1;">Kiválasztottak elfogadása</button>
+                <button id="gyszt-settings-acceptall" class="btn-accept" type="button" style="flex:1;">Összes elfogadása</button>
             </div>
             <p style="margin-top:16px; font-size:0.8rem; text-align:center;">
-                <a href="adatkezeles.html" style="color:#00824b;">Adatkezelési és süti tájékoztató</a>
+                <a href="adatkezeles.html#sutik" style="color:#00824b;">Adatkezelési és süti tájékoztató</a>
             </p>
         </div>
     </div>
@@ -534,7 +564,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         // (pl. tartalomblokkoló kiterjesztés, file:// megnyitás, beágyazott iframe) ne akassza meg
         // a többi funkció (nyitvatartás, hírek, e-mail gomb, menü) inicializálását.
         try {
-            const CONSENT_KEY = 'gyogyszertar_cookie_v2';
+            const CONSENT_KEY = 'gyogyszertar_cookie_v3';
+            const OLD_KEY = 'gyogyszertar_cookie_v2';   // korábbi változat: csak a külső tartalmakra adott választ vesszük át
             const banner = document.getElementById('gyszt-notice');
             const overlay = document.getElementById('gyszt-overlay');
             const isNoLockPage = /(adatkezeles|impresszum)\.html/i.test(window.location.pathname);
@@ -546,6 +577,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             const settingsSaveBtn = document.getElementById('gyszt-settings-save');
             const settingsAcceptAllBtn = document.getElementById('gyszt-settings-acceptall');
             const externalToggle = document.getElementById('gyszt-external-toggle');
+            const statsToggle = document.getElementById('gyszt-stats-toggle');
+            const onlyNecBtn = document.getElementById('gyszt-settings-onlynec');
 
             function lockPage() {
                 if (isNoLockPage) return;
@@ -558,18 +591,26 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             }
             function loadConsent() {
                 try {
-                    const raw = localStorage.getItem(CONSENT_KEY);
-                    if (!raw) return null;
-                    const data = JSON.parse(raw);
                     const MAX_AGE = 365 * 24 * 60 * 60 * 1000; // legfeljebb 12 hónap
-                    if (!data.ts || (Date.now() - data.ts) > MAX_AGE) return null;
-                    return data;
+                    const raw = localStorage.getItem(CONSENT_KEY);
+                    if (raw) {
+                        const data = JSON.parse(raw);
+                        if (data && data.ts && (Date.now() - data.ts) <= MAX_AGE && typeof data.stats === 'boolean') return data;
+                    }
+                    // Korábbi (v2) döntés: a külső tartalmakra adott válasz megmarad, de a statisztikára még nem született döntés,
+                    // ezért ez nem teljes hozzájárulás (stats: false), és a sáv egyszer újra megjelenik.
+                    const old = localStorage.getItem(OLD_KEY);
+                    if (old) {
+                        const o = JSON.parse(old);
+                        if (o && o.ts && (Date.now() - o.ts) <= MAX_AGE) return { necessary: true, external: !!o.external, stats: false, legacy: true, ts: o.ts };
+                    }
+                    return null;
                 } catch (e) { return null; }
             }
-            function saveConsent(external) {
-                const data = { necessary: true, external: !!external, ts: Date.now() };
-                try { localStorage.setItem(CONSENT_KEY, JSON.stringify(data)); } catch (e) {}
-                try { window.dispatchEvent(new CustomEvent('cookieConsentDecided')); } catch (e) {}
+            function saveConsent(external, stats) {
+                const data = { necessary: true, external: !!external, stats: !!stats, ts: Date.now() };
+                try { localStorage.setItem(CONSENT_KEY, JSON.stringify(data)); localStorage.removeItem(OLD_KEY); } catch (e) {}
+                try { window.dispatchEvent(new CustomEvent('cookieConsentDecided', { detail: data })); } catch (e) {}
                 return data;
             }
             function applyConsent(consent) {
@@ -587,17 +628,20 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     }
                 });
                 if (externalToggle) externalToggle.checked = !!(consent && consent.external);
+                if (statsToggle) statsToggle.checked = !!(consent && consent.stats);
             }
             function hideBanner() { if (banner) banner.style.display = 'none'; unlockPage(); }
             window.enableExternalContent = function () {
-                const c = saveConsent(true);
+                const prev = loadConsent();
+                const c = saveConsent(true, prev ? prev.stats : false);
                 applyConsent(c);
                 hideBanner();
                 if (settingsModal) settingsModal.style.display = 'none';
             };
             window.openCookieSettings = function () {
                 const c = loadConsent();
-                if (externalToggle) externalToggle.checked = c ? !!c.external : true;
+                if (externalToggle) externalToggle.checked = c ? !!c.external : false;
+                if (statsToggle) statsToggle.checked = c ? !!c.stats : false;
                 if (settingsModal) settingsModal.style.display = 'block';
             };
 
@@ -606,8 +650,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 console.warn('localStorage nem elérhető, a süti-sáv mindig megjelenik:', storageErr);
             }
 
-            applyConsent(consent || { necessary: true, external: false });
-            if (banner && !consent) { banner.style.display = 'block'; lockPage(); }
+            applyConsent(consent || { necessary: true, external: false, stats: false });
+            if (banner && (!consent || consent.legacy)) { banner.style.display = 'block'; lockPage(); }
             // Biztonsági háló: ha az oldal zárolva maradt, de a süti-panel nem látszik (pl. PWA-ablakban), a görgetés feloldódik
             setTimeout(function () {
                 try {
@@ -616,12 +660,12 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             }, 800);
 
             if (acceptBtn) acceptBtn.onclick = function () {
-                const c = saveConsent(true);
+                const c = saveConsent(true, true);
                 applyConsent(c);
                 hideBanner();
             };
             if (rejectBtn) rejectBtn.onclick = function () {
-                const c = saveConsent(false);
+                const c = saveConsent(false, false);
                 applyConsent(c);
                 hideBanner();
             };
@@ -655,7 +699,16 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             window.openCookieSettings = function () { origOpenSettings(); trapFocus(settingsModal); };
 
             if (settingsSaveBtn) settingsSaveBtn.onclick = function () {
-                const c = saveConsent(externalToggle ? externalToggle.checked : false);
+                const c = saveConsent(externalToggle ? externalToggle.checked : false, statsToggle ? statsToggle.checked : false);
+                applyConsent(c);
+                if (settingsModal) settingsModal.style.display = 'none';
+                hideBanner();
+                restoreFocus();
+            };
+            if (onlyNecBtn) onlyNecBtn.onclick = function () {
+                if (externalToggle) externalToggle.checked = false;
+                if (statsToggle) statsToggle.checked = false;
+                const c = saveConsent(false, false);
                 applyConsent(c);
                 if (settingsModal) settingsModal.style.display = 'none';
                 hideBanner();
@@ -663,7 +716,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             };
             if (settingsAcceptAllBtn) settingsAcceptAllBtn.onclick = function () {
                 if (externalToggle) externalToggle.checked = true;
-                const c = saveConsent(true);
+                if (statsToggle) statsToggle.checked = true;
+                const c = saveConsent(true, true);
                 applyConsent(c);
                 if (settingsModal) settingsModal.style.display = 'none';
                 hideBanner();
@@ -726,5 +780,6 @@ if ('serviceWorker' in navigator) {
 <script src="pwa-extras.js" defer></script>
 <script src="site-common.js" defer></script>
 <script src="design.js" defer></script>
+<script src="stats.js?v=20261119a" defer></script>
 </body>
 </html>

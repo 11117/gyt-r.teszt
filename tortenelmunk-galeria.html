@@ -92,6 +92,26 @@
   .back-btn:hover { background:var(--navy); color:#fff; }
   .back-btn-row { display:flex; justify-content:flex-start; margin: 14px 0 4px; }
   .back-btn-row.bottom { justify-content:center; margin: 30px 0 6px; }
+  .quick-phone { position: fixed; right: 22px; bottom: 22px; z-index: 15000; }
+  .quick-phone__button { width: 56px; height: 56px; border: 0; border-radius: 50%; background: #2E7D32; color: white; font-size: 1.35rem; cursor: pointer; box-shadow: 0 8px 22px rgba(46,125,50,.38); animation: phonePulse 2s infinite; }
+  .quick-phone__button:hover { background: #1b5e20; transform: scale(1.06); }
+  .quick-phone__panel { position: absolute; right: 0; bottom: 68px; width: 235px; padding: 16px; border-radius: 14px; background: white; box-shadow: 0 12px 35px rgba(0,0,0,.2); text-align: center; display: none; }
+  .quick-phone__panel.is-open { display: block; }
+  .quick-phone__panel p { margin: 0 0 7px; color: #334155; font-weight: 700; }
+  .quick-phone__panel a { color: #1b5e20; text-decoration: none; font-weight: 800; font-size: 1.05rem; }
+  .quick-phone__panel .qp-status { font-size: 1.02rem; line-height: 1.3; }
+  .quick-phone__panel .qp-status .qp-open { color: #2E7D32; font-weight: 800; }
+  .quick-phone__panel .qp-status.is-closed { color: #d32f2f; }
+  .quick-phone__panel .qp-status .qp-closed { color: #8e1b1b; font-weight: 800; }
+  .quick-phone__panel .qp-sub { display: none; margin: 0 0 9px; color: #d32f2f; font-size: 0.84rem; font-weight: 700; line-height: 1.35; }
+  .quick-phone__panel .qp-sub.is-shown { display: block; }
+  .quick-phone__panel .qp-call { display: flex; flex-direction: column; align-items: center; gap: 1px; margin-top: 8px; padding: 10px 12px; border-radius: 12px; background: #2E7D32; color: #fff; box-shadow: 0 6px 16px rgba(46,125,50,.35); font-weight: 800; font-size: 1.05rem; line-height: 1.25; }
+  .quick-phone__panel .qp-call small { font-size: 0.74rem; font-weight: 700; letter-spacing: .04em; opacity: .92; }
+  .quick-phone__panel .qp-call:active { background: #1b5e20; }
+  .quick-phone__panel .qp-call.is-disabled { background: #e3e6ea; color: #9aa1a9; box-shadow: none; pointer-events: none; cursor: default; }
+  @keyframes phonePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.52), 0 8px 22px rgba(46,125,50,.38); } 70% { box-shadow: 0 0 0 13px rgba(76,175,80,0), 0 8px 22px rgba(46,125,50,.38); } }
+  @media screen and (max-width: 768px) { .quick-phone { right: 16px; bottom: 16px; } }
+  @keyframes phonePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(76,175,80,.52), 0 8px 22px rgba(46,125,50,.38); } 70% { box-shadow: 0 0 0 13px rgba(76,175,80,0), 0 8px 22px rgba(46,125,50,.38); } }
 
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'Open Sans', system-ui, sans-serif; background:var(--paper); color:#26394b; line-height:1.7; }
@@ -240,6 +260,11 @@
         }
         #gyszt-notice p { margin-bottom: 18px; font-size: 0.98rem; line-height:1.55; }
         .gyszt-notice-btns { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        /* Egyenlő hangsúlyú gombok a sütisávban és a beállítások ablakban (az elutasítás ugyanolyan könnyű, mint az elfogadás) */
+        #gyszt-notice .btn-eq { background:#fff; color:#1b2a3a; border:1px solid #fff; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.88rem; }
+        .btn-eq2 { background:#fff; color:#1b5e20; border:1.5px solid #1b5e20; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; font-size:0.86rem; }
+        #gyszt-notice .btn-eq:focus-visible, .btn-eq2:focus-visible { outline:2px solid #1a73e8; outline-offset:2px; }
+        .gyszt-group-label { text-align:left; margin:16px 2px 8px; font-size:0.74rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#667; }
         .btn-accept { background: #4CAF50; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size:0.88rem; }
         .btn-reject { background: #3a3a3a; color: #eee; border: 1px solid #555; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size:0.88rem; }
         .btn-info { background: transparent; color: #aaa; border: 1px solid #444; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size:0.88rem; }
@@ -427,11 +452,11 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
     <div id="gyszt-overlay" aria-hidden="true"></div>
     <div id="gyszt-notice" role="dialog" aria-modal="true" aria-labelledby="gyszt-notice-title">
         <p id="gyszt-notice-title">
-            Weboldalunk a működéshez szükséges technikai sütiket (cookie-kat) és egyéb technikai elemeket használ, emellett bizonyos külső tartalmakat (pl. Google Térkép, Szimpatika akciók) is megjeleníthet. Az opcionális külső tartalmak csak az Ön hozzájárulása után töltődnek be.
+            Az oldal a működéshez szükséges technikai elemeket használ. Ha engedélyezi, külső tartalmakat (pl. Google Térkép, Szimpatika) és névtelen látogatottságmérést is használunk. A mérés süti és azonosító nélkül működik, és nem köthető az Ön személyéhez. Döntését bármikor módosíthatja.
         </p>
         <div class="gyszt-notice-btns">
-            <button id="gyszt-settings-btn" class="btn-info">További lehetőségek</button>
-            <button id="gyszt-accept-btn" class="btn-accept">Elfogadom</button>
+            <button id="gyszt-settings-btn" class="btn-info" type="button">További lehetőségek</button>
+            <button id="gyszt-accept-btn" class="btn-accept" type="button">Összes elfogadása</button>
         </div>
         <div class="gyszt-notice-links">
             <a href="adatkezeles.html#sutik">Adatkezelési és süti tájékoztató</a>
@@ -442,7 +467,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         <div class="modal-inner">
             <span id="gyszt-settings-close-x" class="close-x" role="button" tabindex="0" aria-label="Bezárás">&times;</span>
             <h2 id="gyszt-settings-title" style="margin-bottom: 6px;">Sütibeállítások</h2>
-            <p style="font-size:0.85rem; color:#667; margin-bottom:18px;">Válassza ki, mely tartalmakat engedélyezi. Döntését legfeljebb 12 hónapig őrizzük meg, és bármikor módosíthatja a lábléc "Sütibeállítások" pontjára kattintva.</p>
+            <p style="font-size:0.85rem; color:#667; margin-bottom:18px;">Az opcionális célok alapértelmezetten ki vannak kapcsolva: csak azt engedélyezzük, amit Ön maga bekapcsol. Döntését legfeljebb 12 hónapig őrizzük meg, és bármikor módosíthatja vagy visszavonhatja a lábléc "Sütibeállítások" pontjára kattintva.</p>
 
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
@@ -452,20 +477,31 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 <p>A weboldal alapvető működéséhez szükséges technikai elemek: a menü, a sütibeállítás megjegyzése, valamint a helyben, az Ön böngészőjében futó funkciók (pl. játékok legjobb eredménye) tárolása.</p>
             </div>
 
+            <p class="gyszt-group-label">Opcionális</p>
+
             <div class="gyszt-category">
                 <div class="gyszt-cat-header">
                     <strong>Külső tartalmak</strong>
-                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" checked><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="gyszt-external-toggle" aria-label="Külső tartalmak engedélyezése"><span class="slider"></span></label>
                 </div>
                 <p>Google Térkép, Szimpatika akciók és egyéb harmadik féltől származó beágyazott tartalmak megjelenítése. Betöltésükkor adatok (pl. IP-cím) juthatnak el az adott külső szolgáltatóhoz.</p>
             </div>
 
+            <div class="gyszt-category">
+                <div class="gyszt-cat-header">
+                    <strong>Statisztika</strong>
+                    <label class="switch"><input type="checkbox" id="gyszt-stats-toggle" aria-label="Statisztika engedélyezése"><span class="slider"></span></label>
+                </div>
+                <p>Névtelen látogatottságmérés. Csak azt számoljuk, mely oldalakat és funkciókat használják, mikor, és milyen típusú eszközről. Nem tárolunk sütit vagy azonosítót, és nem rögzítjük az IP-címét. Az adatküldés a Google szolgáltatásán keresztül történik, amely technikailag látja a kapcsolat IP-címét; mi ezt nem kapjuk meg és nem tároljuk.</p>
+            </div>
+
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;">
-                <button id="gyszt-settings-save" class="btn-info" style="flex:1;">Kiválasztottak elfogadása</button>
-                <button id="gyszt-settings-acceptall" class="btn-accept" style="flex:1;">Összes elfogadása</button>
+                <button id="gyszt-settings-onlynec" class="btn-info" type="button" style="flex:1;">Csak a szükségesek</button>
+                <button id="gyszt-settings-save" class="btn-info" type="button" style="flex:1;">Kiválasztottak elfogadása</button>
+                <button id="gyszt-settings-acceptall" class="btn-accept" type="button" style="flex:1;">Összes elfogadása</button>
             </div>
             <p style="margin-top:16px; font-size:0.8rem; text-align:center;">
-                <a href="adatkezeles.html" style="color:#00824b;">Adatkezelési és süti tájékoztató</a>
+                <a href="adatkezeles.html#sutik" style="color:#00824b;">Adatkezelési és süti tájékoztató</a>
             </p>
         </div>
     </div>
@@ -487,7 +523,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
         // (pl. tartalomblokkoló kiterjesztés, file:// megnyitás, beágyazott iframe) ne akassza meg
         // a többi funkció (nyitvatartás, hírek, e-mail gomb, menü) inicializálását.
         try {
-            const CONSENT_KEY = 'gyogyszertar_cookie_v2';
+            const CONSENT_KEY = 'gyogyszertar_cookie_v3';
+            const OLD_KEY = 'gyogyszertar_cookie_v2';   // korábbi változat: csak a külső tartalmakra adott választ vesszük át
             const banner = document.getElementById('gyszt-notice');
             const overlay = document.getElementById('gyszt-overlay');
             const isNoLockPage = /(adatkezeles|impresszum)\.html/i.test(window.location.pathname);
@@ -499,6 +536,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             const settingsSaveBtn = document.getElementById('gyszt-settings-save');
             const settingsAcceptAllBtn = document.getElementById('gyszt-settings-acceptall');
             const externalToggle = document.getElementById('gyszt-external-toggle');
+            const statsToggle = document.getElementById('gyszt-stats-toggle');
+            const onlyNecBtn = document.getElementById('gyszt-settings-onlynec');
 
             function lockPage() {
                 if (isNoLockPage) return;
@@ -511,18 +550,26 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             }
             function loadConsent() {
                 try {
-                    const raw = localStorage.getItem(CONSENT_KEY);
-                    if (!raw) return null;
-                    const data = JSON.parse(raw);
                     const MAX_AGE = 365 * 24 * 60 * 60 * 1000; // legfeljebb 12 hónap
-                    if (!data.ts || (Date.now() - data.ts) > MAX_AGE) return null;
-                    return data;
+                    const raw = localStorage.getItem(CONSENT_KEY);
+                    if (raw) {
+                        const data = JSON.parse(raw);
+                        if (data && data.ts && (Date.now() - data.ts) <= MAX_AGE && typeof data.stats === 'boolean') return data;
+                    }
+                    // Korábbi (v2) döntés: a külső tartalmakra adott válasz megmarad, de a statisztikára még nem született döntés,
+                    // ezért ez nem teljes hozzájárulás (stats: false), és a sáv egyszer újra megjelenik.
+                    const old = localStorage.getItem(OLD_KEY);
+                    if (old) {
+                        const o = JSON.parse(old);
+                        if (o && o.ts && (Date.now() - o.ts) <= MAX_AGE) return { necessary: true, external: !!o.external, stats: false, legacy: true, ts: o.ts };
+                    }
+                    return null;
                 } catch (e) { return null; }
             }
-            function saveConsent(external) {
-                const data = { necessary: true, external: !!external, ts: Date.now() };
-                try { localStorage.setItem(CONSENT_KEY, JSON.stringify(data)); } catch (e) {}
-                try { window.dispatchEvent(new CustomEvent('cookieConsentDecided')); } catch (e) {}
+            function saveConsent(external, stats) {
+                const data = { necessary: true, external: !!external, stats: !!stats, ts: Date.now() };
+                try { localStorage.setItem(CONSENT_KEY, JSON.stringify(data)); localStorage.removeItem(OLD_KEY); } catch (e) {}
+                try { window.dispatchEvent(new CustomEvent('cookieConsentDecided', { detail: data })); } catch (e) {}
                 return data;
             }
             function applyConsent(consent) {
@@ -540,17 +587,20 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                     }
                 });
                 if (externalToggle) externalToggle.checked = !!(consent && consent.external);
+                if (statsToggle) statsToggle.checked = !!(consent && consent.stats);
             }
             function hideBanner() { if (banner) banner.style.display = 'none'; unlockPage(); }
             window.enableExternalContent = function () {
-                const c = saveConsent(true);
+                const prev = loadConsent();
+                const c = saveConsent(true, prev ? prev.stats : false);
                 applyConsent(c);
                 hideBanner();
                 if (settingsModal) settingsModal.style.display = 'none';
             };
             window.openCookieSettings = function () {
                 const c = loadConsent();
-                if (externalToggle) externalToggle.checked = c ? !!c.external : true;
+                if (externalToggle) externalToggle.checked = c ? !!c.external : false;
+                if (statsToggle) statsToggle.checked = c ? !!c.stats : false;
                 if (settingsModal) settingsModal.style.display = 'block';
             };
 
@@ -559,8 +609,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
                 console.warn('localStorage nem elérhető, a süti-sáv mindig megjelenik:', storageErr);
             }
 
-            applyConsent(consent || { necessary: true, external: false });
-            if (banner && !consent) { banner.style.display = 'block'; lockPage(); }
+            applyConsent(consent || { necessary: true, external: false, stats: false });
+            if (banner && (!consent || consent.legacy)) { banner.style.display = 'block'; lockPage(); }
             // Biztonsági háló: ha az oldal zárolva maradt, de a süti-panel nem látszik (pl. PWA-ablakban), a görgetés feloldódik
             setTimeout(function () {
                 try {
@@ -569,12 +619,12 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             }, 800);
 
             if (acceptBtn) acceptBtn.onclick = function () {
-                const c = saveConsent(true);
+                const c = saveConsent(true, true);
                 applyConsent(c);
                 hideBanner();
             };
             if (rejectBtn) rejectBtn.onclick = function () {
-                const c = saveConsent(false);
+                const c = saveConsent(false, false);
                 applyConsent(c);
                 hideBanner();
             };
@@ -608,7 +658,16 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             window.openCookieSettings = function () { origOpenSettings(); trapFocus(settingsModal); };
 
             if (settingsSaveBtn) settingsSaveBtn.onclick = function () {
-                const c = saveConsent(externalToggle ? externalToggle.checked : false);
+                const c = saveConsent(externalToggle ? externalToggle.checked : false, statsToggle ? statsToggle.checked : false);
+                applyConsent(c);
+                if (settingsModal) settingsModal.style.display = 'none';
+                hideBanner();
+                restoreFocus();
+            };
+            if (onlyNecBtn) onlyNecBtn.onclick = function () {
+                if (externalToggle) externalToggle.checked = false;
+                if (statsToggle) statsToggle.checked = false;
+                const c = saveConsent(false, false);
                 applyConsent(c);
                 if (settingsModal) settingsModal.style.display = 'none';
                 hideBanner();
@@ -616,7 +675,8 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
             };
             if (settingsAcceptAllBtn) settingsAcceptAllBtn.onclick = function () {
                 if (externalToggle) externalToggle.checked = true;
-                const c = saveConsent(true);
+                if (statsToggle) statsToggle.checked = true;
+                const c = saveConsent(true, true);
                 applyConsent(c);
                 if (settingsModal) settingsModal.style.display = 'none';
                 hideBanner();
@@ -679,5 +739,73 @@ if ('serviceWorker' in navigator) {
 <script src="pwa-extras.js" defer></script>
 <script src="site-common.js" defer></script>
 <script src="design.js" defer></script>
+<script src="stats.js?v=20261119a" defer></script>
+
+<div class="quick-phone" aria-label="Telefonos érdeklődés">
+    <div class="quick-phone__panel" id="quick-phone-panel">
+        <p class="qp-status" id="qp-status">Érdeklődjön telefonon nyitvatartási időben:</p>
+        <p class="qp-sub" id="qp-sub"></p>
+        <a href="tel:+3676591020" class="qp-call" id="qp-call"><small>Hívás most</small><span>+36 76 591 020</span></a>
+    </div>
+    <button class="quick-phone__button" id="quick-phone-button" type="button" aria-label="Telefonos elérhetőség megnyitása" aria-expanded="false"><svg class="ico ico-phone"><use href="#ico-phone"></use></svg></button>
+</div>
+
+<script>
+(function(){
+  var quickPhoneButton = document.getElementById('quick-phone-button');
+  var quickPhonePanel = document.getElementById('quick-phone-panel');
+  if (quickPhoneButton && quickPhonePanel) {
+    quickPhoneButton.addEventListener('click', function() {
+      var open = quickPhonePanel.classList.toggle('is-open');
+      quickPhoneButton.setAttribute('aria-expanded', String(open));
+    });
+  }
+})();
+</script>
+<script>
+(function(){
+// Telefonpanel: a nyitvatartáshoz igazodik (ugyanazok az időpontok, mint a nyitvatartás-kártyán)
+function updateQuickPhone() {
+    const st = document.getElementById('qp-status');
+    const sub = document.getElementById('qp-sub');
+    const call = document.getElementById('qp-call');
+    if (!st || !sub || !call) return;
+    const now = new Date();
+    const day = now.getDay();
+    const mins = now.getHours() * 60 + now.getMinutes();
+    const napok = ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"];
+    const open = (day >= 1 && day <= 5) && ((mins >= 480 && mins < 780) || (mins >= 810 && mins < 990));
+    if (open) {
+        st.className = 'qp-status';
+        st.innerHTML = 'Jelenleg <span class="qp-open">NYITVA!</span>';
+        sub.className = 'qp-sub';
+        sub.textContent = '';
+        call.classList.remove('is-disabled');
+        call.setAttribute('href', 'tel:+3676591020');
+        call.removeAttribute('aria-disabled');
+        call.removeAttribute('tabindex');
+    } else {
+        let nextText;
+        if (day >= 1 && day <= 5 && mins < 480) nextText = 'ma 08:00';
+        else if (day >= 1 && day <= 5 && mins >= 780 && mins < 810) nextText = 'ma 13:30';
+        else {
+            let nd = (day + 1) % 7;
+            while (nd === 0 || nd === 6) nd = (nd + 1) % 7;
+            nextText = napok[nd] + ' 08:00';
+        }
+        st.className = 'qp-status is-closed';
+        st.innerHTML = 'Jelenleg <span class="qp-closed">ZÁRVA!</span>';
+        sub.className = 'qp-sub is-shown';
+        sub.textContent = 'Kérjük nyitvatartási időben telefonáljon, legközelebbi nyitás: ' + nextText;
+        call.classList.add('is-disabled');
+        call.removeAttribute('href');
+        call.setAttribute('aria-disabled', 'true');
+        call.setAttribute('tabindex', '-1');
+    }
+}
+updateQuickPhone();
+setInterval(updateQuickPhone, 30000);
+})();
+</script>
 </body>
 </html>

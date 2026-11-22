@@ -215,7 +215,7 @@ function startTour(force){
  addEventListener('resize',place);
  show();
 }
-function consentOk(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts)}catch(e){return false}}
+function consentOk(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v3'));return!!(d&&d.ts)}catch(e){return false}}
 function maybeStart(){if(LS('gyTourDone'))return;setTimeout(function(){startTour(false)},1200)}
 if(!isIndex){}else if(/[?&]tour=1/.test(location.search)){setTimeout(function(){startTour(true)},900)}
 else if(consentOk())maybeStart();else{addEventListener('cookieConsentDecided',maybeStart,{once:true});D.addEventListener('cookieConsentDecided',maybeStart,{once:true})}

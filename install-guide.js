@@ -257,7 +257,7 @@ function start(){ // rendszerszintű telepítési ablak, ha elérhető; a lépé
 pop.querySelector('.ig-btn').onclick=start;
 addEventListener('beforeinstallprompt',function(e){e.preventDefault();defer=e;if(waiting){waiting=false;clearTimeout(waitT);nativePrompt()}else if(AND&&card.classList.contains('on')){toast('Most már telepíthető – koppintson ide a telepítéshez.',12000,function(){close();nativePrompt()})}});
 addEventListener('appinstalled',function(){LS('gyInstalled','1');pop.classList.remove('on');close()});
-function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v2'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
+function consent(){try{var d=JSON.parse(localStorage.getItem('gyogyszertar_cookie_v3'));return!!(d&&d.ts&&Date.now()-d.ts<31536e6)}catch(e){return false}}
 function reveal(){if(popOff)return;if(Date.now()-parseInt(LS('igPopX')||'0',10)<432e5)return;setTimeout(function(){setTop();pop.className='ig-pop on ig-top'},1200)}
 consent()?reveal():addEventListener('cookieConsentDecided',reveal,{once:true});
 var ck=D.getElementById('check'),popWas=false,popOff=false;if(ck)ck.addEventListener('change',function(){if(ck.checked){popWas=pop.classList.contains('on');pop.classList.remove('on');if(card.classList.contains('on')||hn.classList.contains('on'))close()}else if(popWas&&!popOff){popWas=false;pop.classList.add('on')}});
