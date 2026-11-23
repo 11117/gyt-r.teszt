@@ -43,7 +43,7 @@
         nav.style.setProperty('--sp', Math.min(1, y / max).toFixed(4));
         if (y > 8) nav.classList.add('dg-scrolled'); else nav.classList.remove('dg-scrolled');
       }
-      if (!reduce) {
+      if (!reduce && !D.documentElement.classList.contains('dz-on')) {   // a főoldali ajtó-animáció alatt a nyitókép mozgatását az az animáció végzi
         for (var i = 0; i < heroes.length; i++) {
           var h = heroes[i], hh = h.offsetHeight;
           if (hh > 0) {
