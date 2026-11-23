@@ -712,7 +712,7 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 /* ---- Főoldal: indulási animáció – belezoomol az ajtóba, minden elfeketedik, a ragyogásból az ajtó résében jelennek meg az akciók ---- */
 .dz-splash { position: fixed; inset: 0; z-index: 99900; isolation: isolate; overflow: hidden; background: transparent; color: #fff;
   display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; touch-action: none; }
-.dz-img { position: absolute; inset: 0; z-index: -2; background-repeat: no-repeat; background-position: center; background-size: cover; pointer-events: none; will-change: transform, opacity; backface-visibility: hidden; }
+.dz-img { position: absolute; inset: 0; z-index: -2; background-repeat: no-repeat; background-position: center; background-size: cover; pointer-events: none; will-change: transform, opacity; }
 .dz-shade { position: absolute; inset: 0; z-index: -1; background: #000; opacity: .5; pointer-events: none; will-change: opacity; }
 .dz-glow { position: absolute; opacity: 0; pointer-events: none; will-change: opacity;
   background: linear-gradient(180deg, rgba(255,251,232,.96), rgba(255,229,155,.88)); }
@@ -728,8 +728,8 @@ html.dz-on div.hero > h1, html.dz-on div.hero > p { position: relative; z-index:
 html.dz-on div.hero > h1 { opacity: calc(1 - var(--dzp, 0)); transform: translate3d(0, calc(var(--dzp, 0) * -50px), 0); }
 html.dz-on div.hero > p  { opacity: calc(1 - var(--dzp, 0) * 1.4); transform: translate3d(0, calc(var(--dzp, 0) * -36px), 0); }
 html.dz-on div.hero .scroll-down { z-index: 3; pointer-events: auto; opacity: calc(1 - var(--dzp, 0) * 3); }
-/* a „lyuk”: belül átlátszó (az oldal látszik), kívül a hatalmas fekete árnyék mindent elsötétít */
-.dz-hole { position: absolute; z-index: 2; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }   /* canvas: fekete takarás átlátszó lyukkal (nincs óriás árnyék, nincs elrendezés-számítás) */
+.dz-leaf { position: absolute; background-repeat: no-repeat; backface-visibility: hidden; -webkit-backface-visibility: hidden; will-change: transform; pointer-events: none; }   /* csak az ajtószárny, a fix oldalablakok nem mozdulnak */
+.dz-lshade { position: absolute; inset: 0; background: #1a0f08; opacity: 0; pointer-events: none; }
 .dz-halo { position: absolute; z-index: 4; opacity: 0; pointer-events: none; background: transparent; will-change: opacity; }   /* az ajtó téglalapjából sugárzó fény */
 .dz-splash .dz-t { position: relative; z-index: 3; opacity: calc(1 - var(--dzp, 0)); transform: translate3d(0, calc(var(--dzp, 0) * -50px), 0); }
 /* az animáció alatt a mozgó oldal mögötti üvegesítés (backdrop-filter) kikapcsolva: iOS-en ez okozta a leglassabb képkockákat */
@@ -2157,19 +2157,37 @@ if ('serviceWorker' in navigator) {
 })();
 </script>
 <script>
-/* Főoldali „belépés a gyógyszertárba” animáció: belezoomol az ajtóra, az ajtó kivágódik és minden mellette elfeketedik,
-   ragyogó fény jelenik meg, a ragyogásból az ajtó résében előbukkannak az akciók, majd a rés kinyílik a teljes képernyőre.
-   - böngészőben: egyetlen söprésre végigmegy az akciókig (és vissza), minden görgetésnél; közben a kép oldalról szűkül, mint eredetileg,
-   - telepített alkalmazásban (PWA): indulási képernyőként magától lejátszódik, koppintásra átugorható.
-   Csökkentett mozgásnál nem fut le: ott marad az eredeti nyitókép. */
+/* Főoldali „belépés a gyógyszertárba” animáció: belezoomol az ajtóra, az ajtószárny befelé kinyílik (a két szélén lévő fix
+   ablakok a helyükön maradnak), a nyíláson meleg fény árad ki, belépünk a fénybe, és megjelennek az akciók.
+   - böngészőben: az első lefelé görgetésnél egyszer lejátszódik; utána a régi, sima, összeszűkülő nyitókép-animáció marad,
+   - telepített alkalmazásban (PWA): indulási képernyőként egyszer magától lejátszódik, koppintásra átugorható,
+   - gyenge készüléken nem fut le (jelzők + képkocka-mérés), menet közben pedig azonnal befejeződik, ha szaggat.
+   Csökkentett mozgásnál sem fut. Kipróbáláshoz: az oldal címéhez ?dz=on (mindig fusson) vagy ?dz=off (soha). */
 (function(){
-  var D=document,W=window,html=D.documentElement;
-  var DOOR={x:.371,y:.352,w:.184,h:.418};   // az ajtó helye a nyitóképen (a kép szélességének/magasságának arányában)
+  var D=document,W=window,N=navigator,html=D.documentElement;
+  var LEAF={x:.380,y:.362,w:.120,h:.405};   // csak az ajtószárny a nyitóképen (a kép szélességének/magasságának arányában)
+  var HINGE='left';                          // zsanér oldala: 'left' vagy 'right' (a kilincs a másik oldalon van)
+  var MAXROT=100;                            // ennyi fokra nyílik ki befelé
   var TOTAL=3600;                            // alkalmazásban: az indulási animáció hossza (ms)
+  var SLOW=38,JANK=46;                       // próbamérés: ennyi ms medián fölött gyenge; animáció közben: ennyi ms átlag fölött szaggat
   var hero=D.querySelector('div.hero'),ak=D.getElementById('akciok-szekcio'),view=D.getElementById('view-index');
   if(!hero||!ak||!view)return;
   try{if(W.matchMedia&&W.matchMedia('(prefers-reduced-motion: reduce)').matches)return}catch(e){}
-  var mm=(getComputedStyle(hero).backgroundImage||'').match(/url\(["']?([^"')]+)["']?\)\s*$/);
+  var FORCE=(/[?&]dz=(on|off)\b/.exec(W.location.search)||[])[1]||'';
+  function lowFlag(){try{return W.sessionStorage.getItem('dzLow')==='1'}catch(e){return false}}
+  function markLow(){try{W.sessionStorage.setItem('dzLow','1')}catch(e){}}
+  if(FORCE==='on'){try{W.sessionStorage.removeItem('dzLow')}catch(e){}}
+  function weakHint(){
+    try{
+      var c=N.connection||N.mozConnection||N.webkitConnection;
+      if(c&&c.saveData)return true;
+      if(N.deviceMemory&&N.deviceMemory<=2)return true;
+      if(N.hardwareConcurrency&&N.hardwareConcurrency<=2&&('ontouchstart' in W))return true;
+    }catch(e){}
+    return false;
+  }
+  if(FORCE==='off'||(FORCE!=='on'&&(lowFlag()||weakHint())))return;
+  var mm=(getComputedStyle(hero).backgroundImage||'').match(/url\([\"']?([^\"')]+)[\"']?\)\s*$/);
   if(!mm)return;
   var SRC=mm[1],iw=1920,ih=1440,scenes=[];
   function mk(c){var e=D.createElement('div');e.className=c;e.setAttribute('aria-hidden','true');return e}
@@ -2177,74 +2195,99 @@ if ('serviceWorker' in navigator) {
   function sm(v){v=cl(v);return v*v*(3-2*v)}
   function io(v){v=cl(v);return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
   function isApp(){try{if(W.navigator.standalone===true)return true;var a=['standalone','fullscreen','minimal-ui'];for(var i=0;i<a.length;i++)if(W.matchMedia('(display-mode: '+a[i]+')').matches)return true}catch(e){}return false}
+  function whenLoaded(fn){if(D.readyState==='complete')setTimeout(fn,150);else W.addEventListener('load',function(){setTimeout(fn,150)},{once:true})}
+
+  /* Képkocka-mérés: üresjáratban (próba) és az animáció közben (szaggatás-figyelő). */
+  function probe(cb){
+    var ts=[],last=0,n=0;
+    function f(t){
+      if(last)ts.push(t-last);last=t;n++;
+      if(n<22){W.requestAnimationFrame(f);return}
+      ts=ts.slice(2).sort(function(a,b){return a-b});
+      cb(ts[Math.floor(ts.length/2)]);
+    }
+    W.requestAnimationFrame(f);
+  }
+  function jankMeter(){
+    var last=0,t0=0,buf=[];
+    return function(t){
+      if(!t0)t0=t;
+      if(last){var d=t-last;if(d<400){buf.push(d);if(buf.length>8)buf.shift()}}   // 400 ms fölött a lap a háttérben járt
+      last=t;
+      if(t-t0<350||buf.length<8)return false;                                  // az első fél másodperc bemelegedés
+      var s=0;for(var i=0;i<buf.length;i++)s+=buf[i];
+      return s/buf.length>JANK;
+    };
+  }
 
   /* A jelenet rétegei egy tetszőleges tárolóban (host). set(p): p = 0..1 – tisztán a p-től függ, ezért oda-vissza is működik. */
   function Scene(host){
-    var img=mk('dz-img'),shade=mk('dz-shade'),glow=mk('dz-glow'),hole=D.createElement('canvas'),h1=mk('dz-halo'),h2=mk('dz-halo'),h3=mk('dz-halo');
-    hole.className='dz-hole';hole.setAttribute('aria-hidden','true');
-    var cx2=null,dpr=1,hw=0,hh2=0,last=null;
-    try{cx2=hole.getContext('2d')}catch(e){}
-    function rrect(c,l,t,w,h,r){r=Math.max(0,Math.min(r,w/2,h/2));c.moveTo(l+r,t);c.arcTo(l+w,t,l+w,t+h,r);c.arcTo(l+w,t+h,l,t+h,r);c.arcTo(l,t+h,l,t,r);c.arcTo(l,t,l+w,t,r);c.closePath()}
-    function draw(l,t,w,h,r){                                      // fekete takarás, benne átlátszó lekerekített lyuk
-      last=[l,t,w,h,r];if(!cx2||!hw)return;
-      cx2.setTransform(dpr,0,0,dpr,0,0);cx2.clearRect(0,0,hw,hh2);
-      cx2.fillStyle='#000';cx2.beginPath();cx2.rect(0,0,hw,hh2);rrect(cx2,l,t,w,h,r);cx2.fill('evenodd');
-    }
-    function vis(el,v){var h=v<=0.001?'hidden':'';if(el.style.visibility!==h)el.style.visibility=h}   // ami nem látszik, nem foglal grafikus réteget
-    img.style.backgroundImage='url("'+SRC+'")';img.appendChild(glow);
+    var img=mk('dz-img'),shade=mk('dz-shade'),glow=mk('dz-glow'),leaf=mk('dz-leaf'),lsh=mk('dz-lshade'),h1=mk('dz-halo'),h2=mk('dz-halo'),h3=mk('dz-halo');
+    var right=(HINGE==='right');
+    leaf.style.transformOrigin=right?'100% 50%':'0% 50%';
+    leaf.style.backgroundImage='url("'+SRC+'")';leaf.appendChild(lsh);
+    img.style.backgroundImage='url("'+SRC+'")';img.appendChild(glow);img.appendChild(leaf);
     host.insertBefore(shade,host.firstChild);host.insertBefore(img,host.firstChild);
-    host.appendChild(hole);host.appendChild(h3);host.appendChild(h2);host.appendChild(h1);
+    host.appendChild(h3);host.appendChild(h2);host.appendChild(h1);
     var G={},dims=null;
+    function vis(el,v){var h=v<=0.001?'hidden':'';if(el.style.visibility!==h)el.style.visibility=h}   // ami nem látszik, nem foglal grafikus réteget
     function geo(Wh,Hh){
       dims=[Wh,Hh];
-      dpr=Math.min(W.devicePixelRatio||1,2);hw=Math.round(Wh);hh2=Math.round(Hh);
-      hole.width=Math.round(hw*dpr);hole.height=Math.round(hh2*dpr);
       var sc=Math.max(Wh/iw,Hh/ih),dw=iw*sc,dh=ih*sc,ox=(Wh-dw)/2,oy=(Hh-dh)/2;
-      var dx=ox+DOOR.x*dw,dy=oy+DOOR.y*dh,dW=DOOR.w*dw,dH=DOOR.h*dh;
-      G.W=Wh;G.H=Hh;G.Ox=dx+dW/2;G.Oy=dy+dH/2;G.Cx=Wh/2;G.Cy=Hh*.48;
-      G.S=Math.max(Math.min(.78*Wh/dW,.84*Hh/dH),1.6);
-      G.sw=dW*G.S;G.sh=dH*G.S;G.rr=8*G.S;                            // az ajtó mérete a képernyőn a zoom végén
+      var lx=ox+LEAF.x*dw,ly=oy+LEAF.y*dh,lW=LEAF.w*dw,lH=LEAF.h*dh;
+      G.W=Wh;G.H=Hh;G.Ox=lx+lW/2;G.Oy=ly+lH/2;G.Cx=Wh/2;G.Cy=Hh*.48;
+      G.S1=Math.max(Math.min(.78*Wh/lW,.84*Hh/lH),1.6);        // zoom az ajtóra
+      G.S2=Math.max(Wh/lW,Hh/lH)*1.18;                          // belépés: a nyílás kitölti a képernyőt
+      G.P=lW*3.2;                                               // perspektíva az ajtó nyílásához
+      G.sw=lW*G.S1;G.sh=lH*G.S1;G.rr=2*G.S1;
       img.style.transformOrigin=G.Ox.toFixed(1)+'px '+G.Oy.toFixed(1)+'px';
-      glow.style.left=dx+'px';glow.style.top=dy+'px';glow.style.width=dW+'px';glow.style.height=dH+'px';
+      function place(el){el.style.left=lx.toFixed(1)+'px';el.style.top=ly.toFixed(1)+'px';el.style.width=lW.toFixed(1)+'px';el.style.height=lH.toFixed(1)+'px'}
+      place(glow);place(leaf);
+      leaf.style.backgroundSize=dw.toFixed(1)+'px '+dh.toFixed(1)+'px';
+      leaf.style.backgroundPosition=(ox-lx).toFixed(1)+'px '+(oy-ly).toFixed(1)+'px';
       function box(el,w,hh,shadow){el.style.width=w+'px';el.style.height=hh+'px';el.style.left=(G.Cx-w/2)+'px';el.style.top=(G.Cy-hh/2)+'px';el.style.borderRadius=G.rr.toFixed(1)+'px';el.style.boxShadow=shadow}
       var sw=G.sw,sh=G.sh;
       box(h1,sw,sh,'0 0 '+(sw*.05).toFixed(1)+'px '+(sw*.012).toFixed(1)+'px rgba(255,248,215,.98), 0 0 '+(sw*.12).toFixed(1)+'px '+(sw*.03).toFixed(1)+'px rgba(255,232,160,.85)');
       box(h2,sw,sh,'0 0 '+(sw*.22).toFixed(1)+'px '+(sw*.07).toFixed(1)+'px rgba(255,214,120,.78)');
       box(h3,sw,sh,'0 0 '+(sw*.46).toFixed(1)+'px '+(sw*.15).toFixed(1)+'px rgba(255,188,78,.55)');
-      if(last)draw(last[0],last[1],last[2],last[3],last[4]);
     }
     function set(p){
-      var Wh=G.W,Hh=G.H;
-      var e=io(p/.30),c=sm((p-.28)/.12),g=sm((p-.38)/.20),rv=sm((p-.56)/.12),o=sm((p-.66)/.30);
-      // 1) zoom az ajtóra
-      img.style.transform='translate3d('+((G.Cx-G.Ox)*e).toFixed(2)+'px,'+((G.Cy-G.Oy)*e).toFixed(2)+'px,0) scale('+(1+(G.S-1)*e).toFixed(4)+')';
+      var e=io(p/.30),r=io((p-.26)/.34),z=io((p-.58)/.30),f=sm((p-.84)/.14);
+      // 1) zoom az ajtószárnyra, majd (4) belépés a nyíláson át
+      var s=1+(G.S1-1)*e+(G.S2-G.S1)*z;
+      img.style.transform='translate3d('+((G.Cx-G.Ox)*e).toFixed(2)+'px,'+((G.Cy-G.Oy)*e).toFixed(2)+'px,0) scale('+s.toFixed(4)+')';
       shade.style.opacity=(.5*(1-cl(p/.22))).toFixed(3);
-      // 2) a kép oldalról szűkül (lekerekedve), majd az ajtó téglalapjára zárul: minden más fekete
-      var w=Wh*(1-.1*e),hh=Hh*(1-.1*e),cx=Wh/2,cy=Hh/2,r=30*e;
-      w+=(G.sw-w)*c;hh+=(G.sh-hh)*c;cx+=(G.Cx-cx)*c;cy+=(G.Cy-cy)*c;r+=(G.rr-r)*c;
-      // 5) a rés kinyílik a teljes képernyőre
-      w+=(Wh*1.3-w)*o;hh+=(Hh*1.3-hh)*o;cx+=(Wh/2-cx)*o;cy+=(Hh/2-cy)*o;r*=(1-o);
-      draw(cx-w/2,cy-hh/2,w,hh,r);
-      // 3) ragyogás az ajtó téglalapjából
-      glow.style.opacity=g.toFixed(3);vis(glow,g);
-      var hv=1-sm((p-.62)/.08),o1=sm((p-.38)/.12)*hv,o2=sm((p-.42)/.14)*hv,o3=sm((p-.46)/.16)*hv;
+      // 2) az ajtószárny befelé kinyílik, mögötte meleg fény; a fix oldalablakok és a keret nem mozdulnak
+      var on=p>.24?1:0;glow.style.opacity=on;vis(glow,on);
+      var th=(right?-1:1)*MAXROT*r;
+      leaf.style.transform='perspective('+G.P.toFixed(0)+'px) rotateY('+th.toFixed(2)+'deg)';
+      lsh.style.opacity=(.4*cl(r*1.4)).toFixed(3);
+      vis(leaf,r>=.999?0:1);
+      // 3) a nyíláson kiáradó fény
+      var hv=1-sm((p-.64)/.10),o1=sm((p-.30)/.12)*hv,o2=sm((p-.33)/.14)*hv,o3=sm((p-.36)/.16)*hv;
       h1.style.opacity=o1.toFixed(3);vis(h1,o1);
       h2.style.opacity=o2.toFixed(3);vis(h2,o2);
       h3.style.opacity=o3.toFixed(3);vis(h3,o3);
-      // 4) a ragyogásból előbukkan az oldal: az akciók az ajtó résében
-      img.style.opacity=(1-rv).toFixed(3);vis(img,1-rv);
+      // 5) a fényből előbukkan az oldal: az akciók
+      img.style.opacity=(1-f).toFixed(3);vis(img,1-f);
       host.style.setProperty('--dzp',cl(p/.08).toFixed(3));
     }
-    var s={geo:geo,set:set,regeo:function(){if(dims)geo(dims[0],dims[1])}};
-    scenes.push(s);return s;
+    function destroy(){
+      var a=[img,shade,h1,h2,h3];
+      for(var i=0;i<a.length;i++)if(a[i].parentNode)a[i].parentNode.removeChild(a[i]);
+      host.style.removeProperty('--dzp');
+      var k=scenes.indexOf(s2);if(k>=0)scenes.splice(k,1);
+    }
+    var s2={geo:geo,set:set,destroy:destroy,regeo:function(){if(dims)geo(dims[0],dims[1])}};
+    scenes.push(s2);return s2;
   }
-  var probe=new Image();
-  probe.onload=function(){if(probe.naturalWidth){iw=probe.naturalWidth;ih=probe.naturalHeight;for(var i=0;i<scenes.length;i++)scenes[i].regeo()}};
-  probe.src=SRC;
+  var probeImg=new Image();
+  probeImg.onload=function(){if(probeImg.naturalWidth){iw=probeImg.naturalWidth;ih=probeImg.naturalHeight;for(var i=0;i<scenes.length;i++)scenes[i].regeo()}};
+  probeImg.src=SRC;
 
-  /* ---------- BÖNGÉSZŐ: egy söprésre végigmegy, minden görgetésnél, oda-vissza ---------- */
+  /* ---------- BÖNGÉSZŐ: az első lefelé görgetésnél egyszer lejátszódik, utána a régi, sima animáció marad ---------- */
   function live(){
-    var spacer=null,sc=null,Hh=0,Wh=0,T=0,Dd=1,dirty=false,lp=-1,tick=false,anim=false,cool=0,lastY=0,idle=0;
+    var spacer=null,sc=null,Hh=0,Wh=0,T=0,Dd=1,dirty=false,lp=-1,tick=false,anim=false,cool=0,lastY=0,idle=0,done=false;
     function layout(){Dd=Math.max(1,Math.round(ak.getBoundingClientRect().top+(W.pageYOffset||0)-T))}   // ennyi görgetés után az akciók a nyitókép helyén vannak
     function init(){
       Hh=hero.offsetHeight;Wh=hero.clientWidth;
@@ -2258,8 +2301,17 @@ if ('serviceWorker' in navigator) {
       html.classList.add('dz-on');
       lp=-1;return true;
     }
+    function finish(){                                                 // vége: a nyitókép visszakapja a régi, sima viselkedését
+      if(done)return;done=true;
+      try{if(sc&&sc.destroy)sc.destroy()}catch(e){}
+      html.classList.remove('dz-on');html.classList.remove('dz-anim');
+      html.style.removeProperty('--dz-top');
+      if(spacer&&spacer.parentNode)spacer.parentNode.removeChild(spacer);
+      hero.style.height='';hero.style.visibility='';
+    }
     function upd(){
       tick=false;
+      if(done)return;
       if(!sc&&!init())return;
       if(!hero.offsetHeight)return;
       if(dirty){
@@ -2271,19 +2323,24 @@ if ('serviceWorker' in navigator) {
       var p=cl((W.pageYOffset||0)/Dd);
       if(p===lp)return;lp=p;
       sc.set(p);
-      hero.style.visibility=p>=1?'hidden':'';                          // a végén a nyitókép eltűnik, az akciók már a helyükön vannak
+      if(p>=1)finish();                                                // az akciók a helyükön: az ajtós animáció egyszer lejátszódott
     }
     function req(){if(!tick){tick=true;W.requestAnimationFrame(upd)}}
 
-    /* Egyetlen söprés elég: az animáció normál tempóban végigmegy az akciókig (vagy vissza), minden alkalommal. */
+    /* Egyetlen söprés: az animáció normál tempóban végigmegy az akciókig. */
     var TIME=3000;                                                     // egy teljes lefutás ideje (ms)
     function go(target){
-      if(anim||!sc)return;
+      if(anim||!sc||done)return;
       var y0=W.pageYOffset||0,dist=Math.abs(target-y0);
       if(dist<2)return;
-      var dur=Math.max(800,TIME*dist/Dd),t0=null,sb=html.style.scrollBehavior;
+      var dur=Math.max(800,TIME*dist/Dd),t0=null,sb=html.style.scrollBehavior,meter=jankMeter();
       anim=true;html.style.scrollBehavior='auto';html.classList.add('dz-anim');
       function step(ts){
+        if(done){anim=false;return}
+        if(meter(ts)){                                                 // szaggat: azonnal a végére ugrunk, és többet nem játsszuk le
+          markLow();anim=false;html.style.scrollBehavior=sb;
+          finish();W.scrollTo(0,target);return;
+        }
         if(t0===null)t0=ts;
         var t=cl((ts-t0)/dur),e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
         W.scrollTo(0,y0+(target-y0)*e);req();
@@ -2292,7 +2349,7 @@ if ('serviceWorker' in navigator) {
       }
       W.requestAnimationFrame(step);
     }
-    function active(){return !!sc&&view.classList.contains('active')&&!html.classList.contains('gyszt-lock')&&hero.offsetHeight>0}
+    function active(){return !done&&!!sc&&view.classList.contains('active')&&!html.classList.contains('gyszt-lock')&&hero.offsetHeight>0}
     function skipEl(t,keys){
       if(!t||!t.closest)return false;
       return !!t.closest('.modal-box,.rules-box,#gyszt-notice,#gyszt-settings-panel,[role="dialog"],nav,input,textarea,select,[contenteditable="true"]'+(keys?',button,a[href],summary,[role="button"]':''));
@@ -2329,13 +2386,14 @@ if ('serviceWorker' in navigator) {
       if(anim){ev.preventDefault();return}
       intent(dir,ev);
     });
-    hero.addEventListener('click',function(ev){                        // a „görgessen” nyíl is végigviszi az animációt
+    hero.addEventListener('click',function(ev){                        // a „görgessen” nyíl is elindítja az animációt
+      if(done)return;
       var a=ev.target&&ev.target.closest&&ev.target.closest('a[href="#akciok-szekcio"]');
       if(a){ev.preventDefault();go(Dd)}
     });
     W.addEventListener('scroll',function(){                            // tartalék: görgetősáv, lendület, horgony – a jelenet közepén megállva befejezi a mozgást
       req();
-      if(anim)return;
+      if(anim||done)return;
       var y=W.pageYOffset||0,dir=y>lastY?1:y<lastY?-1:0;lastY=y;
       if(!dir||!active())return;
       clearTimeout(idle);
@@ -2345,13 +2403,16 @@ if ('serviceWorker' in navigator) {
       },60);
     },{passive:true});
     W.addEventListener('resize',function(){dirty=true;req()});
-    W.addEventListener('load',function(){if(sc)layout()});
+    W.addEventListener('load',function(){if(sc&&!done)layout()});
     W.addEventListener('hashchange',function(){setTimeout(req,60)});
     W.addEventListener('pageshow',req);
-    try{upd()}catch(e){html.classList.remove('dz-on');hero.style.height='';hero.style.visibility=''}
+    try{upd()}catch(e){finish()}
+    if(FORCE!=='on')whenLoaded(function(){                              // próbamérés: ha már üresjáratban is lassú a készülék, marad a sima nyitókép
+      setTimeout(function(){probe(function(med){if(!anim&&!done&&med>SLOW){markLow();finish()}})},600);
+    });
   }
 
-  /* ---------- TELEPÍTETT ALKALMAZÁS: indulási képernyő, magától ---------- */
+  /* ---------- TELEPÍTETT ALKALMAZÁS: indulási képernyő, egyszer, magától ---------- */
   var started=false;
   function splash(){
     if(started)return;
@@ -2360,6 +2421,10 @@ if ('serviceWorker' in navigator) {
     if((W.pageYOffset||0)>40)return;
     try{if(W.sessionStorage.getItem('dzSplash'))return;W.sessionStorage.setItem('dzSplash','1')}catch(e){}
     started=true;
+    if(FORCE==='on')play();
+    else whenLoaded(function(){probe(function(med){if(med>SLOW){markLow();return}play()})});
+  }
+  function play(){
     var sp=D.createElement('div');sp.className='dz-splash';sp.setAttribute('aria-hidden','true');
     var t=D.createElement('div');t.className='dz-t';t.innerHTML='<h1></h1><p></p>';
     var h=hero.querySelector('h1'),pp=hero.querySelector('p');
@@ -2370,14 +2435,14 @@ if ('serviceWorker' in navigator) {
     html.classList.add('dz-anim');
     D.body.appendChild(sp);
     sc.geo(sp.clientWidth||W.innerWidth,sp.clientHeight||W.innerHeight);
-    var t0=null,done=false,jumped=false;
-    function jump(){                                                   // a fekete/ragyogó takarásában az akciókra ugrunk
+    var t0=null,done=false,jumped=false,meter=jankMeter();
+    function jump(){                                                   // a fény takarásában az akciókra ugrunk
       if(jumped)return;jumped=true;
       var sb=html.style.scrollBehavior;html.style.scrollBehavior='auto';
       try{ak.scrollIntoView(true)}catch(e){W.scrollTo(0,ak.getBoundingClientRect().top+(W.pageYOffset||0))}
       html.style.scrollBehavior=sb;
     }
-    function remove(){html.classList.remove('dz-anim');if(sp.parentNode)sp.parentNode.removeChild(sp)}
+    function remove(){html.classList.remove('dz-anim');try{sc.destroy()}catch(e){}if(sp.parentNode)sp.parentNode.removeChild(sp)}
     function end(){if(done)return;done=true;jump();sc.set(1);remove()}
     function skip(){                                                   // koppintásra: gyorsan eltűnik, az akciók látszanak
       if(done)return;done=true;jump();
@@ -2385,6 +2450,7 @@ if ('serviceWorker' in navigator) {
     }
     function frame(ts){
       if(done)return;
+      if(meter(ts)){markLow();end();return}                            // szaggat: azonnal vége
       if(t0===null)t0=ts;
       var p=cl((ts-t0)/TOTAL);
       sc.set(p);
@@ -2402,9 +2468,9 @@ if ('serviceWorker' in navigator) {
 
   if(isApp()){
     if(html.classList.contains('gyszt-lock')){                         // előbb a sütibeállítás, utána az animáció
-      var go=function(){setTimeout(splash,250)};
-      W.addEventListener('cookieConsentDecided',go,{once:true});
-      D.addEventListener('cookieConsentDecided',go,{once:true});
+      var go2=function(){setTimeout(splash,250)};
+      W.addEventListener('cookieConsentDecided',go2,{once:true});
+      D.addEventListener('cookieConsentDecided',go2,{once:true});
     }else splash();
   }else live();
 })();
