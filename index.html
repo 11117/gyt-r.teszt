@@ -717,26 +717,6 @@ h1 .ico, h2 .ico, h3 .ico { vertical-align:-0.14em; margin-right:2px; }
 <style>.pwa-menu-li{display:none}@media (max-width:768px) and (display-mode: browser){.pwa-menu-li{display:block}.nav-links{height:calc(100vh - 60px)!important;height:calc(100dvh - 60px)!important;padding-top:14px!important}.nav-links li{margin:5px 0!important}.nav-links li:not(.pwa-menu-li) a{padding:8px 0!important}.nav-links .pwa-menu-li{margin:14px 0 4px!important}.nav-links .pwa-menu-li a{display:flex;align-items:center;justify-content:center;gap:8px;width:auto;height:48px;margin:0 18px;padding:0;border-radius:999px;background:linear-gradient(135deg,#2E7D32,#43a047);color:#fff;font-weight:800;box-shadow:0 8px 22px rgba(46,125,50,.45),0 0 0 3px rgba(255,255,255,.9)}}</style>
 <style id="menu-label-css">@media (max-width:768px){label.menu-toggle{box-sizing:border-box;width:44px;height:30px;margin-right:6px!important;display:flex!important;align-items:center;justify-content:center;background:linear-gradient(#fff,#fff) top/100% 3px no-repeat,linear-gradient(#fff,#fff) bottom/100% 3px no-repeat}label.menu-toggle .ico{display:none!important}label.menu-toggle::before{content:"MENÜ";color:#fff;font-weight:800;font-size:.62rem;line-height:1;letter-spacing:.08em;padding-left:.08em}}</style>
 <link rel="stylesheet" href="design.css">
-<style id="ad-css">
-/* Hirdetéspanel a nyitóképen (a tartalmát az ads.js tölti fel; kép nélkül nem jelenik meg) */
-.ad-panel[hidden] { display: none !important; }
-.ad-panel { position: relative; z-index: 3; width: min(100%, 520px, max(240px, calc((100svh - 340px) * 16 / 9))); margin: 22px auto 0;
-  border-radius: 18px; overflow: hidden; background: #e9ecef; box-shadow: 0 14px 34px rgba(0,0,0,.38); text-align: center; }
-.ad-panel.ad-in { animation: adIn .6s ease both; }
-@keyframes adIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-.ad-head { background: #6b7176; color: #fff; font-weight: 800; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; padding: 9px 14px; line-height: 1.2; text-shadow: none; }
-.ad-stage { position: relative; aspect-ratio: 16 / 9; background: #e9ecef; touch-action: pan-y; }
-.ad-slide { position: absolute; inset: 0; display: block; opacity: 0; transition: opacity .5s ease; pointer-events: none; color: inherit; -webkit-tap-highlight-color: transparent; }
-.ad-slide.active { opacity: 1; pointer-events: auto; }
-.ad-slide img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; }
-.ad-dots { position: absolute; left: 0; right: 0; bottom: 8px; display: flex; justify-content: center; gap: 6px; pointer-events: none; }
-.ad-dots:empty { display: none; }
-.ad-dots { padding: 0; }
-.ad-dot { pointer-events: auto; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.65); box-shadow: 0 0 0 1px rgba(0,0,0,.25); cursor: pointer; }
-.ad-dot.active { background: #fff; width: 20px; border-radius: 5px; }
-div.hero > .ad-panel { opacity: calc(1 - var(--hp, 0) * 1.15); }
-@media (prefers-reduced-motion: reduce) { .ad-slide { transition: none; } .ad-panel.ad-in { animation: none; } }
-</style>
 <style id="dz-css">
 /* ---- Főoldal: indulási animáció – belezoomol az ajtóba, minden elfeketedik, a ragyogásból az ajtó résében jelennek meg az akciók ---- */
 .dz-splash { position: fixed; inset: 0; z-index: 99900; isolation: isolate; overflow: hidden; background: transparent; color: #fff;
@@ -751,7 +731,6 @@ html.dz-on div.hero {
 html.dz-on.dz-ready div.hero { background: transparent !important; }   /* amíg a vászon nem rajzolt, a nyitókép saját háttere látszik */
 html.dz-on div.hero::before { opacity: calc(1 - var(--dzp, 0)); }
 html.dz-on div.hero > h1, html.dz-on div.hero > p { position: relative; z-index: 3; }
-html.dz-on div.hero > .ad-panel { pointer-events: auto; opacity: calc(1 - var(--dzp, 0) * 1.4); transform: translate3d(0, calc(var(--dzp, 0) * -36px), 0); }
 html.dz-on div.hero > h1 { opacity: calc(1 - var(--dzp, 0)); transform: translate3d(0, calc(var(--dzp, 0) * -50px), 0); }
 html.dz-on div.hero > p  { opacity: calc(1 - var(--dzp, 0) * 1.4); transform: translate3d(0, calc(var(--dzp, 0) * -36px), 0); }
 html.dz-on div.hero .scroll-down { z-index: 3; pointer-events: auto; opacity: calc(1 - var(--dzp, 0) * 3); }
@@ -796,11 +775,6 @@ html.dz-anim *, html.dz-anim *::before, html.dz-anim *::after { -webkit-backdrop
         <div class="hero">
             <h1>Gondviselés Gyógyszertár</h1>
             <p>Gyógyszerellátás és szakértelem Orgovány szívében</p>
-            <div class="ad-panel" id="ad-panel" role="region" aria-label="Figyelmébe ajánljuk" hidden>
-                <div class="ad-head">Figyelmébe ajánljuk:</div>
-                <div class="ad-stage" aria-live="off"></div>
-                <div class="ad-dots"></div>
-            </div>
             <a href="#akciok-szekcio" class="scroll-down">
                 <span>Görgessen a részletekért</span>
                 <svg class="ico ico-chevron-down fas"><use href="#ico-chevron-down"></use></svg>
@@ -2198,7 +2172,7 @@ if ('serviceWorker' in navigator) {
   var HINGE='left';                          // zsanér oldala: 'left' vagy 'right' (a kilincs a másik oldalon van)
   var MAXROT=100;                            // ennyi fokra nyílik ki befelé
   var TOTAL=3600;                            // alkalmazásban: az indulási animáció hossza (ms)
-  var SLOW=50,JANK=55;                       // üresjárati próba: ennyi ms medián fölött gyenge; animáció közben: ennyi ms átlag fölött szaggat
+  var SLOW=60,JANK=70;                       // üresjárati próba: ennyi ms medián fölött gyenge; animáció közben: ennyi ms átlag fölött szaggat
   var hero=D.querySelector('div.hero'),ak=D.getElementById('akciok-szekcio'),view=D.getElementById('view-index');
   function dropPre(){html.classList.remove('dz-pre')}               // az indulási takarás (PWA) levétele
   if(!hero||!ak||!view){dropPre();return}
@@ -2231,10 +2205,11 @@ if ('serviceWorker' in navigator) {
   function probe(cb){
     var ts=[],last=0,n=0;
     function f(t){
-      if(last)ts.push(t-last);last=t;n++;
-      if(n<22){W.requestAnimationFrame(f);return}
+      if(D.hidden){cb(0);return}                                       // háttérben lévő lapon a képkockák lelassulnak: ilyenkor nem mérünk (nem a készülék a lassú)
+      if(last&&t-last<400)ts.push(t-last);last=t;n++;
+      if(n<26){W.requestAnimationFrame(f);return}
       ts=ts.slice(2).sort(function(a,b){return a-b});
-      cb(ts[Math.floor(ts.length/2)]);
+      cb(ts.length>=12?ts[Math.floor(ts.length/2)]:0);                 // kevés használható minta: nem döntünk
     }
     W.requestAnimationFrame(f);
   }
@@ -2244,7 +2219,7 @@ if ('serviceWorker' in navigator) {
       if(!t0)t0=t;
       if(last){var d=t-last;if(d<400){buf.push(d);if(buf.length>10)buf.shift()}}   // 400 ms fölött a lap a háttérben járt
       last=t;
-      if(t-t0<600||buf.length<10)return false;                                 // az első 0,6 mp bemelegedés (képdekódolás, első rajzolások)
+      if(t-t0<800||buf.length<10)return false;                                 // az első 0,8 mp bemelegedés (képdekódolás, első rajzolások)
       var s=0;for(var i=0;i<buf.length;i++)s+=buf[i];
       return s/buf.length>JANK;
     };
@@ -2452,7 +2427,7 @@ if ('serviceWorker' in navigator) {
     W.addEventListener('pageshow',req);
     try{upd()}catch(e){finish()}
     if(FORCE!=='on')whenLoaded(function(){                              // próbamérés: ha már üresjáratban is lassú a készülék, marad a sima nyitókép
-      setTimeout(function(){probe(function(med){if(!anim&&!done&&med>SLOW){markLow();finish()}})},600);
+      setTimeout(function(){probe(function(med){if(!anim&&!done&&med>SLOW)finish()})},600);   // csak az adott betöltésre érvényes (nem jegyezzük meg tartósan: átmeneti lassulást, pl. háttérben töltődő lapot is okozhat)
     });
   }
 
@@ -2519,6 +2494,5 @@ if ('serviceWorker' in navigator) {
   }else live();
 })();
 </script>
-<script src="ads.js" defer></script>
 </body>
 </html>
