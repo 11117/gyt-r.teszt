@@ -2,7 +2,7 @@
 // v2: network-first stratégia a HTML oldalakhoz, hogy a telepített PWA-k
 // mindig a legfrissebb verziót kapják amint van internetkapcsolat, és csak
 // offline esetén essenek vissza a gyorsítótárazott változatra.
-const CACHE_NAME = 'gondviseles-gyogyszertar-v30';
+const CACHE_NAME = 'gondviseles-gyogyszertar-v31';
 // Azok a külső (más eredetű) domainek, amelyekről betöltött, ikonokhoz/betűtípusokhoz
 // szükséges erőforrásokat (CSS, woff2 fájlok) a PWA offline használatához is
 // gyorsítótárazzuk, hogy internet nélkül is helyesen jelenjenek meg az ikonok és
@@ -31,7 +31,8 @@ const APP_SHELL = [
   'icon-192.png',
   'icon-512.png',
   'icon-512-maskable.png',
-  'stats.js'
+  'stats.js',
+  'ads.js'
 ];
 
 self.addEventListener('install', function (event) {
@@ -90,6 +91,22 @@ self.addEventListener('fetch', function (event) {
             return new Response('', { status: 504, statusText: 'Offline és nincs gyorsítótárazva' });
           });
         });
+      })
+    );
+    return;
+  }
+
+  // A hirdetések (hirdetesek/ mappa) mindig friss állapotban jelenjenek meg: előbb hálózat, csak offline esetén a gyorsítótár.
+  if (reqUrl.pathname.indexOf('/hirdetesek/') !== -1) {
+    event.respondWith(
+      fetch(req).then(function (response) {
+        if (response && response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then(function (cache) { cache.put(req, clone); });
+        }
+        return response;
+      }).catch(function () {
+        return caches.match(req).then(function (cached) { return cached || new Response('', { status: 404 }); });
       })
     );
     return;
