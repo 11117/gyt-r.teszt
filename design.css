@@ -397,3 +397,21 @@ html.gsa #gyszt-notice {
   background: #1a1a1a; border: 1px solid #333;
 }
 html.gsa .gyszt-modal-style { background: rgba(0, 0, 0, .92); }
+
+
+/* ---------- Aloldalak fejléce: kompakt, hogy mobilon is minél előbb a tartalom legyen előtérben ----------
+   (magasabb specificitás, hogy az oldalankénti beállítások sorrendjétől függetlenül érvényesüljön) */
+html body header.hero { padding: 14px 20px 22px; }
+html body header.hero h1 { margin-bottom: 6px; line-height: 1.2; }
+html body header.hero p, html body header.hero p.subtitle { line-height: 1.35; }
+html body header.hero .disclaimer { margin-top: 8px; }
+html body header.hero .more-btn { padding-top: 2px; }
+html body main.wrap { margin-top: -10px; }                     /* a tartalom kártyái a fejléc aljába lógnak, ez a kis átfedés marad */
+html body main .back-btn-row:not(.bottom) { margin-top: 8px; }
+@media (min-width: 761px) {
+  html body header.hero { padding: 20px 20px 28px; }
+  html body main.wrap { margin-top: -14px; }
+}
+@media (max-width: 600px) {
+  html body header.hero h1 { font-size: min(1.5rem, 6.2vw); }
+}
